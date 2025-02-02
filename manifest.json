@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube スマートタブ - YouTube SmartTabs",
+  "version": "0.0.1",
+  "description": "YouTube視聴をもっと快適に！コメントや動画情報をタブで整理．",
+  "icons": {
+    "48": "icons/icon.png"
+  },
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": [
+        "content.js",
+        "popup/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"
+      ],
+      "css": ["content.css"]
+    }
+  ]
+}

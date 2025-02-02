@@ -1,0 +1,103 @@
+.yt-button-group {
+    display: flex;
+    /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2),
+        2px 0 5px rgba(0, 0, 0, 0.2),
+        -2px 0 5px rgba(0, 0, 0, 0.2); */
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+
+}
+
+
+html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-start {
+    border-radius: 10px 0 0 0;
+    position: relative;
+}
+
+.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--segmented-interval {
+    border-radius: 0 0 0 0;
+    position: relative;
+}
+
+.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--segmented-interval::after {
+    content: "";
+    background: var(--segmented-bg-color, rgba(255, 255, 255, 0.2));
+    position: absolute;
+    right: 0;
+    top: 6px;
+    height: 24px;
+    width: 1px;
+}
+
+.yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-interval {
+    border-radius: 0 0 0 0;
+    position: relative;
+}
+
+.yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-interval::after {
+    content: "";
+    background: var(--segmented-bg-color, rgba(255, 255, 255, 0.2));
+    /* 取得できない場合のデフォルト値 */
+    position: absolute;
+    right: 0;
+    top: 8px;
+    height: 16px;
+    width: 1px;
+}
+
+
+html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-end {
+    border-radius: 0 10px 0 0;
+    position: relative;
+}
+
+html body ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
+    padding-top: 0;
+    padding-right: var(--ytd-margin-6x);
+    margin-top: var(--ytd-margin-6x);
+    box-shadow: '0 2px 5px rgba(0, 0, 0, 0.2)';
+    border-radius: '10px';
+}
+
+
+ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #primary.ytd-watch-flexy,
+ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #secondary.ytd-watch-flexy {
+    padding-top: 0 !important;
+    margin-top: var(--ytd-margin-6x);
+    /* padding-bottom: var(--ytd-margin-6x); */
+}
+
+.hidden {
+    display: none;
+}
+
+.active.show {
+    display: block;
+}
+
+html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.custom-tab-selected {
+    background-color: var(--yt-spec-text-primary);
+    color: var(--yt-spec-text-primary-inverse);
+}
+
+#extension-settings .ytd-settings-extensions-renderer {
+    width: 160px;
+    min-width: 160px;
+    margin-right: 56px;
+    color: var(--yt-spec-text-primary);
+    font-family: "Roboto", "Arial", sans-serif;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    font-weight: 500;
+}
+
+#settings-title.ytd-settings-options-renderer {
+    margin-right: 0 !important;
+    width: 160px;
+    min-width: 160px;
+    color: var(--yt-spec-text-primary);
+    font-family: "Roboto", "Arial", sans-serif;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    font-weight: 500;
+}
