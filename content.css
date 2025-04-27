@@ -101,3 +101,38 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     line-height: 2rem;
     font-weight: 500;
 }
+
+#custom-tab {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+#secondary-inner {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+#header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+#contents {
+    position: relative;
+    z-index: 1;
+    padding-inline: var(--ytd-margin-3x);
+}
+
+ytd-comments-header-renderer {
+    margin-top: 0 !important;
+    padding-top: var(--comments-header-renderer-margin-top, 12px);
+    padding-bottom: var(--comments-header-renderer-margin-bottom, 12px);
+    background: var(--yt-spec-base-background);
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: var(--yt-spec-10-percent-layer);
+    padding-inline: var(--ytd-margin-3x);
+}
