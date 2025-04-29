@@ -47,6 +47,7 @@ const getElements = () => {
     donationShelf: document.querySelector('#donation-shelf.style-scope.ytd-watch-flexy'),
     settings: document.querySelector('#extension-settings.style-scope.ytd-watch-flexy'),
     customTab: document.querySelector('#custom-tab'),
+    customTabAll: document.querySelectorAll('#custom-tab'),
     chatViewBtn: document.querySelector('button-view-model.yt-spec-button-view-model.ytTextCarouselItemViewModelButton'),
     // chatViewBtn: document.querySelector('#show-hide-button.style-scope.ytd-live-chat-frame'),
     chatClosedBtn: document.querySelector('#close-button.style-scope.yt-live-chat-header-renderer'),
@@ -116,15 +117,6 @@ function intervalAction() {
       if (chat) {
         Object.assign(chat.style, { border: '0', height: '100%' });
       }
-
-      checkedTabs.forEach(tab => {
-        if (tab.id === 'chat-container') {
-          console.log("checkedTabsにchat-containerがあります");
-          // elements.below.insertBefore(chatContainer, targetElement);
-          // below.appendChild(chatContainer);
-          // console.log("checkedTabs", chatContainer);
-        }
-      });
 
       // 設定メニューの配置
       const isLargeScreen = window.innerWidth >= 1017;
@@ -269,7 +261,7 @@ function handleSettings() {
 
   // ラジオボタンの状態を復元
   if (selectedTab) {
-    console.log("radioButtons", selectedTab, radioButtons);
+    // console.log("radioButtons", selectedTab, radioButtons);
     radioButtons.forEach((radio, index) => {
       const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
       const labelVal = labelElement.dataset.value;
@@ -287,7 +279,7 @@ function handleSettings() {
   }
 
   radioButtons.forEach((radio, index) => {
-    console.log("radio", radio);
+    // console.log("radio", radio);
     radio.addEventListener('click', () => {
       radioButtons.forEach((r, i) => {
         r.setAttribute("aria-checked", "false");
@@ -297,7 +289,7 @@ function handleSettings() {
       const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
       const labelVal = labelElement.dataset.value;
       const label = labelElement.textContent;
-      console.log("label:", labelVal, selectedTab.id);
+      // console.log("label:", labelVal, selectedTab.id);
       // if (labelVal === selectedTab.id) {
       radio.setAttribute("aria-checked", "true");
       radio.setAttribute("checked", "");
@@ -307,7 +299,7 @@ function handleSettings() {
       const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
       selectedTab = { id: tabId ?? "auto", name: label, num: tabNum ?? 0, elementName: tabElementName ?? "auto" };
       chrome.storage.local.set({ selectedTab: selectedTab }, () => {
-        console.log("selectedTab", selectedTab);
+        // console.log("selectedTab", selectedTab);
       }); // 選択状態を保存
 
     });
@@ -499,6 +491,9 @@ function handleUrlChange(chat) {
       });
     }
 
+    // タブの選択状態を管理する関数
+    setActiveTab(customTab);
+
     // 最大試行回数に達したら終了
     if (!commentsHidden || tryCount >= maxTries) {
       clearInterval(interval);
@@ -509,9 +504,31 @@ function handleUrlChange(chat) {
 }
 
 // タブの選択状態を管理する関数
-function setActiveTab() {
-  const { customTab } = getElements();
-
+function setActiveTab(customTab) {
+  const customTabNodeList = customTab.querySelectorAll('[data-bs-target]');
+  // const selectTarget = customTab.querySelector('.custom-tab-selected');
+  console.log("タブの選択状態を管理します", customTabNodeList, selectedTab);
+  if (selectedTab.id === 'auto') {
+    // customTab 内の先頭のボタンをクリック
+    const startTab = customTabNodeList[0];
+    if (startTab.style.display === 'block') {
+      startTab.click();
+      console.log("タブをクリックしました", startTab, startTab.style.display);
+    } else {
+      // 次のタブをクリックする
+      // それでも表示されない場合は次のタブをクリックする
+      for (const [index, tab] of customTabNodeList.entries()) {
+        if (tab.style.display === 'block') {
+          tab.click();
+          console.log("タブをクリックしました", index, tab, tab.style.display);
+          break; // ← ループ自体を終了できる
+        }
+      }
+    }
+  } else {
+    customTab.querySelector(`#${selectedTab.id}-tab`).click();
+    console.log("タブをクリックしましたよ");
+  }
 }
 
 function renderUI() {
