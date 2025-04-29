@@ -17,7 +17,7 @@ const defaultCheckedTabs = [
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
   // { num: 7, id: "extension-settings", name: "設定" }
 ];
-const defaultSelectedTab = { id: "auto", name: "自動（推奨）", elementName: "auto" }; // 初期値を設定
+const defaultSelectedTab = { num: 0, id: "auto", name: "自動（推奨）", elementName: "auto" }; // 初期値を設定
 const settingsOptions = ["概要", "チャット", "コメント", "関連", "再生リスト", "寄付"];
 
 const settingsOption = [
@@ -86,15 +86,16 @@ chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => 
   checkedTabs = data.checkedTabs ?? defaultCheckedTabs;
   checkedTabs.sort((a, b) => a.num - b.num);
   selectedTab = data.selectedTab ?? defaultSelectedTab;
+  // selectedTab = data.selectedTab === "自動（推奨）" ? defaultSelectedTab : data.selectedTab;
   console.log("checkedTabs", checkedTabs, selectedTab);
   handleSampleTool(isEnabled);
 
 });
 // ストレージの値が変更されたときに実行される処理
-chrome.storage.onChanged.addListener((changes) => {
-  isEnabled = changes.isEnabled ? changes.isEnabled.newValue : isEnabled;
-  handleSampleTool(isEnabled);
-});
+// chrome.storage.onChanged.addListener((changes) => {
+//   isEnabled = changes.isEnabled ? changes.isEnabled.newValue : isEnabled;
+//   handleSampleTool(isEnabled);
+// });
 
 
 function intervalAction() {
@@ -268,9 +269,12 @@ function handleSettings() {
 
   // ラジオボタンの状態を復元
   if (selectedTab) {
+    console.log("radioButtons", selectedTab, radioButtons);
     radioButtons.forEach((radio, index) => {
-      const option = index === 0 ? "自動（推奨）" : settingsOptions[index - 1];
-      if (option === selectedTab) {
+      const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
+      const labelVal = labelElement.dataset.value;
+      // console.log("label:", labelVal, selectedTab.id);
+      if (labelVal === selectedTab.id) {
         radio.setAttribute("aria-checked", "true");
         radio.setAttribute("checked", "");
         radio.setAttribute("active", "");
@@ -283,23 +287,29 @@ function handleSettings() {
   }
 
   radioButtons.forEach((radio, index) => {
+    console.log("radio", radio);
     radio.addEventListener('click', () => {
       radioButtons.forEach((r, i) => {
-        const option = i === 0 ? "自動（推奨）" : settingsOptions[i - 1];
-        if (r === radio) {
-          r.setAttribute("aria-checked", "true");
-          r.setAttribute("checked", "");
-          r.setAttribute("active", "");
-          selectedTab = option;
-          chrome.storage.local.set({ selectedTab: selectedTab }, () => {
-            console.log("selectedTab", selectedTab);
-          }); // 選択状態を保存
-        } else {
-          r.setAttribute("aria-checked", "false");
-          r.removeAttribute("checked");
-          r.removeAttribute("active");
-        }
+        r.setAttribute("aria-checked", "false");
+        r.removeAttribute("checked");
+        r.removeAttribute("active");
       });
+      const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
+      const labelVal = labelElement.dataset.value;
+      const label = labelElement.textContent;
+      console.log("label:", labelVal, selectedTab.id);
+      // if (labelVal === selectedTab.id) {
+      radio.setAttribute("aria-checked", "true");
+      radio.setAttribute("checked", "");
+      radio.setAttribute("active", "");
+      const tabId = tabs.find(tab => tab.id === labelVal)?.id;
+      const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
+      const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
+      selectedTab = { id: tabId ?? "auto", name: label, num: tabNum ?? 0, elementName: tabElementName ?? "auto" };
+      chrome.storage.local.set({ selectedTab: selectedTab }, () => {
+        console.log("selectedTab", selectedTab);
+      }); // 選択状態を保存
+
     });
   });
 
@@ -660,7 +670,7 @@ window.addEventListener('resize', () => {
   const { secondaryInner, chat } = getElements();
   if (secondaryInner) {
     setTimeout(() => {
-      console.log("secondaryInner", secondaryInner.offsetHeight, heightDiff, chat, document.querySelector("#chat-messages"));
+      // console.log("secondaryInner", secondaryInner.offsetHeight, heightDiff, chat, document.querySelector("#chat-messages"));
       secondaryInner.style.height = `${secondaryInner.offsetHeight + heightDiff}px`;
       if (chat) {
         chat.style.height = `${chat.offsetHeight + heightDiff}px`;
