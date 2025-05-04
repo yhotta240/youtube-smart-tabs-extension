@@ -136,3 +136,13 @@ ytd-comments-header-renderer {
     border-color: var(--yt-spec-10-percent-layer);
     padding-inline: var(--ytd-margin-3x);
 }
+
+#columns {
+    min-height: calc(100vh - 56px);
+}
+
+@media (min-width: 1424px) {
+    #columns {
+        min-height: calc(100vh + 100px);
+    }
+}
