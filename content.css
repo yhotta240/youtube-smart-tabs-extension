@@ -74,7 +74,7 @@ html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmente
 
 html body ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
     padding-top: 0;
-    padding-right: var(--ytd-margin-6x);
+    padding-right: var(--ytd-margin-3x);
     margin-top: var(--ytd-margin-6x);
     box-shadow: '0 2px 5px rgba(0, 0, 0, 0.2)';
     border-radius: '10px';
@@ -129,7 +129,7 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     z-index: 1000;
 }
 
-#header {
+#secondary-inner #comments #header {
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -166,10 +166,50 @@ ytd-comments-header-renderer {
     gap: 0.8rem;
 }
 
+#secondary-inner>ytd-watch-metadata #description {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+#secondary-inner>ytd-watch-metadata #description-inner.ytd-watch-metadata {
+    margin: 8px;
+}
+
 #secondary-inner>#related.style-scope.ytd-watch-flexy.active.show yt-related-chip-cloud-renderer {
     display: inline-block;
     position: sticky;
     top: 0;
     background: var(--yt-spec-base-background);
     z-index: 1000;
+}
+
+#secondary-inner>ytd-watch-metadata #bottom-row.ytd-watch-metadata {
+    margin-right: 0 !important;
+}
+
+.resize-secondary {
+    position: absolute;
+    right: 0;
+    width: 10px;
+    margin-top: var(--ytd-margin-6x);
+    height: 730px;
+    z-index: 1000;
+    cursor: e-resize;
+}
+
+.resize-secondary:hover {
+    background-color: var(--yt-spec-text-primary);
+}
+
+#secondary-inner>#chat-container.style-scope.ytd-watch-flexy.active.show,
+#secondary-inner>#chat-container.style-scope.ytd-watch-flexy.active.show #chat {
+    height: 100% !important;
+}
+
+#secondary-inner>#chat-container.style-scope.ytd-watch-flexy.active.show #chat {
+    border: 0;
+}
+
+ytd-watch-metadata[larger-item-wrap] .item.ytd-watch-metadata {
+    min-width: 350px !important;
 }
