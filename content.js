@@ -7,7 +7,6 @@ const tabs = [
   { num: 4, id: "related", name: "関連", elementName: "related" },
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
   { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
-  // { num: 7, id: "extension-settings", name: "設定" }
 ];
 
 const defaultCheckedTabs = [
@@ -15,9 +14,8 @@ const defaultCheckedTabs = [
   { num: 3, id: "comments", name: "コメント", elementName: "comments" },
   { num: 4, id: "related", name: "関連", elementName: "related" },
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
-  // { num: 7, id: "extension-settings", name: "設定" }
 ];
-const defaultSelectedTab = { num: 0, id: "auto", name: "自動（推奨）", elementName: "auto" }; // 初期値を設定
+const defaultSelectedTab = { num: 0, id: "auto", name: "自動（推奨）", elementName: "auto" };
 
 const settingsOption = [
   { num: 0, id: "auto", name: "自動（推奨）", elementName: "auto" },
@@ -27,7 +25,6 @@ const settingsOption = [
   { num: 4, id: "related", name: "関連", elementName: "related" },
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
   { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
-  // { num: 7, id: "extension-settings", name: "設定" }
 ];
 
 // DOM要素の取得を関数化
@@ -53,7 +50,7 @@ const getElements = () => {
     bottomRow: document.querySelector('#below #bottom-row'),
   };
 }
-// Sampleツールの有効/無効を処理する関数
+// ツールの有効/無効を処理する関数
 const handleSampleTool = (isEnabled) => {
   if (isEnabled) {
     // console.log(`${manifestData.name} がONになりました`);
@@ -69,7 +66,6 @@ const height = () => { // 画面の高さを取得する関数
   const header = document.querySelector('#container.style-scope.ytd-masthead');
   const headerHeight = header ? header.offsetHeight : 0;
   const windowHeight = window.innerHeight;
-  // console.log("height", windowHeight, headerHeight, windowHeight - headerHeight - 155);
   return windowHeight - headerHeight - 155;
 };
 
@@ -84,7 +80,6 @@ chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => 
   checkedTabs = data.checkedTabs ?? defaultCheckedTabs;
   checkedTabs.sort((a, b) => a.num - b.num);
   selectedTab = data.selectedTab ?? defaultSelectedTab;
-  // selectedTab = data.selectedTab === "自動（推奨）" ? defaultSelectedTab : data.selectedTab;
   console.log("checkedTabs", checkedTabs, selectedTab);
   handleSampleTool(isEnabled);
 
@@ -100,9 +95,8 @@ chrome.storage.onChanged.addListener((changes) => {
 
 function intervalAction() {
   const interval = setInterval(() => {
-    const { related, below, secondaryInner, chatContainer, comments, chatViewBtn } = getElements();
+    const { related, below, secondaryInner, chatContainer, comments } = getElements();
     if (related && below && secondaryInner && chatContainer && comments) {
-      const chat = document.querySelector("#chat");
       Object.assign(secondaryInner.style, { // secondaryInnerのstyle を設定
         height: `${height()}px`,
         overflowY: 'auto',
@@ -131,7 +125,7 @@ function extensionSettings() {
       <div id="content" class="style-scope ytd-settings-options-renderer">
         ${settingsOption.filter(option => option.id !== 'auto').map((option) => /*html*/ `
           <ytd-settings-checkbox-renderer class="style-scope ytd-settings-options-renderer">
-            <tp-yt-paper-checkbox id="checkbox" role="checkbox" aria-checked="false" 
+            <tp-yt-paper-checkbox id="checkbox" role="checkbox" aria-checked="false"
             class="style-scope ytd-settings-options-renderer" tabindex="0" aria-label="${option.name}"  >
               <div id="checkboxContainer" class="style-scope ytd-settings-checkbox-renderer">
                 <div id="checkbox" class="checked style-scope" ></div>
@@ -165,7 +159,6 @@ function extensionSettings() {
       </div>
     </div>
   </div>
-  
   `;
 
   // console.log("return settings", settings);
@@ -355,11 +348,15 @@ function handleResize(elements, customTab, isLargeScreen) {
 
     // 大画面レイアウトに合わせて要素を移動
     elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
-    if (elements.description) elements.secondaryInner.appendChild(elements.description);
     if (elements.settings) elements.secondaryInner.appendChild(elements.settings);
-    elements.secondaryInner.appendChild(elements.comments);
-    // moveElement(elements.secondaryInner);
-
+    console.log("サイズ変更されました。移動させます", elements.settings);
+    checkedTabs.forEach(tab => {
+      const element = getElements()[tab.elementName];
+      console.log("サイズ変更されました。移動させます", tab.elementName, element);
+      if (element) {
+        elements.secondaryInner.appendChild(element);
+      }
+    });
     // タブのクリックイベント処理
     clickTab(elements.secondaryInner);
 
@@ -373,14 +370,20 @@ function handleResize(elements, customTab, isLargeScreen) {
     });
 
     // 中画面レイアウトに合わせて要素を移動
-    const related = elements.secondaryInner.querySelector('#related');
-    const description = elements.secondaryInner.querySelector('ytd-watch-metadata');
     if (elements.settings) elements.below.appendChild(elements.settings);
-    if (description) elements.below.appendChild(description);
-    elements.below.appendChild(related);
+    console.log("medium layout.移動させます", elements.settings);
     elements.below.insertBefore(customTab, elements.settings);
-    elements.below.appendChild(elements.comments);
-    // moveElement(elements.below);
+    checkedTabs.forEach(tab => {
+      const element = getElements()[tab.elementName];
+      console.log("medium layout.移動させます", tab.id, element);
+      if (element) {
+        elements.below.appendChild(element);
+      }
+      if (tab.id === 'description') {
+        const description = document.querySelector('ytd-watch-metadata');
+        if (description) elements.below.appendChild(description);
+      }
+    });
 
     // タブのクリックイベント処理
     clickTab(elements.below);
@@ -479,11 +482,11 @@ function handleUrlChange() {
 }
 
 function moveElement() {
-  const { below, secondaryInner } = getElements();
+  const { below, secondaryInner, customTab } = getElements();
   // 設定メニューの配置
   if (!below && !secondaryInner) return;
   const isLargeScreen = window.innerWidth >= 1017;
-  const customTab = document.querySelector('#custom-tab');
+  // const customTab = document.querySelector('#custom-tab');
   (isLargeScreen ?
     secondaryInner.appendChild(extensionSettings()) :
     below.insertBefore(extensionSettings(), customTab.nextSibling)
@@ -553,7 +556,6 @@ function setActiveTab(customTab) {
 function renderUI() {
   const { related, below, primary, secondary, secondaryInner, chatContainer, comments, customTab, mastheadContainer } = getElements();
   if (related && below && secondary && secondaryInner && chatContainer && comments) {
-    const chat = document.querySelector("#chat");
     Object.assign(secondaryInner.style, {
       height: `${height()}px`,
       overflowY: 'auto',
