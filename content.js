@@ -524,37 +524,29 @@ function moveElement() {
 }
 // タブの選択状態を管理する関数
 function setActiveTab(customTab) {
-  const customTabNodeList = customTab.querySelectorAll('[data-bs-target]');
-  // const selectTarget = customTab.querySelector('.custom-tab-selected');
-  // console.log("タブの選択状態を管理します", customTabNodeList, selectedTab);
-  if (selectedTab.id === 'auto') {
-    // customTab 内の先頭のボタンをクリック
-    const startTab = customTabNodeList[0];
-    if (startTab.style.display === 'block') {
-      startTab.click();
-      // console.log("タブをクリックしました", startTab, startTab.style.display);
-    } else {
-      // 次のタブをクリックする
-      // それでも表示されない場合は次のタブをクリックする
-      for (const [index, tab] of customTabNodeList.entries()) {
-        if (tab.style.display === 'block') {
-          tab.click();
-          // console.log("タブをクリックしました", index, tab, tab.style.display);
-          break; // ← ループ自体を終了できる
-        }
+  const tabs = customTab.querySelectorAll('[data-bs-target]');
+  const autoSelectTab = () => {
+    for (const tab of tabs) {
+      if (tab.style.display === 'block') {
+        tab.click();
+        return;
       }
     }
+  };
+
+  if (selectedTab.id === 'auto') {
+    autoSelectTab();
   } else {
-    checkedTabs.forEach(tab => {
-      if (tab.id === selectedTab.id) {
-        customTab.querySelector(`#${selectedTab.id}-tab`).click();
-      }
-    })
+    const targetTab = customTab.querySelector(`#${selectedTab.id}-tab`);
+    if (targetTab && targetTab.style.display === 'block') {
+      targetTab.click();
+    } else {
+      autoSelectTab();
+    }
   }
 }
-
 function renderUI() {
-  const { related, below, primary, secondary, secondaryInner, chatContainer, comments, customTab, mastheadContainer } = getElements();
+  const { related, below, secondary, secondaryInner, chatContainer, comments } = getElements();
   if (related && below && secondary && secondaryInner && chatContainer && comments) {
     Object.assign(secondaryInner.style, {
       height: `${height()}px`,
@@ -607,7 +599,6 @@ function createTab(checkedTabs) {
         <span class="style-scope yt-chip-cloud-chip-renderer">設定</span>
       </button>
     `;
-  // tab.style.backgroundColor = "var(--yt-spec-base-background)";
   setTimeout(() => {
     const startButton = tab.querySelector(".yt-spec-button-shape-next--segmented-start");
     const intervalButtons = tab.querySelectorAll(".yt-spec-button-shape-next--segmented-interval");
