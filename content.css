@@ -9,9 +9,6 @@
 }
 
 @media (min-width: 1017px) {
-    ytd-watch-metadata #owner {
-        flex-wrap: wrap;
-    }
 
     .yt-button-group {
         border-radius: 10px 10px 0 0 !important;
@@ -74,7 +71,6 @@ html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmente
 
 html body ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
     padding-top: 0;
-    padding-right: var(--ytd-margin-3x);
     margin-top: var(--ytd-margin-6x);
     box-shadow: '0 2px 5px rgba(0, 0, 0, 0.2)';
     border-radius: '10px';
