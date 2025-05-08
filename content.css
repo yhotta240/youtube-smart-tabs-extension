@@ -123,11 +123,17 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     font-weight: 500;
 }
 
-#secondary-inner {
+#secondary-inner.tab-container{
     position: sticky;
     top: calc(80px + 32px);
     z-index: 1000;
+    overflow-y: auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--yt-spec-10-percent-layer);
+    border-radius: 0px 0px 12px 12px;
 }
+
 
 #secondary-inner #comments #header {
     position: sticky;
@@ -169,6 +175,7 @@ ytd-comments-header-renderer {
 #secondary-inner>ytd-watch-metadata #description {
     flex-wrap: wrap;
     gap: 0.8rem;
+    min-width: 100% !important;
 }
 
 #secondary-inner>ytd-watch-metadata #description-inner.ytd-watch-metadata {

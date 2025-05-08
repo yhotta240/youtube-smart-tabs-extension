@@ -55,7 +55,6 @@ const handleSampleTool = (isEnabled) => {
   if (isEnabled) {
     // console.log(`${manifestData.name} がONになりました`);
     observer.observe(document.body, { childList: true, subtree: true });
-    intervalAction();
   } else {
     // console.log(`${manifestData.name} がOFFになりました`);
     observer.disconnect();
@@ -91,24 +90,6 @@ chrome.storage.onChanged.addListener((changes) => {
     window.location.reload();
   }
 });
-
-
-function intervalAction() {
-  const interval = setInterval(() => {
-    const { related, below, secondaryInner, chatContainer, comments } = getElements();
-    if (related && below && secondaryInner && chatContainer && comments) {
-      Object.assign(secondaryInner.style, { // secondaryInnerのstyle を設定
-        height: `${height()}px`,
-        overflowY: 'auto',
-        borderWidth: '1px',
-        borderStyle: 'solid',
-        borderColor: 'var(--yt-spec-10-percent-layer)',
-        borderRadius: '0 0 12px 12px',
-      });
-      clearInterval(interval);
-    }
-  }, 100);
-}
 
 function extensionSettings() {
   const settings = document.createElement('div');
@@ -285,7 +266,11 @@ let preUrl = null;
 const observer = new MutationObserver(() => {
   const elements = getElements();
 
-  if (!elements.below || !elements.secondary || !elements.secondaryInner) return;
+  if (!elements.below && !elements.secondary && !elements.secondaryInner) return;
+  if (!elements.secondaryInner.classList.contains('tab-container')) {
+    console.log("tab-containerがないので追加します");
+    elements.secondaryInner.classList.add('tab-container');
+  }
   const isLargeScreen = window.innerWidth >= 1017;
   const customTab = document.querySelector('#custom-tab');
 
@@ -546,16 +531,9 @@ function setActiveTab(customTab) {
   }
 }
 function renderUI() {
-  const { related, below, secondary, secondaryInner, chatContainer, comments } = getElements();
-  if (related && below && secondary && secondaryInner && chatContainer && comments) {
-    Object.assign(secondaryInner.style, {
-      height: `${height()}px`,
-      overflowY: 'auto',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: 'var(--yt-spec-10-percent-layer)',
-      borderRadius: '0 0 12px 12px',
-    });
+  const { secondaryInner } = getElements();
+  if (secondaryInner) {
+    secondaryInner.style.height = `${height()}px`;
   }
 }
 
