@@ -256,6 +256,9 @@ function handleSettings() {
         // console.log("selectedTab", selectedTab);
       }); // 選択状態を保存
 
+      if (!tabId) {
+        chrome.storage.local.set({ currentTab: null })
+      }
     });
   });
 
@@ -453,6 +456,9 @@ function handleUrlChange() {
       });
     }
 
+    if (tryCount === 0) {
+      setActiveTab(customTab);
+    }
 
     // 最大試行回数に達したら終了
     if (!commentsHidden || tryCount >= maxTries) {
@@ -522,7 +528,6 @@ function setActiveTab(customTab) {
     // 保存されたタブを取得して、現在選択されているタブに一致する場合は、タブの選択状態を更新
     chrome.storage.local.get('currentTab', ({ currentTab }) => {
       if (currentTab) {
-        console.log("保存されたタブが存在します", currentTab);
         const targetButton = document.querySelector(`[data-bs-target="#${currentTab.id}"]`);
         if (targetButton && targetButton.style.display === 'block') {
           targetButton.click();
