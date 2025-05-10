@@ -305,12 +305,10 @@ const observer = new MutationObserver(() => {
 function handleFirstRender(elements, checkedTabs, isLargeScreen) {
   console.log("Custom Tabが見つかりません");
   if (isLargeScreen) {
-    // displayElementNone(elements.secondaryInner);
     const tabs = createTab(checkedTabs);
     elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
     clickTab(elements.secondaryInner);
   } else {
-    // displayElementNone(elements.below);
     const tabs = createTab(checkedTabs);
     const targetElement = elements.below.querySelector('#related');
     elements.below.insertBefore(tabs, targetElement);
@@ -507,6 +505,7 @@ function moveElement() {
   }
 
 }
+
 // タブの選択状態を管理する関数
 function setActiveTab(customTab) {
   const tabs = customTab.querySelectorAll('[data-bs-target]');
@@ -520,7 +519,20 @@ function setActiveTab(customTab) {
   };
 
   if (selectedTab.id === 'auto') {
-    autoSelectTab();
+    // 保存されたタブを取得して、現在選択されているタブに一致する場合は、タブの選択状態を更新
+    chrome.storage.local.get('currentTab', ({ currentTab }) => {
+      if (currentTab) {
+        console.log("保存されたタブが存在します", currentTab);
+        const targetButton = document.querySelector(`[data-bs-target="#${currentTab.id}"]`);
+        if (targetButton && targetButton.style.display === 'block') {
+          targetButton.click();
+        } else {
+          autoSelectTab();
+        }
+      } else {
+        autoSelectTab();
+      }
+    });
   } else {
     const targetTab = customTab.querySelector(`#${selectedTab.id}-tab`);
     if (targetTab && targetTab.style.display === 'block') {
@@ -530,6 +542,7 @@ function setActiveTab(customTab) {
     }
   }
 }
+
 function renderUI() {
   const { secondaryInner } = getElements();
   if (secondaryInner) {
@@ -637,16 +650,17 @@ function clickTab(innerContent) {
         if (description) description.style.display = 'block';
         console.log("概要が選択されました", description);
       }
-      checkedTabs.forEach(tab => {
-        if (tab.elementName === targetId) {
-          const currentTab = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
-          chrome.storage.local.set({
-            currentTab: currentTab
-          }, () => {
-            console.log("現在のタブを保存しました", currentTab);
-          });
-        }
-      })
+      console.log("選択されました", targetId.slice(1, targetId.length));
+      if (selectedTab.id === 'auto') {
+        checkedTabs.forEach(tab => {
+          if (tab.id === targetId.slice(1, targetId.length)) {
+            const currentTab = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
+            chrome.storage.local.set({ currentTab: currentTab }, () => {
+              console.log("現在のタブを保存しました", currentTab);
+            });
+          }
+        });
+      }
     });
   });
 
