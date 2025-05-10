@@ -72,6 +72,7 @@ let isEnabled = false;
 let checkedTabs = null;
 let selectedTab = null;
 let preRespWidth = null;
+let isFirstSelected = false;
 
 // 最初の読み込みまたはリロード後に実行する処理
 chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => {
@@ -375,13 +376,14 @@ function handleResize(elements, customTab, isLargeScreen) {
     clickTab(elements.below);
   }
 }
+
 // URL変更時の処理
 function handleUrlChange() {
   let tryCount = 0;
   const maxTries = 10;
   moveElement();
   const interval = setInterval(() => {
-    const { below, chatContainer, chatViewBtn, chatContainerTab, comments } = getElements();
+    const { below, chatContainer, chatViewBtn, chatContainerTab, comments, playlist } = getElements();
     renderUI();
     // チャットリプレイパネルのイベントリスナ登録
     if (chatViewBtn && !chatViewBtn._reg) {
@@ -394,11 +396,8 @@ function handleUrlChange() {
       chatViewBtn._reg = true;
     }
 
-    const commentsHidden = document.querySelector("#comments.style-scope.ytd-watch-flexy").hasAttribute("hidden");
+    const commentsHidden = comments.hasAttribute("hidden");
     const teaserCarousel = document.querySelector("#teaser-carousel");
-    const playlist = document.querySelector("#playlist");
-    // hidden属性の確認
-    // console.log("チャット", chat !== null, chat, "コメント欄", !!commentsContents, commentsContents ? commentsContents.className : false, commentsContents ? commentsContents.classList : false, commentsHidden);
 
     const customTab = document.querySelector('#custom-tab');
     let filteredTabs = checkedTabs.filter(filteredTab => {
@@ -425,7 +424,7 @@ function handleUrlChange() {
 
       if (filteredTab.id === 'playlist') {
         // console.log("再生リスト", filteredTab.id === 'playlist' && (playlist && playlist.hasAttribute("hidden")));
-        shouldHideTab = playlist && playlist.hasAttribute("hidden");
+        shouldHideTab = playlist.hasAttribute("hidden");
       }
 
       // console.log(filteredTab.id, "を", shouldHideTab ? "非表示" : "表示");
@@ -457,6 +456,7 @@ function handleUrlChange() {
     }
 
     if (tryCount === 0) {
+      isFirstSelected = true;
       setActiveTab(customTab);
     }
 
@@ -653,16 +653,26 @@ function clickTab(innerContent) {
       if (targetId === '#description') {
         const description = document.querySelector('ytd-watch-metadata')
         if (description) description.style.display = 'block';
-        console.log("概要が選択されました", description);
       }
       console.log("選択されました", targetId.slice(1, targetId.length));
+      if (targetId === '#playlist') {
+        const playlist = getElements().playlist;
+        if (playlist) {
+          playlist.style.display = 'block';
+          playlist.classList.add('active', 'show');
+        }
+      }
       if (selectedTab.id === 'auto') {
         checkedTabs.forEach(tab => {
           if (tab.id === targetId.slice(1, targetId.length)) {
-            const currentTab = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
-            chrome.storage.local.set({ currentTab: currentTab }, () => {
-              console.log("現在のタブを保存しました", currentTab);
-            });
+            const tabObject = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
+            if (!isFirstSelected) {
+              chrome.storage.local.set({ currentTab: tabObject }, () => {
+                console.log("現在のタブを保存しました", tabObject);
+              });
+            } else {
+              isFirstSelected = false;
+            }
           }
         });
       }
