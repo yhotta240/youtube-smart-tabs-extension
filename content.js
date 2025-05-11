@@ -170,9 +170,8 @@ function extensionSettings() {
 // ページ読み込み時にsettingsの選択状態を復元
 function handleSettings() {
   const { settings } = getElements();
-  // console.log("settings みつかりました", settings);
-  checkbox = settings.querySelectorAll("#checkbox");
-  radioButtons = settings.querySelectorAll("#radio");
+  const checkbox = settings.querySelectorAll("#checkbox");
+  const radioButtons = settings.querySelectorAll("#radio");
   // console.log("checkbox", checkbox);
   // console.log("radioButtons", radioButtons);
 
@@ -358,9 +357,10 @@ function handleResize(elements, customTab, isLargeScreen) {
     elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
     if (elements.settings) elements.secondaryInner.appendChild(elements.settings);
     console.log("サイズ変更されました。移動させます", elements.settings);
+    handleSettings();
     checkedTabs.forEach(tab => {
       const element = getElements()[tab.elementName];
-      console.log("サイズ変更されました。移動させます", tab.elementName, element);
+      console.log("サイズ変更されました。移動させます", tab.elementName);
       if (element) {
         elements.secondaryInner.appendChild(element);
       }
@@ -379,11 +379,12 @@ function handleResize(elements, customTab, isLargeScreen) {
 
     // 中画面レイアウトに合わせて要素を移動
     if (elements.settings) elements.below.appendChild(elements.settings);
-    console.log("medium layout.移動させます", elements.settings);
     elements.below.insertBefore(customTab, elements.settings);
+    console.log("medium layout.移動させます", elements.settings);
+    handleSettings();
     checkedTabs.forEach(tab => {
       const element = getElements()[tab.elementName];
-      console.log("medium layout.移動させます", tab.id, element);
+      console.log("medium layout.移動させます", tab.id);
       if (element) {
         elements.below.appendChild(element);
       }
@@ -492,21 +493,22 @@ function handleUrlChange() {
 }
 
 function moveElement() {
-  const { below, secondaryInner, customTab } = getElements();
+  const { below, secondaryInner, customTab, settings } = getElements();
   // 設定メニューの配置
   if (!below && !secondaryInner) return;
   const isLargeScreen = window.innerWidth >= 1017;
-  // const customTab = document.querySelector('#custom-tab');
-  (isLargeScreen ?
-    secondaryInner.appendChild(extensionSettings()) :
-    below.insertBefore(extensionSettings(), customTab.nextSibling)
-  );
-  // console.log("設定メニューを追加しました");
-  handleSettings();
+  if (!settings) {
+    if (isLargeScreen) {
+      secondaryInner.appendChild(extensionSettings())
+    } else {
+      below.appendChild(extensionSettings())
+    }
+    handleSettings();
+  }
   checkedTabs.forEach(tab => {
     const element = getElements()[tab.elementName];
     if (element) {
-      console.log("移動させます", tab.elementName, element);
+      console.log("移動させます", tab.elementName);
       if (tab.elementName === "chatContainer") {
         return;
       }
@@ -650,7 +652,7 @@ function displayElementNone(innerContent) {
       if (description) description.style.display = 'none';
     }
   });
-  // elements.settings.style.display = 'none';
+  elements.settings.style.display = 'none';
   // elements.settings.setAttribute('aria-selected', 'false');
   const settings = innerContent.querySelector('#extension-settings');
   if (settings) {
