@@ -94,6 +94,9 @@ chrome.storage.onChanged.addListener((changes) => {
 
 function extensionSettings() {
   const settings = document.createElement('div');
+  const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
+  const manualLink = chrome.runtime.getURL("popup/popup.html");
+  const issueLink = 'https://forms.gle/qkaaa2E49GQ5QKMT8';
   settings.id = 'extension-settings';
   settings.style.display = 'none';
   settings.setAttribute('aria-selected', 'false');
@@ -102,6 +105,22 @@ function extensionSettings() {
   // loadSettings の結果を待つ
   settings.innerHTML = /*html*/ `
   <div class="style-scope ytd-watch-flexy" id="settings-container" style="padding: 10px;">
+    <div id="options" class="style-scope ytd-settings-options-renderer">
+      <ytd-channel-options-renderer class="style-scope ytd-settings-options-renderer">
+        <div id="store-link" class="link ytd-channel-options-renderer">
+          <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${storeLink}" dir="auto" style-target="bold" target="_blank">
+            ストアページに移動</a>
+        </div>
+        <div id="manual-link" class="link ytd-channel-options-renderer">
+          <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${manualLink}" dir="auto" style-target="bold" target="_blank">
+            マニュアル</a>
+        </div>
+        <div id="issue-link" class="link ytd-channel-options-renderer">
+          <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${issueLink}" dir="auto" style-target="bold" target="_blank">
+            問題を報告する</a>
+        </div>
+      </ytd-channel-options-renderer>
+    </div>
     <div id="section" class="style-scope ytd-settings-options-renderer">
       <div id="settings-title" class="style-scope ytd-settings-options-renderer">タブ化するコンテンツ</div>
       <div id="content" class="style-scope ytd-settings-options-renderer">
