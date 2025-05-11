@@ -119,7 +119,7 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     font-weight: 500;
 }
 
-#secondary-inner.tab-container{
+#secondary-inner.tab-container {
     position: sticky;
     top: calc(80px + 32px);
     z-index: 1000;
@@ -143,7 +143,7 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     padding-inline: var(--ytd-margin-3x);
 }
 
-ytd-comments-header-renderer {
+#secondary-inner #comments #header ytd-comments-header-renderer {
     margin-top: 0 !important;
     padding-top: var(--comments-header-renderer-margin-top, 12px);
     padding-bottom: var(--comments-header-renderer-margin-bottom, 12px);
