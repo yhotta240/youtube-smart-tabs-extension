@@ -96,7 +96,7 @@ chrome.storage.onChanged.addListener((changes) => {
 function extensionSettings() {
   const settings = document.createElement('div');
   const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
-  const manualLink = chrome.runtime.getURL("popup/popup.html");
+  const manualLink = chrome.runtime.getURL("docs/index.html");
   const issueLink = 'https://forms.gle/qkaaa2E49GQ5QKMT8';
   settings.id = 'extension-settings';
   settings.style.display = 'none';

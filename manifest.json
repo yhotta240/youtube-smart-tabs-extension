@@ -20,14 +20,14 @@
       "matches": ["https://www.youtube.com/*"],
       "js": [
         "content.js",
-        "popup/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"
+        "docs/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"
       ],
       "css": ["content.css"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["popup/popup.html"],
+      "resources": ["docs/index.html"],
       "matches": ["<all_urls>"]
     }
   ]
