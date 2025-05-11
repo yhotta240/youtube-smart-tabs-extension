@@ -73,6 +73,7 @@ let checkedTabs = null;
 let selectedTab = null;
 let preRespWidth = null;
 let isFirstSelected = false;
+let isEventAdded = false;
 
 // 最初の読み込みまたはリロード後に実行する処理
 chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => {
@@ -113,7 +114,7 @@ function extensionSettings() {
         </div>
         <div id="manual-link" class="link ytd-channel-options-renderer">
           <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${manualLink}" dir="auto" style-target="bold" target="_blank">
-            マニュアル</a>
+            マニュアルを開く</a>
         </div>
         <div id="issue-link" class="link ytd-channel-options-renderer">
           <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${issueLink}" dir="auto" style-target="bold" target="_blank">
@@ -326,7 +327,8 @@ const observer = new MutationObserver(() => {
 
 // 初回レンダリング時の処理
 function handleFirstRender(elements, checkedTabs, isLargeScreen) {
-  console.log("Custom Tabが見つかりません");
+  console.log("Custom Tabが見つかりません", isEventAdded);
+  isEventAdded = false;
   if (isLargeScreen) {
     const tabs = createTab(checkedTabs);
     elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
@@ -659,6 +661,8 @@ function displayElementNone(innerContent) {
 
 function clickTab(innerContent) {
   const buttons = document.querySelectorAll('[data-bs-target]');
+  if (isEventAdded) return;
+  isEventAdded = true;
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const targetId = button.getAttribute('data-bs-target');
