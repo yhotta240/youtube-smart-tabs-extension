@@ -6,7 +6,7 @@
   "icons": {
     "48": "icons/icon.png"
   },
-  "permissions": ["contextMenus","storage","notifications"],
+  "permissions": ["contextMenus", "storage", "notifications"],
   "action": {
     "default_icon": {
       "48": "icons/icon.png"
@@ -23,6 +23,12 @@
         "popup/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"
       ],
       "css": ["content.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup/popup.html"],
+      "matches": ["<all_urls>"]
     }
   ]
 }
