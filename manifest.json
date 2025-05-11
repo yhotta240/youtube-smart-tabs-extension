@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube スマートタブ - YouTube SmartTabs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "YouTube視聴をもっと快適に！コメントや動画情報をタブで整理．",
   "icons": {
     "48": "icons/icon.png"
