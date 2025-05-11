@@ -100,7 +100,7 @@ function saveSettings(datetime, message, value) {
 }
 
 
-// popup.html内のリンクを新しいタブで開けるように設定する関数
+// index.html内のリンクを新しいタブで開けるように設定する関数
 function clickURL(link) {
   const url = link.href ? link.href : link;
   if (link instanceof HTMLElement) {
