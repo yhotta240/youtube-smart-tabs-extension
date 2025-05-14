@@ -8,8 +8,15 @@ body {
   margin: 0;
 }
 
-#messagePanel {
+#panel {
   height: 0;
   overflow: hidden;
   transition: height 0.3s ease;
+}
+#panel.no-transition {
+  transition: none !important;
+}
+
+.container-md {
+  max-width: 800px;
 }
