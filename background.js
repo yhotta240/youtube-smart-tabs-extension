@@ -6,6 +6,7 @@ let isEnabled = false; // ツールの有効状態を示すフラグ（初期値
 // 拡張機能がインストールされたときに実行される処理
 chrome.runtime.onInstalled.addListener((details) => {
   console.log('拡張機能がインストールされました。', title, details.reason);
+  chrome.tabs.create({ url: 'docs/index.html' });
   // コンテキストメニューを作成
   chrome.contextMenus.create({
     title: `${title}${isEnabled ? '無効にする' : '有効にする'}`, // 有効/無効に応じたタイトルを設定
