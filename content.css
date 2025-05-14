@@ -137,10 +137,10 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     z-index: 1000;
 }
 
-#contents {
+.active.show #contents.style-scope.ytd-item-section-renderer{
     position: relative;
     z-index: 1;
-    padding-inline: var(--ytd-margin-3x);
+    padding-inline: var(--ytd-margin-4x);
 }
 
 #secondary-inner #comments #header ytd-comments-header-renderer {
