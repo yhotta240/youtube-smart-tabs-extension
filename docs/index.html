@@ -61,39 +61,151 @@
     <!-- 使い方 -->
     <div class="tab-pane fade mt-2 mx-2 active show" id="user-guide" role="tabpanel" style="margin-bottom: 200px;"
       aria-labelledby="user-guide-tab">
-
-      <p class="mb-1 fw-bold">
-        Sampleを有効にする
-      </p>
-      <ul class="m-1">
-        <li>拡張機能のポップアップを開き，「Sampleを有効にする」のトグルボタンをクリック</li>
-      </ul>
-      <div class="mb-3">無効にする場合も同じ操作を行ってください。</div>
-      <p class="mb-1 fw-bold">
-        設定
-      </p>
-      <ul>
-        <li>
-
-        </li>
-        <li>
-
-        </li>
-        <li>
-
-        </li>
-      </ul>
-      <p class="mb-1 fw-bold">
-        操作方法
-      </p>
-      <ul>
-        <li>
-
-        </li>
-        <li>
-
-        </li>
-      </ul>
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+              aria-expanded="true" aria-controls="collapseOne">
+              チュートリアル
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body p-4">
+              <p class="mb-1 fw-bold">
+                YouTube スマートタブ - YouTube Smart Tabs （ツール）を有効にする
+              </p>
+              <p class="mb-1">ツールを有効化する方法は<strong>2通り</strong>あります．YouTubeを開いている状態でツールが有効または無効に変更されたときは自動でリロードされます．</p>
+              <ul class="">
+                <li>ブラウザの右上にある拡張機能のアイコンをクリック
+                  <p>この拡張機能のアイコンが表示されていれば有効，アイコンの色がグレーであれば無効です．</p>
+                  <div class="container text-center">
+                    <div class="row justify-content-evenly">
+                      <div class="col-5">
+                        <img class="img-thumbnail" src="images/tutorial-icon.png" alt="有効時の拡張機能アイコン">
+                        <label class="mt-2">有効時の拡張機能アイコン</label>
+                      </div>
+                      <div class="col-5">
+                        <img class="img-thumbnail" src="images/tutorial-gray-icon.png" alt="無効時の拡張機能アイコン">
+                        <label class="mt-2">無効時の拡張機能アイコン</label>
+                      </div>
+                      <div class="d-flex flex-column ">
+                      </div>
+                      <div class="d-flex flex-column ">
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <p>または</p>
+              <ul class="mb-4">
+                <li>このサイトの上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化
+                </li>
+                <div class="container text-center ">
+                  <img class="img-thumbnail w-75" src="images/tutorial-toggle-button.png" alt="">
+                  <label>有効化/無効化のトグルボタン</label>
+                </div>
+              </ul>
+              <p class="mb-1 fw-bold">
+                YouTubeの動画ページを開く
+              </p>
+              <ol>
+                <li class="mb-1">
+                  ツールが有効になった状態で<a href="https://www.youtube.com/">YouTube</a>を開き，視聴する動画ページを開きます．
+                  <p class="m-0">※この拡張機能はYouTubeのトップページではなく，動画ページ（shortsを除く）のみ対応しています．</p>
+                  <p class="m-0">動画ページのURLは，https://www.youtube.com/watch?v=VIDEO_ID </p>
+                </li>
+              </ol>
+              <p class="mb-1 fw-bold">
+                設定を変更する
+              </p>
+              <ol>
+                <li class="mb-1">
+                  動画ページを開くと，この拡張機能によりサイドバー（セカンダリエリア）に タブ と 選択されたタブのコンテンツ が表示されます．
+                </li>
+                <li class="mb-1">
+                  設定タブをクリックすると，設定のメニューが表示されます．
+                </li>
+                <li class="mb-1">
+                  設定メニューから以下の項目を設定できます．
+                  <ul>
+                    <li>タブ化するコンテンツ</li>
+                    <li>最初に表示するコンテンツ</li>
+                  </ul>
+                  <p class="m-0">タブ化するコンテンツはデフォルトではコメント欄，関連動画，再生リストがタブ化されています．</p>
+                  <p class="m-0">最初に表示するコンテンツはデフォルトで「自動（推奨）」の設定により，先頭のコンテンツまたは前回に選択していたタブ（設定タブ以外）が動画ページに移動した際に表示されます．
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              用語について
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body p-4">
+              <div class="mx-3 ">
+                このドキュメントでは，YouTubeの動画ページに関連する各エリアや機能を一貫して説明するために，いくつかの用語を定義しています．
+                一般的な用語とは異なる意味や範囲で使用している場合もあるため，以下の定義を前提としてご参照ください．
+              </div>
+              <ul class="m-3">
+                <li class="mb-1">
+                  <div class="fw-bold">タブ：tab</div>
+                  YouTubeの動画ページ上部に表示される，コンテンツの種類ごとに切り替え可能なナビゲーション要素．<br>「概要」「チャット」「関連動画」「コメント」などの各エリアは，それぞれのタブによって表示が切り替わる．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">コンテンツ：content</div>
+                  YouTubeの動画ページにおいて表示される，動画本体やその周辺情報（概要，コメント，チャット，関連など）を含む全体的な情報のことを指す．このドキュメントでは，タブごとに切り替えられる各エリアをまとめて「コンテンツ」と呼ぶ．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">サイドバー：secondary</div>
+                  画面の横（右側）に表示されるサブエリア（セカンダリエリアとも呼ばれる）で，通常，メインコンテンツの隣に位置する．拡張機能では，コメント欄をこの位置に表示できる．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">概要：description</div>
+                  本来は動画の「概要欄（再生回数・投稿日）」を指すが，ここでは概要欄に加えて，動画のタイトル，チャンネル名，評価などの情報を含む動画メタデータ全体のエリアを指す．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">チャット：chat</div>
+                  YouTubeの動画ページにおいて，ライブ配信中またはライブ配信終了後のリプレイ動画に表示されるチャットのエリアを指す．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">コメント：comments</div>
+                  YouTubeの動画ページにおいて，視聴者が動画に対する意見や感想を投稿できるエリア．ライブ配信中のチャットと混同されがちだが，コメントは動画公開後も残り続け，時系列で並び替えられる．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">関連：related</div>
+                  YouTubeの動画ページにおいて，現在表示されている動画に関連する他の動画が一覧で表示されるエリア．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">再生リスト：playlist</div>
+                  YouTubeで複数の動画をまとめて整理・再生できる機能．動画ページでは，再生リストに含まれている場合，タブに表示される．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">動画プレイヤー：player</div>
+                  動画の再生を担当するインターフェースやコンポーネント．YouTubeのページでは，動画を再生するためのボタン，音量調整，進行状況バー，再生停止ボタンなどが含まれたUIを指す．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">動画メタデータ：metadata</div>
+                  動画に関連する情報や属性のこと．YouTubeでは，タイトル，チャネル名，評価（高評価・低評価），概要欄，公開日，再生回数などが動画メタデータに含まれる．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">Large レイアウト：</div>
+                  ウィンドウの横幅が1017px ~ 1020px 以上の状態．サイドバーが表示される．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">Medium レイアウト：</div>
+                  ウィンドウの横幅が1017px ~ 1020px 未満の状態．サイドバーが表示されない．
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 機能 -->
@@ -102,7 +214,7 @@
       <div>
         <p class="my-1 fw-bold">説明:</p>
         <p>
-          YouTube SmartTabs は，YouTube の 動画ページのUI
+          YouTube Smart Tabs は，YouTube の 動画ページのUI
           を一新し，コメント欄や動画説明，関連動画などをタブ化することで動画視聴をより快適にします．複雑なページをスクロールする必要はもうありません．必要な情報をタブ化し，動画を観ながらコメント欄や概要を簡単に閲覧できます．
         </p>
         <p>
@@ -179,7 +291,7 @@
         </li>
         <li class="list-group-item">
           <p>サイトへのアクセス:</p>
-          <p id="permission-info">アクセスしたウェブサイト上にある自分の全データの読み取りと変更をこの拡張機能に許可します。</p>
+          <p id="permission-info">アクセスしたウェブサイト上にある自分の全データの読み取りと変更をこの拡張機能に許可します．</p>
           <span id="site-access">Checking...</span>
         </li>
         </li>
@@ -193,16 +305,16 @@
         </li>
         <li class="list-group-item">
           <p class="m-0">提供元: </p>
-          <p class="m-0"> </p>
+          <p class="m-0">yhotta240 </p>
         </li>
         <li class="list-group-item">
           <p class="m-0">デベロッパー: </p>
-          <p class="m-0">example@example.com </p>
+          <p class="m-0">yhotta240@gmail.com</p>
         </li>
         <li class="list-group-item">
           <p class="m-0">GitHub: </p>
           <a class="m-0" id="github-link"
-            href="https://github.com/yhotta240/easy-web-starter-kit-jp">https://github.com/yhotta240/easy-web-starter-kit-jp
+            href="https://github.com/yhotta240/easy-web-starter-kit-jp">https://github.com/yhotta240/youtube-smart-tabs-extension
           </a>
         </li>
         <li class="list-group-item">
@@ -210,8 +322,8 @@
       </ul>
       <div class="ps-0 " style="margin-bottom: 180px;">
         <h5 class="ps-1">プライバシー</h5>
-        <p class="ps-3">お客様のデータを収集または使用しないことを表明しています。</p>
-        <p class="ps-3">お客様のデータについて以下を宣言します。</p>
+        <p class="ps-3">お客様のデータを収集または使用しないことを表明しています．</p>
+        <p class="ps-3">お客様のデータについて以下を宣言します．</p>
         <div class="m-2">
           <ul>
             <li>
