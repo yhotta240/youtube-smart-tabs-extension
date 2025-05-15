@@ -33,7 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const enabledLabel = document.getElementById('enabled-label');
   enabledLabel.textContent = `${manifestData.name} を有効にする`;
 
-  // 情報タブ: 
+  const newTabButton = document.getElementById('new-tab-button');
+  newTabButton.addEventListener('click', () => {
+    chrome.tabs.create({ url: 'docs/index.html' });
+  });
+
+  // 情報タブ:
   // ストアリンクのクリックイベントを設定
   const storeLink = document.getElementById('store_link');
   storeLink.href = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
