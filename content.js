@@ -170,6 +170,7 @@ function extensionSettings() {
 // ページ読み込み時にsettingsの選択状態を復元
 function handleSettings() {
   const { settings } = getElements();
+  if (!settings) return;
   const checkbox = settings.querySelectorAll("#checkbox");
   const radioButtons = settings.querySelectorAll("#radio");
   // console.log("checkbox", checkbox);
