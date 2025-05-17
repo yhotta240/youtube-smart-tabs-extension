@@ -6,7 +6,7 @@
   "icons": {
     "48": "icons/icon.png"
   },
-  "permissions": ["contextMenus", "storage", "notifications"],
+  "permissions": ["contextMenus", "storage","tabs"],
   "action": {
     "default_icon": {
       "48": "icons/icon.png"
