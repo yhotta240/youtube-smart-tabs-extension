@@ -30,7 +30,7 @@ closeButton.addEventListener('click', () => {
 });
 
 function togglePanel(isPanelOpen) {
-  console.log('高さ', parseFloat(panel.style.height), panel.offsetHeight, panel.offsetHeight > 50, 'isPanelOpen', isPanelOpen, panelHeight(), 'emdHeight', emdHeight);
+  // console.log('高さ', parseFloat(panel.style.height), panel.offsetHeight, panel.offsetHeight > 50, 'isPanelOpen', isPanelOpen, panelHeight(), 'emdHeight', emdHeight);
   if (!isDragging) {
     panel.style.height = `${isPanelOpen ? `${emdHeight}px` : '0px'}`;
   }
