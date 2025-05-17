@@ -8,7 +8,7 @@ const manifestData = chrome.runtime.getManifest();
 enabledElement.addEventListener('change', (event) => {
   isEnabled = event.target.checked;
   chrome.storage.local.set({ isEnabled: isEnabled }, () => {
-    messageOutput(dateTime(), isEnabled ? `${manifestData.name} は無効になっています` : `${manifestData.name} は無効になっています`);
+    messageOutput(dateTime(), isEnabled ? `${manifestData.name} は有効になっています` : `${manifestData.name} は無効になっています`);
   });
 });
 
@@ -19,7 +19,7 @@ chrome.storage.local.get(['settings', 'isEnabled'], (data) => {
     isEnabled = data.isEnabled || false;
     enabledElement.checked = isEnabled;
   }
-  messageOutput(dateTime(), isEnabled ? `${manifestData.name} は無効になっています` : `${manifestData.name} は無効になっています`);
+  messageOutput(dateTime(), isEnabled ? `${manifestData.name} は有効になっています` : `${manifestData.name} は無効になっています`);
 });
 
 
