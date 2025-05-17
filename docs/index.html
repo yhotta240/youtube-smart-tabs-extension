@@ -61,15 +61,32 @@
     <!-- 使い方 -->
     <div class="tab-pane fade mt-2 mx-2 active show" id="user-guide" role="tabpanel" style="margin-bottom: 200px;"
       aria-labelledby="user-guide-tab">
-      <div class="accordion" id="accordionExample">
+      <div class="accordion" id="accordion-user-guide">
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-              aria-expanded="true" aria-controls="collapseOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" id="aboutSite-button"
+              data-bs-target="#aboutSite" aria-expanded="false" aria-controls="aboutSite">
+              当サイトについて
+            </button>
+          </h2>
+          <div id="aboutSite" class="accordion-collapse collapse" data-bs-parent="#accordion-user-guide">
+            <div class="accordion-body p-4">
+              当サイトは YouTube Smart Tabs に関するマニュアルおよびバージョン情報などをまとめた拡張機能の専用サイトです．
+              <div>
+                拡張機能のアイコンを右クリックまたは，任意のWEBサイト上で右クリックすると拡張機能のメニュー（コンテキストメニュー）が表示されます．
+                コンテキストメニューから当サイトのマニュアルページを開くことができます．
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tutorial"
+              aria-expanded="true" aria-controls="tutorial">
               チュートリアル
             </button>
           </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div id="tutorial" class="accordion-collapse collapse show" data-bs-parent="#accordion-user-guide">
             <div class="accordion-body p-4">
               <p class="mb-1 fw-bold">
                 YouTube スマートタブ - YouTube Smart Tabs （ツール）を有効にする
@@ -98,8 +115,8 @@
               </ul>
               <p>または</p>
               <ul class="mb-4">
-                <li><a href="#collapseThree" data-bs-toggle="collapse" role="button" aria-expanded="false"
-                    aria-controls="collapseThree">
+                <li><a href="#aboutSite" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="aboutSite">
                     当サイト
                   </a>の上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化
                 </li>
@@ -145,11 +162,11 @@
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              data-bs-target="#word-definition" aria-expanded="false" aria-controls="word-definition">
               用語について
             </button>
           </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div id="word-definition" class="accordion-collapse collapse" data-bs-parent="#accordion-user-guide">
             <div class="accordion-body p-4">
               <div class="mx-3 ">
                 このドキュメントでは，YouTubeの動画ページに関連する各エリアや機能を一貫して説明するために，いくつかの用語を定義しています．
@@ -213,23 +230,6 @@
                   ウィンドウの横幅が1017px未満の状態．サイドバーが表示されない．
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              id="collapseAccordionThree" data-bs-target="#collapseThree" aria-expanded="false"
-              aria-controls="collapseThree">
-              当サイトについて
-            </button>
-          </h2>
-          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body p-4">
-              当サイトは YouTube Smart Tabs に関するマニュアルおよびバージョン情報などをまとめた拡張機能の専用サイトです．
-              <div>
-                拡張機能のアイコンまたは，任意のWEBサイト上で右クリックして拡張機能のメニューから当サイトを開くことができます．
-              </div>
             </div>
           </div>
         </div>
