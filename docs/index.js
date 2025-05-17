@@ -7,9 +7,7 @@ const manifestData = chrome.runtime.getManifest();
 // チェックボックス（トグルボタン）の状態が変更されたとき，ツールの有効/無効状態を更新
 enabledElement.addEventListener('change', (event) => {
   isEnabled = event.target.checked;
-  chrome.storage.local.set({ isEnabled: isEnabled }, () => {
-    messageOutput(dateTime(), isEnabled ? `${manifestData.name} は有効になっています` : `${manifestData.name} は無効になっています`);
-  });
+  chrome.storage.local.set({ isEnabled: isEnabled });
 });
 
 
@@ -22,6 +20,15 @@ chrome.storage.local.get(['settings', 'isEnabled'], (data) => {
   messageOutput(dateTime(), isEnabled ? `${manifestData.name} は有効になっています` : `${manifestData.name} は無効になっています`);
 });
 
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.isEnabled && enabledElement) {
+    isEnabled = changes.isEnabled.newValue;
+    enabledElement.checked = isEnabled;
+  }
+  chrome.storage.local.set({ isEnabled: isEnabled }, () => {
+    messageOutput(dateTime(), isEnabled ? `${manifestData.name} は有効になっています` : `${manifestData.name} は無効になっています`);
+  });
+});
 
 // DOMの読み込み完了を監視し，完了後に実行
 document.addEventListener('DOMContentLoaded', function () {
