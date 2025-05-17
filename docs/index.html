@@ -98,7 +98,10 @@
               </ul>
               <p>または</p>
               <ul class="mb-4">
-                <li>このサイトの上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化
+                <li><a href="#collapseThree" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="collapseThree">
+                    当サイト
+                  </a>の上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化
                 </li>
                 <div class="container text-center ">
                   <img class="img-thumbnail w-75" src="images/tutorial-toggle-button.png" alt="">
@@ -154,16 +157,24 @@
               </div>
               <ul class="m-3">
                 <li class="mb-1">
+                  <div class="fw-bold">ツール：tool</div>
+                  本拡張機能が提供する，YouTubeの動画ページ上で動作する機能群を指します．ツールは，特定のエリア（例：コメント，チャット，概要など）に対して，表示の最適化や操作性の向上を目的として動作します．
+                </li>
+                <li class="mb-1">
                   <div class="fw-bold">タブ：tab</div>
-                  YouTubeの動画ページ上部に表示される，コンテンツの種類ごとに切り替え可能なナビゲーション要素．<br>「概要」「チャット」「関連動画」「コメント」などの各エリアは，それぞれのタブによって表示が切り替わる．
+                  本拡張機能によってYouTubeの動画ページに表示されるコンテンツの種類ごとに切り替え可能なナビゲーション要素．「概要」「チャット」「関連動画」「コメント」などの各エリアは，それぞれのタブによって表示が切り替わる．
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">コンテンツ：content</div>
-                  YouTubeの動画ページにおいて表示される，動画本体やその周辺情報（概要，コメント，チャット，関連など）を含む全体的な情報のことを指す．このドキュメントでは，タブごとに切り替えられる各エリアをまとめて「コンテンツ」と呼ぶ．
+                  YouTubeの動画ページにおいて表示される動画本体やその周辺情報（概要，コメント，チャット，関連など）を含む全体的な情報のことを指す．このドキュメントでは，タブごとに切り替えられる各エリアをまとめて「コンテンツ」と呼ぶ．
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">サイドバー：secondary</div>
                   画面の横（右側）に表示されるサブエリア（セカンダリエリアとも呼ばれる）で，通常，メインコンテンツの隣に位置する．拡張機能では，コメント欄をこの位置に表示できる．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">設定：setting</div>
+                  この拡張機能を管理するための設定画面を指す．
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">概要：description</div>
@@ -195,13 +206,30 @@
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">Large レイアウト：</div>
-                  ウィンドウの横幅が1017px ~ 1020px 以上の状態．サイドバーが表示される．
+                  ウィンドウの横幅が1017px以上の状態．サイドバーが表示される．
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">Medium レイアウト：</div>
-                  ウィンドウの横幅が1017px ~ 1020px 未満の状態．サイドバーが表示されない．
+                  ウィンドウの横幅が1017px未満の状態．サイドバーが表示されない．
                 </li>
               </ul>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              id="collapseAccordionThree" data-bs-target="#collapseThree" aria-expanded="false"
+              aria-controls="collapseThree">
+              当サイトについて
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body p-4">
+              当サイトは YouTube Smart Tabs に関するマニュアルおよびバージョン情報などをまとめた拡張機能の専用サイトです．
+              <div>
+                拡張機能のアイコンまたは，任意のWEBサイト上で右クリックして拡張機能のメニューから当サイトを開くことができます．
+              </div>
             </div>
           </div>
         </div>
@@ -263,7 +291,7 @@
               <a href="" id="extension_link">この拡張機能を管理する</a>
             </li>
             <li>
-              <a href="https://forms.gle/" id="issue-link">問題を報告する</a>
+              <a href="https://forms.gle/qkaaa2E49GQ5QKMT8" id="issue-link">問題を報告する</a>
             </li>
           </ul>
         </li>
@@ -312,7 +340,7 @@
         <li class="list-group-item">
           <p class="m-0">GitHub: </p>
           <a class="m-0" id="github-link"
-            href="https://github.com/yhotta240/easy-web-starter-kit-jp">https://github.com/yhotta240/youtube-smart-tabs-extension
+            href="https://github.com/yhotta240/youtube-smart-tabs-extension">https://github.com/yhotta240/youtube-smart-tabs-extension
           </a>
         </li>
         <li class="list-group-item">
