@@ -77,20 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// 設定をストレージに保存する関数
-function saveSettings(datetime, message, value) {
-  const settings = {
-    sampleValue: value,
-    // storageに保存するための設定をここに追加する
-  };
-
-  // ストレージに設定を保存し，保存完了後にメッセージを出力
-  chrome.storage.local.set({ settings: settings }, () => {
-    messageOutput(datetime, message); // 保存時の日時とメッセージを出力
-  });
-}
-
-
 // index.html内のリンクを新しいタブで開けるように設定する関数
 function clickURL(link) {
   const url = link.href ? link.href : link;
