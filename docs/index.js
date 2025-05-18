@@ -42,7 +42,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const newTabButton = document.getElementById('new-tab-button');
   newTabButton.addEventListener('click', () => {
-    chrome.tabs.create({ url: 'docs/index.html' });
+    chrome.tabs.query({ url: "chrome-extension://" + chrome.runtime.id + "/docs/index.html" }, (tabs) => {
+      chrome.tabs.create({ url: 'docs/index.html' });
+      if (tabs.length > 0) {
+        chrome.tabs.remove(tabs[0].id);
+      }
+    });
   });
 
   // 情報タブ:

@@ -96,7 +96,7 @@ chrome.storage.onChanged.addListener((changes) => {
 function extensionSettings() {
   const settings = document.createElement('div');
   const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
-  const manualLink = chrome.runtime.getURL("docs/index.html");
+  const extensionLink = chrome.runtime.getURL("docs/index.html");
   const issueLink = 'https://forms.gle/qkaaa2E49GQ5QKMT8';
   settings.id = 'extension-settings';
   settings.style.display = 'none';
@@ -112,9 +112,9 @@ function extensionSettings() {
           <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${storeLink}" dir="auto" style-target="bold" target="_blank">
             ストアページに移動</a>
         </div>
-        <div id="manual-link" class="link ytd-channel-options-renderer">
-          <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${manualLink}" dir="auto" style-target="bold" target="_blank">
-            マニュアルを開く</a>
+        <div id="extension-link" class="link ytd-channel-options-renderer">
+          <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${extensionLink}" dir="auto" style-target="bold" target="_blank">
+            拡張機能のページを開く</a>
         </div>
         <div id="issue-link" class="link ytd-channel-options-renderer">
           <a class="yt-simple-endpoint bold style-scope yt-formatted-string" spellcheck="false" href="${issueLink}" dir="auto" style-target="bold" target="_blank">
