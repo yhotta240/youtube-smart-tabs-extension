@@ -57,19 +57,18 @@
 
 
   <div class="tab-content" id="myTabContent">
-
     <!-- 使い方 -->
     <div class="tab-pane fade mt-2 mx-2 active show" id="user-guide" role="tabpanel" style="margin-bottom: 200px;"
       aria-labelledby="user-guide-tab">
       <div class="accordion" id="accordion-user-guide">
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" id="aboutSite-button"
-              data-bs-target="#aboutSite" aria-expanded="false" aria-controls="aboutSite">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" id="about-site-button"
+              data-bs-target="#about-site" aria-expanded="false" aria-controls="about-site">
               当サイトについて
             </button>
           </h2>
-          <div id="aboutSite" class="accordion-collapse collapse" data-bs-parent="#accordion-user-guide">
+          <div id="about-site" class="accordion-collapse collapse" data-bs-parent="#accordion-user-guide">
             <div class="accordion-body p-4">
               当サイトは YouTube Smart Tabs に関するマニュアルおよびバージョン情報などをまとめた拡張機能の専用サイトです．
               <div>
@@ -91,46 +90,69 @@
               <p class="mb-1 fw-bold">
                 YouTube スマートタブ - YouTube Smart Tabs （ツール）を有効にする
               </p>
-              <p class="mb-1">ツールを有効化する方法は<strong>2通り</strong>あります．YouTubeを開いている状態でツールが有効または無効に変更されたときは自動でリロードされます．</p>
+              <p class="mb-1">ツールを有効化する方法は<strong>3通り</strong>あります．YouTubeを開いている状態でツールが有効または無効に変更されたときは自動でリロードされます．</p>
               <ul class="">
-                <li>ブラウザの右上にある拡張機能のアイコンをクリック
+                <li>ブラウザの右上にある拡張機能のアイコンをクリックして有効化/無効化
                   <p>この拡張機能のアイコンが表示されていれば有効，アイコンの色がグレーであれば無効です．</p>
                   <div class="container text-center">
                     <div class="row justify-content-evenly">
                       <div class="col-5">
-                        <img class="img-thumbnail" src="images/tutorial-icon.png" alt="有効時の拡張機能アイコン">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail w-75" src="images/tutorial-icon.png" alt="有効時の拡張機能アイコン">
+                        </div>
                         <label class="mt-2">有効時の拡張機能アイコン</label>
                       </div>
                       <div class="col-5">
-                        <img class="img-thumbnail" src="images/tutorial-gray-icon.png" alt="無効時の拡張機能アイコン">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail w-75" src="images/tutorial-gray-icon.png" alt="無効時の拡張機能アイコン">
+                        </div>
                         <label class="mt-2">無効時の拡張機能アイコン</label>
-                      </div>
-                      <div class="d-flex flex-column ">
-                      </div>
-                      <div class="d-flex flex-column ">
                       </div>
                     </div>
                   </div>
                 </li>
               </ul>
-              <p>または</p>
-              <ul class="mb-4">
-                <li><a href="#aboutSite" data-bs-toggle="collapse" role="button" aria-expanded="false"
-                    aria-controls="aboutSite">
+              <ul class="mb-2">
+                <li><a href="#about-site" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="about-site">
                     当サイト
-                  </a>の上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化
+                  </a>の上部にある「YouTube スマートタブ - YouTube Smart Tabs を有効にする」のトグルボタンをクリックして有効化/無効化
                 </li>
-                <div class="container text-center ">
-                  <img class="img-thumbnail w-75" src="images/tutorial-toggle-button.png" alt="">
+                <div class="container text-center w-50 m-auto ">
+                  <div class="hover-modal-wrapper">
+                    <img class="img-thumbnail " src="images/tutorial-toggle-button.png" alt="">
+                  </div>
                   <label>有効化/無効化のトグルボタン</label>
                 </div>
               </ul>
-              <p class="mb-1 fw-bold">
+              <ul>
+                <li>コンテキストメニューから有効化/無効化
+                  <p>拡張機能のアイコンを右クリックまたは，任意のWEBサイト上で右クリックすると拡張機能のメニュー（コンテキストメニュー）が表示されます． コンテキストメニューから有効化/無効化を選択します</p>
+                  <div class="container text-center">
+                    <div class="row justify-content-evenly">
+                      <div class="col-5 d-flex flex-column justify-content-between" title="アイコンを右クリックして有効化">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-context-menu-1.png" alt="アイコンを右クリックして有効化">
+                        </div>
+                        <label>アイコンを右クリックして有効化/無効化</label>
+                      </div>
+                      <div class="col-5 d-flex flex-column justify-content-between"
+                        title="サイト上で右クリックして有効化">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-context-menu-2.png" alt="サイト上で右クリックして有効化">
+                        </div>
+                        <label>サイト上で右クリックして有効化/無効化</label>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <p class="mb-1 mt-3 fw-bold">
                 YouTubeの動画ページを開く
               </p>
               <ol>
                 <li class="mb-1">
-                  ツールが有効になった状態で<a href="https://www.youtube.com/">YouTube</a>を開き，視聴する動画ページを開きます．
+                  ツールが有効になった状態で<a href="https://www.youtube.com/" target="_blank">YouTube</a>を開き，視聴する動画ページを開きます．
                   <p class="m-0">※この拡張機能はYouTubeのトップページではなく，動画ページ（shortsを除く）のみ対応しています．</p>
                   <p class="m-0">動画ページのURLは，https://www.youtube.com/watch?v=VIDEO_ID </p>
                 </li>
