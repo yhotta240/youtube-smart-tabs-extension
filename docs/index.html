@@ -136,8 +136,7 @@
                         </div>
                         <label>アイコンを右クリックして有効化/無効化</label>
                       </div>
-                      <div class="col-5 d-flex flex-column justify-content-between"
-                        title="サイト上で右クリックして有効化">
+                      <div class="col-5 d-flex flex-column justify-content-between" title="サイト上で右クリックして有効化">
                         <div class="hover-modal-wrapper">
                           <img class="img-thumbnail" src="images/tutorial-context-menu-2.png" alt="サイト上で右クリックして有効化">
                         </div>
@@ -152,18 +151,48 @@
               </p>
               <ol>
                 <li class="mb-1">
-                  ツールが有効になった状態で<a href="https://www.youtube.com/" target="_blank">YouTube</a>を開き，視聴する動画ページを開きます．
+                  ツールが有効になった状態で<a href="https://www.youtube.com/" target="_blank">YouTube</a>を開き，視聴する動画ページを開きます．<br>
+                  すると下記の画像のように動画ページの右側にタブが表示されます．
+                  <div class="container text-center w-50 m-auto ">
+                    <div class="hover-modal-wrapper">
+                      <img class="img-thumbnail " src="images/tutorial-youtube-video.png" alt="">
+                    </div>
+                    <label>動画ページ</label>
+                  </div>
                   <p class="m-0">※この拡張機能はYouTubeのトップページではなく，動画ページ（shortsを除く）のみ対応しています．</p>
                   <p class="m-0">動画ページのURLは，https://www.youtube.com/watch?v=VIDEO_ID </p>
+                </li>
+                <li class="mb-1">
+                  タブを切り替える<br>
+                  ツールが有効になっているとYouTubeの動画ページの右側のサイドエリアにタブが表示されます．タブをクリックすることでコメントや関連動画などのコンテンツを切り替えることができます．
+                  <div class="container text-center">
+                    <div class="row justify-content-evenly">
+                      <div class="col-4 " title="チャットタブ">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-youtube-chats-tab.png" alt="チャットタブ">
+                        </div>
+                        <label>チャットタブ<br>(ライブ配信やリプレイ動画の場合)</label>
+                      </div>
+                      <div class="col-4 " title="コメントタブ">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-youtube-comments-tab.png" alt="コメントタブ">
+                        </div>
+                        <label>コメントタブ</label>
+                      </div>
+                      <div class="col-4 " title="関連動画タブ">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-youtube-video-tab.png" alt="関連動画タブ">
+                        </div>
+                        <label>関連動画タブ</label>
+                      </div>
+                    </div>
+                  </div>
                 </li>
               </ol>
               <p class="mb-1 fw-bold">
                 設定を変更する
               </p>
               <ol>
-                <li class="mb-1">
-                  動画ページを開くと，この拡張機能によりサイドバー（セカンダリエリア）に タブ と 選択されたタブのコンテンツ が表示されます．
-                </li>
                 <li class="mb-1">
                   設定タブをクリックすると，設定のメニューが表示されます．
                 </li>
@@ -173,9 +202,28 @@
                     <li>タブ化するコンテンツ</li>
                     <li>最初に表示するコンテンツ</li>
                   </ul>
+                  <div class="container text-center my-2">
+                    <div class="row justify-content-evenly">
+                      <div class="col-4 d-flex flex-column justify-content-between" title="タブ化するコンテンツ">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-tab-setting.png" alt="タブ化するコンテンツ">
+                        </div>
+                        <label>タブ化するコンテンツ</label>
+                      </div>
+                      <div class="col-4 d-flex flex-column justify-content-between" title="最初に表示するコンテンツ">
+                        <div class="hover-modal-wrapper">
+                          <img class="img-thumbnail" src="images/tutorial-tab-first-setting.png" alt="最初に表示するコンテンツ">
+                        </div>
+                        <label>最初に表示するコンテンツ</label>
+                      </div>
+                    </div>
+                  </div>
                   <p class="m-0">タブ化するコンテンツはデフォルトではコメント欄，関連動画，再生リストがタブ化されています．</p>
                   <p class="m-0">最初に表示するコンテンツはデフォルトで「自動（推奨）」の設定により，先頭のコンテンツまたは前回に選択していたタブ（設定タブ以外）が動画ページに移動した際に表示されます．
                   </p>
+                </li>
+                <li class="mb-1">
+                  設定を反映させるためにYouTubeの動画ページを再読み込みします．
                 </li>
               </ol>
             </div>
@@ -197,7 +245,7 @@
               <ul class="m-3">
                 <li class="mb-1">
                   <div class="fw-bold">ツール：tool</div>
-                  本拡張機能が提供する，YouTubeの動画ページ上で動作する機能群を指します．ツールは，特定のエリア（例：コメント，チャット，概要など）に対して，表示の最適化や操作性の向上を目的として動作します．
+                  本拡張機能が提供する，YouTubeの動画ページ上で動作する機能群を指す．ツールは，特定のエリア（例：コメント，チャット，概要など）に対して，表示の最適化や操作性の向上を目的として動作する．ここでは，YouTubeの動画ページ上で表示されるコンテンツをタブ化する機能を指す。
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">タブ：tab</div>
@@ -206,6 +254,10 @@
                 <li class="mb-1">
                   <div class="fw-bold">コンテンツ：content</div>
                   YouTubeの動画ページにおいて表示される動画本体やその周辺情報（概要，コメント，チャット，関連など）を含む全体的な情報のことを指す．このドキュメントでは，タブごとに切り替えられる各エリアをまとめて「コンテンツ」と呼ぶ．
+                </li>
+                <li class="mb-1">
+                  <div class="fw-bold">コンテキストメニュー:context menu</div>
+                  WEBサイト上の要素を右クリックした際に表示される拡張機能のメニューを指す．
                 </li>
                 <li class="mb-1">
                   <div class="fw-bold">サイドバー：secondary</div>
