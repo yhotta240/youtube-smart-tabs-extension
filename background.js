@@ -1,7 +1,7 @@
 // 初期化
-let context = 'all'; // コンテキストの初期値を設定（全体を対象）
-let title = chrome.runtime.getManifest().name; // 拡張機能の名前をmanifest.jsonから取得
-let isEnabled = false; // ツールの有効状態を示すフラグ（初期値はfalse）
+let context = 'all';
+let title = chrome.runtime.getManifest().name;
+let isEnabled = false;
 
 // 拡張機能がインストールされたときに実行される処理
 chrome.runtime.onInstalled.addListener((details) => {
@@ -9,35 +9,24 @@ chrome.runtime.onInstalled.addListener((details) => {
   chrome.tabs.create({ url: 'docs/index.html' });
   chrome.storage.local.get('isEnabled', (data) => {
     isEnabled = data.isEnabled !== undefined ? data.isEnabled : isEnabled;
-    actionIcon(isEnabled); // アイコンのテキストを更新
+    actionIcon(isEnabled);
   });
-  // コンテキストメニューを作成
-  console.log('コンテキストメニューを作成します。', isEnabled);
-  createParentContextMenu();
+  createContextMenu();
 });
 
 // ストレージの値が変更されたときに実行される処理
 chrome.storage.onChanged.addListener((changes) => {
-  console.log('ストレージが変更されました。', changes);
-  // 'isEnabled'の変更があった場合
   if (changes.isEnabled) {
-    // 新しい値を取得し、未設定の場合は既存の'isEnabled'を保持
     isEnabled = changes.isEnabled.newValue;
-    // openEditor(isEnabled);
     actionIcon(isEnabled);
   }
-
-  updateContextMenu(); // コンテキストメニューを更新
+  updateContextMenu();
 });
-
 
 // コンテキストメニューの項目がクリックされたときに実行される処理
 chrome.contextMenus.onClicked.addListener((info) => {
-  console.log('コンテキストメニューがクリックされました。', info);
   if (info.menuItemId === "extensionPage") {
-    // すでにdocs/index.htmlが開かれている場合は、削除して新しいタブを開く
     chrome.tabs.query({ url: "chrome-extension://" + chrome.runtime.id + "/docs/index.html" }, (tabs) => {
-      console.log('docs/index.htmlが開かれているタブを見つけました。', tabs);
       if (tabs.length > 0) {
         chrome.tabs.remove(tabs[0].id);
       }
@@ -51,69 +40,57 @@ chrome.contextMenus.onClicked.addListener((info) => {
   }
 });
 
-
 // タブが更新されたときに実行される処理
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  console.log('タブが更新されました。', tabId, changeInfo);
   if (changeInfo.status === 'complete') {
     chrome.storage.local.get('isEnabled', (data) => {
       isEnabled = data.isEnabled !== undefined ? data.isEnabled : isEnabled;
-      updateContextMenu(); // コンテキストメニューを更新
+      updateContextMenu();
     });
   }
 });
 
-
 // コンテキストメニューを更新する関数
 function updateContextMenu() {
   chrome.contextMenus.remove("keyEnabled", () => {
-    // 削除が成功した場合に新しいメニュー項目を作成
-    console.log('コンテキストメニューを更新しました。');
     if (!chrome.runtime.lastError) {
       enabledContextMenu();
     }
   });
 }
 
-function createParentContextMenu() {
+function createContextMenu() {
   chrome.contextMenus.create({
-    title: title, // 有効/無効に応じたタイトルを設定
-    contexts: [context], // メニューを表示するコンテキスト
-    id: "Extension" // メニュー項目のID
+    title: title,
+    contexts: [context],
+    id: "Extension"
   });
-
   chrome.contextMenus.create({
-    title: "拡張機能のページを開く", // 有効/無効に応じたタイトルを設定
-    contexts: [context], // メニューを表示するコンテキスト
+    title: "拡張機能のページを開く",
+    contexts: [context],
     parentId: "Extension",
     id: "extensionPage"
   });
-
   enabledContextMenu();
 }
 
 function enabledContextMenu() {
-  console.log('コンテキストメニューを作成しました。', isEnabled);
   chrome.contextMenus.create({
     title: `YouTube スマートタブを${isEnabled ? '無効にする' : '有効にする'}`,
-    contexts: [context], // メニューを表示するコンテキスト
+    contexts: [context],
     parentId: "Extension",
     id: "keyEnabled"
   });
 }
 
 chrome.action.onClicked.addListener((tab) => {
-  isEnabled = !isEnabled; // 有効状態を反転
-  console.log("アクションボタンがクリックされました。", tab, isEnabled);
-  actionIcon(isEnabled); // アイコンのテキストを更新
-  chrome.storage.local.set({ isEnabled: isEnabled }); // 状態をストレージに保存
+  isEnabled = !isEnabled;
+  actionIcon(isEnabled);
+  chrome.storage.local.set({ isEnabled: isEnabled });
 });
 
 function actionIcon(isEnabled) {
   chrome.action.setIcon({
     path: isEnabled ? "icons/icon.png" : "icons/icon_gray.png"
   });
-  // chrome.action.setBadgeText({ text: isEnabled ? 'ON' : '' });
-  // chrome.action.setBadgeBackgroundColor({ color: isEnabled ? '#4688F1' : '#CCCCCC' });
 }
-

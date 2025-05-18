@@ -6,7 +6,7 @@ const tabs = [
   { num: 3, id: "comments", name: "コメント", elementName: "comments" },
   { num: 4, id: "related", name: "関連", elementName: "related" },
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
-  { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
+  // { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
 ];
 
 const defaultCheckedTabs = [
@@ -24,13 +24,12 @@ const settingsOption = [
   { num: 3, id: "comments", name: "コメント", elementName: "comments" },
   { num: 4, id: "related", name: "関連", elementName: "related" },
   { num: 5, id: "playlist", name: "再生リスト", elementName: "playlist" },
-  { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
+  // { num: 6, id: "donation-shelf", name: "寄付", elementName: "donationShelf" },
 ];
 
 // DOM要素の取得を関数化
 const getElements = () => {
   return {
-    mastheadContainer: document.querySelector('#masthead-container.style-scope.ytd-app'),
     below: document.querySelector('#below.style-scope.ytd-watch-flexy'),
     primary: document.querySelector('#primary.style-scope.ytd-watch-flexy'),
     secondary: document.querySelector('#secondary.style-scope.ytd-watch-flexy'),
@@ -44,19 +43,16 @@ const getElements = () => {
     settings: document.querySelector('#extension-settings.style-scope.ytd-watch-flexy'),
     customTab: document.querySelector('#custom-tab'),
     chatViewBtn: document.querySelector('button-view-model.yt-spec-button-view-model.ytTextCarouselItemViewModelButton'),
-    chatClosedBtn: document.querySelector('#close-button.style-scope.yt-live-chat-header-renderer'),
-    chatContainerTab: document.querySelector('#chat-container-tab'), // chatContainerTab
+    chatContainerTab: document.querySelector('#chat-container-tab'),
     chat: document.querySelector('#chat'),
-    bottomRow: document.querySelector('#below #bottom-row'),
   };
-}
+};
+
 // ツールの有効/無効を処理する関数
 const handleSampleTool = (isEnabled) => {
   if (isEnabled) {
-    // console.log(`${manifestData.name} がONになりました`);
     observer.observe(document.body, { childList: true, subtree: true });
   } else {
-    // console.log(`${manifestData.name} がOFFになりました`);
     observer.disconnect();
   }
 };
@@ -81,10 +77,9 @@ chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => 
   checkedTabs = data.checkedTabs ?? defaultCheckedTabs;
   checkedTabs.sort((a, b) => a.num - b.num);
   selectedTab = data.selectedTab ?? defaultSelectedTab;
-  console.log("checkedTabs", checkedTabs, selectedTab);
   handleSampleTool(isEnabled);
-
 });
+
 // ストレージの値が変更されたときに実行される処理
 chrome.storage.onChanged.addListener((changes) => {
   isEnabled = changes.isEnabled ? changes.isEnabled.newValue : isEnabled;
@@ -102,8 +97,6 @@ function extensionSettings() {
   settings.style.display = 'none';
   settings.setAttribute('aria-selected', 'false');
   settings.classList.add('style-scope', 'ytd-watch-flexy');
-
-  // loadSettings の結果を待つ
   settings.innerHTML = /*html*/ `
   <div class="style-scope ytd-watch-flexy" id="settings-container" style="padding: 10px;">
     <div id="options" class="style-scope ytd-settings-options-renderer">
@@ -162,8 +155,6 @@ function extensionSettings() {
     </div>
   </div>
   `;
-
-  // console.log("return settings", settings);
   return settings;
 }
 
@@ -173,28 +164,20 @@ function handleSettings() {
   if (!settings) return;
   const checkbox = settings.querySelectorAll("#checkbox");
   const radioButtons = settings.querySelectorAll("#radio");
-  // console.log("checkbox", checkbox);
-  // console.log("radioButtons", radioButtons);
-
   // デフォルト値の適用
   if (!checkedTabs) {
     checkedTabs = defaultCheckedTabs;
-    chrome.storage.local.set({ checkedTabs }, () => {
-    }); // デフォルト値を保存
+    chrome.storage.local.set({ checkedTabs });
   }
   if (!selectedTab) {
     selectedTab = defaultSelectedTab;
-    chrome.storage.local.set({ selectedTab }, () => {
-    }); // デフォルト値を保存
+    chrome.storage.local.set({ selectedTab });
   }
-
   if (checkedTabs) { // チェックボックスの選択状態を復元
     checkbox.forEach((cb, index) => {
-      // 設定のラベルを取得
       const labelElement = cb.querySelector("#label.style-scope.ytd-settings-checkbox-renderer");
       if (labelElement) {
         const labelVal = labelElement.dataset.value;
-        // console.log("label:", labelVal, labelElement.textContent);
         if (checkedTabs.some((tab) => tab.id === labelVal)) {
           cb.setAttribute("aria-checked", "true");
           cb.setAttribute("checked", "");
@@ -206,17 +189,13 @@ function handleSettings() {
         }
       }
     });
-
-    console.log("Restored checked tabs:", checkedTabs);
   }
-
   checkbox.forEach((cb, index) => { // チェックボックスのイベントリスナー
     cb.addEventListener('click', () => {
       const labelElement = cb.querySelector("#label.style-scope.ytd-settings-checkbox-renderer");
       const labelVal = labelElement.dataset.value;
       const label = labelElement.textContent;
       const isChecked = cb.getAttribute("aria-checked") === "true";
-      console.log(`Checkbox ${labelVal} clicked. Checked: ${isChecked}`);
       if (isChecked) {
         const tabId = tabs.find(tab => tab.id === labelVal)?.id;
         const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
@@ -228,19 +207,14 @@ function handleSettings() {
       } else {
         checkedTabs = checkedTabs.filter(tab => tab.id !== labelVal);
       }
-      chrome.storage.local.set({ checkedTabs: checkedTabs }, () => {
-        console.log("Checked tabs saved:", checkedTabs);
-      }); // 選択状態を保存
+      chrome.storage.local.set({ checkedTabs: checkedTabs });
     });
   });
-
   // ラジオボタンの状態を復元
   if (selectedTab) {
-    // console.log("radioButtons", selectedTab, radioButtons);
     radioButtons.forEach((radio, index) => {
       const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
       const labelVal = labelElement.dataset.value;
-      // console.log("label:", labelVal, selectedTab.id);
       if (labelVal === selectedTab.id) {
         radio.setAttribute("aria-checked", "true");
         radio.setAttribute("checked", "");
@@ -252,9 +226,7 @@ function handleSettings() {
       }
     });
   }
-
   radioButtons.forEach((radio, index) => {
-    // console.log("radio", radio);
     radio.addEventListener('click', () => {
       radioButtons.forEach((r, i) => {
         r.setAttribute("aria-checked", "false");
@@ -264,8 +236,6 @@ function handleSettings() {
       const labelElement = radio.querySelector("#label.style-scope.ytd-settings-radio-option-renderer");
       const labelVal = labelElement.dataset.value;
       const label = labelElement.textContent;
-      // console.log("label:", labelVal, selectedTab.id);
-      // if (labelVal === selectedTab.id) {
       radio.setAttribute("aria-checked", "true");
       radio.setAttribute("checked", "");
       radio.setAttribute("active", "");
@@ -273,61 +243,48 @@ function handleSettings() {
       const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
       const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
       selectedTab = { id: tabId ?? "auto", name: label, num: tabNum ?? 0, elementName: tabElementName ?? "auto" };
-      chrome.storage.local.set({ selectedTab: selectedTab }, () => {
-        // console.log("selectedTab", selectedTab);
-      }); // 選択状態を保存
-
+      chrome.storage.local.set({ selectedTab: selectedTab });
       if (!tabId) {
-        chrome.storage.local.set({ currentTab: null })
+        chrome.storage.local.set({ currentTab: null });
       }
     });
   });
-
 };
 
 let preUrl = null;
 // メインの処理
 const observer = new MutationObserver(() => {
   const elements = getElements();
-
   if (!elements.below && !elements.secondary && !elements.secondaryInner) return;
   if (!elements.secondaryInner.classList.contains('tab-container')) {
-    console.log("tab-containerがないので追加します");
     elements.secondaryInner.classList.add('tab-container');
   }
   const isLargeScreen = window.innerWidth >= 1017;
   const customTab = document.querySelector('#custom-tab');
-
   const url = new URL(window.location.href);
   const preVideoId = preUrl ? new URL(preUrl).searchParams.get("v") : null; //// 前のURLからvideoIdを取得
   const currentVideoId = url.searchParams.get("v"); // 現在のURLからvideoIdを取得
-
   if (!customTab) {
     handleFirstRender(elements, checkedTabs, isLargeScreen);
     if (preVideoId !== currentVideoId) {
-      console.log("URLが変更されました", preUrl, "から", url.href);
+      // console.log("URLが変更", preUrl, "から", url.href);
       handleUrlChange();
       preUrl = url.href;
     }
   } else {
     handleResize(elements, customTab, isLargeScreen);
     if (preVideoId !== currentVideoId && preUrl) {
-      console.log("PreURL:", preUrl, "URL:", url.href);
+      // console.log("PreURL:", preUrl, "URL:", url.href);
       customTab.remove();
     } else if (preVideoId !== currentVideoId) {
-      // customTab.remove();
-      console.log("カスタムタブを削除する");
       preUrl = "https://www.youtube.com/";
     }
   }
-
   preRespWidth = isLargeScreen ? 'large' : 'medium';
-
 });
 
 // 初回レンダリング時の処理
 function handleFirstRender(elements, checkedTabs, isLargeScreen) {
-  console.log("Custom Tabが見つかりません", isEventAdded);
   isEventAdded = false;
   if (isLargeScreen) {
     const tabs = createTab(checkedTabs);
@@ -339,53 +296,43 @@ function handleFirstRender(elements, checkedTabs, isLargeScreen) {
     elements.below.insertBefore(tabs, targetElement);
     clickTab(elements.below);
   }
-  console.log("タブを作成しました");
 }
+
 // ウィンドウサイズ変更時の処理
 function handleResize(elements, customTab, isLargeScreen) {
-
   const sizeClass = 'yt-spec-button-shape-next--size-';
   if (isLargeScreen && preRespWidth === 'medium') {
-    console.log("Switched to large screen layout");
+    // console.log("Switched to large screen layout");
     renderUI();
     Array.from(customTab.children).forEach(tab => {
       if (tab.classList.contains(`${sizeClass}m`)) {
         tab.classList.replace(`${sizeClass}m`, `${sizeClass}s`);
       }
     });
-
     // 大画面レイアウトに合わせて要素を移動
     elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
     if (elements.settings) elements.secondaryInner.appendChild(elements.settings);
-    console.log("サイズ変更されました。移動させます", elements.settings);
     handleSettings();
     checkedTabs.forEach(tab => {
       const element = getElements()[tab.elementName];
-      console.log("サイズ変更されました。移動させます", tab.elementName);
       if (element) {
         elements.secondaryInner.appendChild(element);
       }
     });
-    // タブのクリックイベント処理
     clickTab(elements.secondaryInner);
-
   } else if (!isLargeScreen && preRespWidth === 'large') {
-    console.log("Switched to medium screen layout");
-
+    // console.log("Switched to medium screen layout");
     Array.from(customTab.children).forEach(tab => {
       if (tab.classList.contains(`${sizeClass}s`)) {
         tab.classList.replace(`${sizeClass}s`, `${sizeClass}m`);
       }
     });
-
     // 中画面レイアウトに合わせて要素を移動
     if (elements.settings) elements.below.appendChild(elements.settings);
     elements.below.insertBefore(customTab, elements.settings);
-    console.log("medium layout.移動させます", elements.settings);
     handleSettings();
     checkedTabs.forEach(tab => {
       const element = getElements()[tab.elementName];
-      console.log("medium layout.移動させます", tab.id);
       if (element) {
         elements.below.appendChild(element);
       }
@@ -394,8 +341,6 @@ function handleResize(elements, customTab, isLargeScreen) {
         if (description) elements.below.appendChild(description);
       }
     });
-
-    // タブのクリックイベント処理
     clickTab(elements.below);
   }
 }
@@ -418,54 +363,34 @@ function handleUrlChange() {
       }, { once: true });
       chatViewBtn._reg = true;
     }
-
     const commentsHidden = comments.hasAttribute("hidden");
     const teaserCarousel = document.querySelector("#teaser-carousel");
-
     const customTab = document.querySelector('#custom-tab');
     let filteredTabs = checkedTabs.filter(filteredTab => {
       const element = getElements()[filteredTab.elementName];
       const tabElement = customTab.querySelector(`#${filteredTab.id}-tab`);
-      // console.log(filteredTab.id, element?.children.length);
-
       let shouldHideTab = false;
-
       if (filteredTab.id === 'chat-container') {
-        // console.log("チャット", filteredTab.id === 'chat-container' && !teaserCarousel.hasAttribute("hidden") || element?.children.length === 2);
         shouldHideTab = !(filteredTab.id === 'chat-container' && !teaserCarousel.hasAttribute("hidden") || element?.children.length === 2);
       }
-
       if (filteredTab.id === 'comments') {
-        // console.log("コメント", commentsHidden ? "がない" : "あり", (commentsHidden));
         shouldHideTab = (commentsHidden);
       }
-
       if (filteredTab.id === 'related') {
-        // console.log("関連", filteredTab.id === 'related' && (element && element.children.length > 1));
         shouldHideTab = !(element && element.children.length > 1);
       }
-
       if (filteredTab.id === 'playlist') {
-        // console.log("再生リスト", filteredTab.id === 'playlist' && (playlist && playlist.hasAttribute("hidden")));
         shouldHideTab = playlist.hasAttribute("hidden");
       }
-
       // console.log(filteredTab.id, "を", shouldHideTab ? "非表示" : "表示");
-      // タブを表示・非表示にする
       tabElement.style.display = shouldHideTab ? 'none' : 'block';
-
       return !shouldHideTab;
     });
-
-
     filteredTabs.sort((a, b) => a.num - b.num);
-    console.log("filteredTabs", filteredTabs);
-
     if (filteredTabs.length > 0) {
       const tablist = filteredTabs
         .map(filtered => customTab.querySelector(`#${filtered.id}-tab`)) // 各IDに対応する要素を取得
         .filter(tab => tab !== null); // 存在する要素だけに絞る
-
       // クラスの適用
       tablist.forEach((tab, index) => {
         if (index === 0) {
@@ -477,12 +402,10 @@ function handleUrlChange() {
         }
       });
     }
-
     if (tryCount === 0) {
       isFirstSelected = true;
       setActiveTab(customTab);
     }
-
     // 最大試行回数に達したら終了
     if (!commentsHidden || tryCount >= maxTries) {
       setActiveTab(customTab);
@@ -509,7 +432,6 @@ function moveElement() {
   checkedTabs.forEach(tab => {
     const element = getElements()[tab.elementName];
     if (element) {
-      console.log("移動させます", tab.elementName);
       if (tab.elementName === "chatContainer") {
         return;
       }
@@ -517,23 +439,19 @@ function moveElement() {
     } else {
       const interval = setInterval(() => {
         const retryElement = getElements()[tab.elementName];
-        // console.log("移動させる要素がありません", tab.elementName, retryElement);
         if (retryElement) {
           appendElement(tab);
-          console.log("移動させました", tab.elementName);
           clearInterval(interval);
         }
       }, 100);
     }
   });
-
   function appendElement(tab) {
     (isLargeScreen ?
       secondaryInner.appendChild(getElements()[tab.elementName]) :
       below.appendChild(getElements()[tab.elementName])
     );
   }
-
 }
 
 // タブの選択状態を管理する関数
@@ -547,9 +465,7 @@ function setActiveTab(customTab) {
       }
     }
   };
-
   if (selectedTab.id === 'auto') {
-    // 保存されたタブを取得して、現在選択されているタブに一致する場合は、タブの選択状態を更新
     chrome.storage.local.get('currentTab', ({ currentTab }) => {
       if (currentTab) {
         const targetButton = document.querySelector(`[data-bs-target="#${currentTab.id}"]`);
@@ -580,11 +496,8 @@ function renderUI() {
 }
 
 function createTab(checkedTabs) {
-  console.log("タブを作成します");
   let filteredTabs = checkedTabs;
   filteredTabs.sort((a, b) => a.num - b.num);
-  const elements = getElements();
-
   const tab = document.createElement('div');
   const btnSize = `yt-spec-button-shape-next--size-${window.innerWidth >= 1017 ? 's' : 'm'}`;
   tab.id = 'custom-tab';
@@ -622,8 +535,6 @@ function createTab(checkedTabs) {
   setTimeout(() => {
     const startButton = tab.querySelector(".yt-spec-button-shape-next--segmented-start");
     const intervalButtons = tab.querySelectorAll(".yt-spec-button-shape-next--segmented-interval");
-    console.log("タブを整形");
-
     if (startButton) {
       const bgColor = window.getComputedStyle(startButton).backgroundColor;
       const rgbaColor = bgColor.replace(/rgb(a)?\((\d+), (\d+), (\d+)(, [\d.]+)?\)/, (_, a, r, g, b) => {
@@ -634,15 +545,12 @@ function createTab(checkedTabs) {
       });
     }
   }, 0);
-
-
   return tab;
 }
 
 function displayElementNone(innerContent) {
   const elements = getElements();
   checkedTabs.forEach(tab => {
-    // console.log('displayElementNone', tab.elementName);
     const element = elements[tab.elementName];
     if (element) {
       element.style.display = 'none';
@@ -654,7 +562,6 @@ function displayElementNone(innerContent) {
     }
   });
   elements.settings.style.display = 'none';
-  // elements.settings.setAttribute('aria-selected', 'false');
   const settings = innerContent.querySelector('#extension-settings');
   if (settings) {
     settings.style.display = 'none';
@@ -669,7 +576,6 @@ function clickTab(innerContent) {
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const targetId = button.getAttribute('data-bs-target');
-      // チャットが選択されたとき
       if (targetId === '#chat-container') getElements().chatViewBtn?.click();
       removeCustomTabSelected();
       displayElementNone(innerContent);
@@ -680,7 +586,6 @@ function clickTab(innerContent) {
         const description = document.querySelector('ytd-watch-metadata')
         if (description) description.style.display = 'block';
       }
-      console.log("選択されました", targetId.slice(1, targetId.length));
       if (targetId === '#playlist') {
         const playlist = getElements().playlist;
         if (playlist) {
@@ -693,9 +598,7 @@ function clickTab(innerContent) {
           if (tab.id === targetId.slice(1, targetId.length)) {
             const tabObject = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
             if (!isFirstSelected) {
-              chrome.storage.local.set({ currentTab: tabObject }, () => {
-                console.log("現在のタブを保存しました", tabObject);
-              });
+              chrome.storage.local.set({ currentTab: tabObject });
             } else {
               isFirstSelected = false;
             }
@@ -704,8 +607,8 @@ function clickTab(innerContent) {
       }
     });
   });
-
 }
+
 function removeCustomTabSelected() {
   const buttons = document.querySelectorAll('[data-bs-target]');
   buttons.forEach(button => {
@@ -713,18 +616,14 @@ function removeCustomTabSelected() {
   });
 }
 
-
-let initialHeight = window.innerHeight; // 初期の高さを取得
+let initialHeight = window.innerHeight;
 window.addEventListener('resize', () => {
   const windowHeight = window.innerHeight;
-  // 初期の高さを取得してどのくらい変化したかを確認
-  const heightDiff = windowHeight - initialHeight; // 絶対値
-  console.log("Height diff:", windowHeight, initialHeight, heightDiff);
-  initialHeight = windowHeight; // 新しい高さを初期値として保存
+  const heightDiff = windowHeight - initialHeight;
+  initialHeight = windowHeight;
   const { secondaryInner, chat } = getElements();
   if (secondaryInner) {
     setTimeout(() => {
-      // console.log("secondaryInner", secondaryInner.offsetHeight, heightDiff, chat, document.querySelector("#chat-messages"));
       secondaryInner.style.height = `${secondaryInner.offsetHeight + heightDiff}px`;
       if (chat) {
         chat.style.height = `${chat.offsetHeight + heightDiff}px`;
