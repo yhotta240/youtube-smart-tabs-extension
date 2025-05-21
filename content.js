@@ -492,6 +492,32 @@ function renderUI() {
   const { secondaryInner } = getElements();
   if (secondaryInner) {
     secondaryInner.style.height = `${height()}px`;
+    const descInner = document.querySelector('ytd-watch-metadata.watch-active-metadata #description-inner');
+    if (!descInner) return;
+    const descBtn = descInner.querySelector('#collapse');
+    const expandBtn = descInner.querySelector('#description-inline-expander');
+    const existClonedBtn = descInner.querySelector('#cloneCollapse');
+    const isExpanded = descInner.querySelector('#description-inline-expander').hasAttribute('is-expanded');
+    if (descBtn && expandBtn && !existClonedBtn) {
+      const cloneDescBtn = descBtn.cloneNode(true);
+      cloneDescBtn.id = 'cloneCollapse';
+      cloneDescBtn.classList.add('cloneBtn');
+      descInner.insertBefore(cloneDescBtn, descInner.firstChild);
+      expandBtn.addEventListener('click', () => {
+        cloneDescBtn.removeAttribute('hidden');
+        cloneDescBtn.style.display = 'block';
+      });
+      cloneDescBtn.addEventListener('click', () => {
+        descBtn.click();
+      });
+      descBtn.addEventListener('click', () => {
+        setTimeout(() => {
+          cloneDescBtn.style.display = 'none';
+        }, 100);
+      });
+    } else if (existClonedBtn && !isExpanded) {
+      existClonedBtn.style.display = 'none';
+    }
   }
 }
 

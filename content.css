@@ -187,6 +187,12 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     margin: 8px;
 }
 
+ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn {
+    margin-top: 0 !important;
+    margin-bottom: 4px;
+    white-space: normal;
+}
+
 #secondary-inner>ytd-watch-metadata #bottom-row.ytd-watch-metadata {
     margin-right: 0 !important;
 }
