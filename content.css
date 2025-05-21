@@ -187,6 +187,14 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     margin: 8px;
 }
 
+#secondary-inner>ytd-watch-metadata #bottom-row.ytd-watch-metadata {
+    margin-right: 0 !important;
+}
+
+#secondary-inner>ytd-watch-metadata #teaser-carousel.item.ytd-watch-metadata {
+    min-width: 100% !important;
+}
+
 #secondary-inner>#related.style-scope.ytd-watch-flexy.active.show #items {
     padding-top: 5px;
     padding-inline: var(--ytd-margin-4x);
@@ -198,10 +206,6 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
     top: 0;
     background: var(--yt-spec-base-background);
     z-index: 1000;
-}
-
-#secondary-inner>ytd-watch-metadata #bottom-row.ytd-watch-metadata {
-    margin-right: 0 !important;
 }
 
 .resize-secondary {
