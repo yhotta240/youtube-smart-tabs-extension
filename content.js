@@ -481,17 +481,15 @@ function handleUrlChange() {
 }
 
 function moveElement() {
-  const { below, secondaryInner, customTab, settings } = getElements();
-  // 設定メニューの配置
+  const { below, secondaryInner, settings } = getElements();
   if (!below && !secondaryInner) return;
   const isLargeScreen = window.innerWidth >= 1017;
+  const parent = isLargeScreen ? secondaryInner : below;
   if (!settings) {
-    if (isLargeScreen) {
-      secondaryInner.appendChild(extensionSettings())
-    } else {
-      below.appendChild(extensionSettings())
-    }
+    parent.appendChild(extensionSettings());
     handleSettings();
+  } else {
+    parent.appendChild(settings);
   }
   checkedTabs.forEach(tab => {
     const element = getElements()[tab.elementName];
