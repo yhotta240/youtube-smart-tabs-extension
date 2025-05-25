@@ -37,15 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
   titleHeader.textContent = `${manifestData.name}`;
   const enabledLabel = document.getElementById('enabled-label');
   enabledLabel.textContent = `${manifestData.name} を有効にする`;
-  const newTabButton = document.getElementById('new-tab-button');
-  newTabButton.addEventListener('click', () => {
-    chrome.tabs.query({ url: "chrome-extension://" + chrome.runtime.id + "/docs/index.html" }, (tabs) => {
-      chrome.tabs.create({ url: 'docs/index.html' });
-      if (tabs.length > 0) {
-        chrome.tabs.remove(tabs[0].id);
-      }
-    });
-  });
   const storeLink = document.getElementById('store_link');
   storeLink.href = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
   if (storeLink) clickURL(storeLink);
