@@ -32,6 +32,7 @@ const getElements = () => {
   return {
     below: document.querySelector('#below.style-scope.ytd-watch-flexy'),
     primary: document.querySelector('#primary.style-scope.ytd-watch-flexy'),
+    primaryInner: document.querySelector('#primary-inner.style-scope.ytd-watch-flexy'),
     secondary: document.querySelector('#secondary.style-scope.ytd-watch-flexy'),
     secondaryInner: document.querySelector('#secondary-inner.style-scope.ytd-watch-flexy'),
     description: document.querySelector('#below > ytd-watch-metadata'),
@@ -552,7 +553,10 @@ function setActiveTab(customTab) {
 }
 
 function renderUI() {
-  const { secondaryInner } = getElements();
+  const { primaryInner, secondaryInner } = getElements();
+  if (primaryInner) {
+    primaryInner.style.paddingBottom = '100px';
+  }
   if (secondaryInner) {
     secondaryInner.style.height = `${height()}px`;
     const descInner = document.querySelector('ytd-watch-metadata.watch-active-metadata #description-inner');
