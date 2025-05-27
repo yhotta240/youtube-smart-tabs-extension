@@ -396,13 +396,14 @@ function handleResize(elements, customTab, isLargeScreen) {
     elements.below.insertBefore(customTab, elements.settings);
     handleSettings();
     checkedTabs.forEach(tab => {
-      const element = getElements()[tab.elementName];
+      let element;
+      if (tab.id === 'description') {
+        element = document.querySelector('ytd-watch-metadata');
+      } else {
+        element = getElements()[tab.elementName];
+      }
       if (element) {
         elements.below.appendChild(element);
-      }
-      if (tab.id === 'description') {
-        const description = document.querySelector('ytd-watch-metadata');
-        if (description) elements.below.appendChild(description);
       }
     });
     clickTab(elements.below);
@@ -498,14 +499,6 @@ function moveElement() {
         return;
       }
       appendElement(tab);
-    } else {
-      const interval = setInterval(() => {
-        const retryElement = getElements()[tab.elementName];
-        if (retryElement) {
-          appendElement(tab);
-          clearInterval(interval);
-        }
-      }, 100);
     }
   });
   function appendElement(tab) {
