@@ -21,7 +21,7 @@
       "js": [
         "settings/settingsData.js",
         "settings/extensionSetting.js",
-        "docs/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js",
+        "lib/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js",
         "content.js"
       ],
       "css": ["content.css"]
