@@ -30,3 +30,11 @@ YouTubeの動画を視聴しながら，コメントや概要を手軽に確認�
 - 他の拡張機能（特にUIを変更するタイプのもの）と併用すると，競合が発生する可能性があります．
 
 YouTube Smart Tabsで，YouTube をもっと便利に！
+
+---
+
+© 2025 yhotta240
+
+本ソフトウェアの無断転載，自作発言，並びにChromeウェブストアや他のプラットフォームでの無断公開を禁止します．
+
+Unauthorized copying, claiming as your own, and publishing this software without permission on the Chrome Web Store or any other platform are prohibited.
