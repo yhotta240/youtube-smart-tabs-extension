@@ -42,16 +42,18 @@ const height = () => { // 画面の高さを取得する関数
 let isEnabled = false;
 let checkedTabs = null;
 let selectedTab = null;
+let extensionDetails = null;
 let preRespWidth = null;
 let isFirstSelected = false;
 let isEventAdded = false;
 
 // 最初の読み込みまたはリロード後に実行する処理
-chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab'], (data) => {
+chrome.storage.local.get(['isEnabled', 'checkedTabs', 'selectedTab', 'details'], (data) => {
   isEnabled = data.isEnabled ?? false;
   checkedTabs = data.checkedTabs ?? defaultCheckedTabs;
   checkedTabs.sort((a, b) => a.num - b.num);
   selectedTab = data.selectedTab ?? defaultSelectedTab;
+  extensionDetails = data.details ?? settingDetails;
   handleSampleTool(isEnabled);
 });
 
@@ -152,6 +154,18 @@ function handleSettings() {
       if (!tabId) {
         chrome.storage.local.set({ currentTab: null });
       }
+    });
+  });
+  // 詳細設定の状態の復元とイベントリスナの追加
+  const details = settings.querySelectorAll("#detail");
+  if (!details.length) return;
+  details.forEach(detail => {
+    const toggle = detail.querySelector("#toggle");
+    const detailData = extensionDetails.find(d => d.id === detail.dataset.id);
+    if (detailData?.isEnabled) toggle.click();
+    toggle.addEventListener('click', () => {
+      detailData.isEnabled = toggle.getAttribute("aria-pressed") === "true";
+      chrome.storage.local.set({ details: extensionDetails });
     });
   });
 };
@@ -392,7 +406,10 @@ function renderUI() {
   if (secondaryInner) {
     secondaryInner.style.height = `${height()}px`;
     const descInner = document.querySelector('ytd-watch-metadata.watch-active-metadata #description-inner');
+    const isDetailedDesc = extensionDetails.find(detail => detail.id === 'description-detail')?.isEnabled;
+    handleCommentDetailCSS();
     if (!descInner) return;
+    if (!isDetailedDesc) return;
     const descBtn = descInner.querySelector('#collapse');
     const expandBtn = descInner.querySelector('#description-inline-expander');
     const existClonedBtn = descInner.querySelector('#cloneCollapse');
@@ -404,19 +421,23 @@ function renderUI() {
       descInner.insertBefore(cloneDescBtn, descInner.firstChild);
       expandBtn.addEventListener('click', () => {
         cloneDescBtn.removeAttribute('hidden');
-        cloneDescBtn.style.display = 'block';
       });
       cloneDescBtn.addEventListener('click', () => {
         descBtn.click();
       });
       descBtn.addEventListener('click', () => {
         setTimeout(() => {
-          cloneDescBtn.style.display = 'none';
+          cloneDescBtn.setAttribute('hidden', '');
         }, 100);
       });
     } else if (existClonedBtn && !isExpanded) {
-      existClonedBtn.style.display = 'none';
+      existClonedBtn.style.display = 'block';
+      existClonedBtn.setAttribute('hidden', '');
     }
+  }
+  function handleCommentDetailCSS() {
+    const isDetailedComments = extensionDetails.find(detail => detail.id === 'comment-detail')?.isEnabled;
+    chrome.runtime.sendMessage({ action: isDetailedComments ? "insertCSS" : "removeCSS" });
   }
 }
 

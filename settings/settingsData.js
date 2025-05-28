@@ -26,6 +26,6 @@ const settingsOption = [
 ];
 
 const settingDetails = [
-    { id: "description-detail", elementName: "description", sectionTitle: "概要", title: "概要欄の「一部を表示」ボタンを上部にも表示", subtitle: "概要欄の「もっと見る」ボタンをクリックしたときに，概要欄の下部に表示される「一部を表示」ボタンを上部にも表示します．" },
-    { id: "comment-detail", elementName: "comments", sectionTitle: "コメント", title: "コメントヘッダを固定", subtitle: "コメント欄のヘッダ（入力欄）をコンテンツ内の上部に固定します．" },
+    { id: "description-detail", elementName: "description", isEnabled: true, sectionTitle: "概要", title: "概要欄の「一部を表示」ボタンを上部にも表示", subtitle: "概要欄の「もっと見る」ボタンをクリックしたときに，概要欄の下部に表示される「一部を表示」ボタンを上部にも表示します．" },
+    { id: "comment-detail", elementName: "comments", isEnabled: false, sectionTitle: "コメント", title: "コメントヘッダを固定", subtitle: "コメント欄のヘッダ（入力欄）をコンテンツ内の上部に固定します．" },
 ];

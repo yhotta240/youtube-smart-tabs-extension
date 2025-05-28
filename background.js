@@ -94,3 +94,20 @@ function actionIcon(isEnabled) {
     path: isEnabled ? "icons/icon.png" : "icons/icon_gray.png"
   });
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const cssFilePath = 'settings/css/comment-detail.css';
+  const tabId = sender.tab?.id;
+  if (!tabId) return;
+  if (message.action === "insertCSS") {
+    chrome.scripting.insertCSS({
+      target: { tabId },
+      files: [cssFilePath]
+    });
+  } else if (message.action === "removeCSS") {
+    chrome.scripting.removeCSS({
+      target: { tabId },
+      files: [cssFilePath]
+    });
+  }
+});

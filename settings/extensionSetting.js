@@ -32,13 +32,13 @@ function createRadio(option, className) {
 
 function createDetail(detail, className) {
   return /*html*/`
-    <ytd-settings-options-renderer class="style-scope ytd-item-section-renderer">
+    <ytd-settings-options-renderer id="detail" class="style-scope ytd-item-section-renderer" data-id="${detail.id}" >
       <div id="section" class="${className}">
         <div id="title" class="${className}" style="margin-right: 0;">${detail.sectionTitle}</div>
         <div id="content" class="${className}">
           <div id="options" class="${className}">
             <ytd-settings-switch-renderer class="${className}">
-              <tp-yt-paper-toggle-button id="toggle" noink="" class="style-scope ytd-settings-switch-renderer" role="button" aria-pressed="false" tabindex="0" toggles="" aria-disabled="false" aria-label="概要" style="touch-action: pan-y;">
+              <tp-yt-paper-toggle-button id="toggle"  noink="" class="style-scope ytd-settings-switch-renderer" role="button" aria-pressed="false" tabindex="0" toggles="" aria-disabled="false" aria-label="概要" style="touch-action: pan-y;">
                 <div class="toggle-label style-scope tp-yt-paper-toggle-button" data-value="${detail.id}"></div>
               </tp-yt-paper-toggle-button>
               <div class="style-scope ytd-settings-switch-renderer">

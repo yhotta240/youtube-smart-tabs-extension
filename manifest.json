@@ -6,7 +6,7 @@
   "icons": {
     "48": "icons/icon.png"
   },
-  "permissions": ["contextMenus", "storage", "tabs"],
+  "permissions": ["contextMenus", "storage", "scripting"],
   "action": {
     "default_icon": {
       "48": "icons/icon.png"
@@ -32,5 +32,6 @@
       "resources": ["docs/index.html"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "host_permissions": ["https://www.youtube.com/*"]
 }
