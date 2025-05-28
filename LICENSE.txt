@@ -4,11 +4,9 @@
 本ソフトウェアおよび関連ファイルの著作権は著作者に帰属します．
 
 以下の行為を禁止します：
-- 本ソフトウェアの無断転載・複製
+- 本ソフトウェアの無断転載
 - 本ソフトウェアの改変による自作発言
 - 本ソフトウェアを無断でGoogle Chromeウェブストアや他のプラットフォームに公開・配布すること
-
-本ソフトウェアの使用については，著作者の明示的な許可が必要です．
 
 違反が認められた場合，法的手段を講じる可能性があります．
 
@@ -16,10 +14,8 @@
 Copyright of this software and related files belongs to the author.
 
 The following actions are strictly prohibited:
-- Unauthorized copying or redistribution of this software
+- Unauthorized redistribution of this software
 - Claiming this software as your own by modifying or altering it
 - Publishing or distributing this software on the Google Chrome Web Store or any other platform without explicit permission
-
-Use of this software requires the explicit permission of the author.
 
 Violations may result in legal action.
