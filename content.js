@@ -66,7 +66,7 @@ chrome.storage.onChanged.addListener((changes) => {
 });
 
 // ページ読み込み時にsettingsの選択状態を復元
-function handleSettings() {
+function handleSettings(isFirstLoad) {
   const { settings } = getElements();
   if (!settings) return;
   const checkbox = settings.querySelectorAll("#checkbox");
@@ -159,6 +159,7 @@ function handleSettings() {
   // 詳細設定の状態の復元とイベントリスナの追加
   const details = settings.querySelectorAll("#detail");
   if (!details.length) return;
+  if (!isFirstLoad) return;
   details.forEach(detail => {
     const toggle = detail.querySelector("#toggle");
     const detailData = extensionDetails.find(d => d.id === detail.dataset.id);
@@ -231,7 +232,7 @@ function handleResize(elements, customTab, isLargeScreen) {
     // 大画面レイアウトに合わせて要素を移動
     elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
     if (elements.settings) elements.secondaryInner.appendChild(elements.settings);
-    handleSettings();
+    handleSettings(false);
     checkedTabs.forEach(tab => {
       const element = getElements()[tab.elementName];
       if (element) {
@@ -249,7 +250,7 @@ function handleResize(elements, customTab, isLargeScreen) {
     // 中画面レイアウトに合わせて要素を移動
     if (elements.settings) elements.below.appendChild(elements.settings);
     elements.below.insertBefore(customTab, elements.settings);
-    handleSettings();
+    handleSettings(false);
     checkedTabs.forEach(tab => {
       let element;
       if (tab.id === 'description') {
@@ -343,7 +344,7 @@ function moveElement() {
   const parent = isLargeScreen ? secondaryInner : below;
   if (!settings) {
     parent.appendChild(extensionSettings());
-    handleSettings();
+    handleSettings(true);
   } else {
     parent.appendChild(settings);
   }
