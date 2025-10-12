@@ -48,6 +48,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
       chrome.storage.local.set({ isEnabled });
       updateContextMenu();
     },
+    manageExtension: () => chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` }),
     storePage: () => chrome.tabs.create({ url: `https://chrome.google.com/webstore/detail/${chrome.runtime.id}` }),
     reportIssue: () => chrome.tabs.create({ url: 'https://forms.gle/qkaaa2E49GQ5QKMT8' })
   };
