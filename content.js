@@ -564,17 +564,32 @@ function removeCustomTabSelected() {
 }
 
 let initialHeight = window.innerHeight;
+let rafId = null;
+
 window.addEventListener('resize', () => {
   const windowHeight = window.innerHeight;
   const heightDiff = windowHeight - initialHeight;
   initialHeight = windowHeight;
   const { secondaryInner, chat } = getElements();
-  if (secondaryInner) {
-    setTimeout(() => {
-      secondaryInner.style.height = `${secondaryInner.offsetHeight + heightDiff}px`;
-      if (chat) {
-        chat.style.height = `${chat.offsetHeight + heightDiff}px`;
-      }
-    }, 100);
-  }
+  if (!secondaryInner) return;
+
+  const secondaryInnerHeight = secondaryInner.clientHeight;
+
+  if (rafId) cancelAnimationFrame(rafId);
+
+  rafId = requestAnimationFrame(() => {
+    if (isFullscreen()) {
+      secondaryInner.style.height = `${secondaryInnerHeight + heightDiff}px`;
+    } else {
+      secondaryInner.style.height = `${secondaryInner.clientHeight + heightDiff}px`;
+    }
+    if (chat) {
+      chat.style.height = `${chat.offsetHeight + heightDiff}px`;
+    }
+  });
 });
+
+// フルスクリーン状態を確認する
+function isFullscreen() {
+  return document.fullscreenElement;
+}
