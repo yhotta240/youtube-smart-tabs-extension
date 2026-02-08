@@ -1,29 +1,31 @@
 # YouTube スマートタブ - YouTube Smart Tabs
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/fedippkpfconhgpingglinjcembojgjm?label=Chrome%20Web%20Store)](https://chrome.google.com/webstore/detail/fedippkpfconhgpingglinjcembojgjm)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/fedippkpfconhgpingglinjcembojgjm?label=Users)](https://chrome.google.com/webstore/detail/fedippkpfconhgpingglinjcembojgjm)
+[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/fedippkpfconhgpingglinjcembojgjm?label=Rating)](https://chrome.google.com/webstore/detail/fedippkpfconhgpingglinjcembojgjm)
+
+YouTube 視聴をもっと快適に！コメントや動画情報をタブで整理する．
+
 ## 概要
-
-YouTube 視聴をもっと快適に！コメントや動画情報をタブで整理．
-
-### 説明
 
 YouTube SmartTabs は，YouTube の UI を一新し，コメント欄や動画説明，関連動画などをタブ化することで動画視聴をより快適にします．複雑なページをスクロールする必要はもうありません．必要な情報をタブ化し，動画を観ながらコメント欄や概要を簡単に閲覧できます．
 
 YouTubeの動画を視聴しながら，コメントや概要を手軽に確認できるので，「動画を観ながらコメントや概要をチェックしたい」という方におすすめの拡張機能です．
 
-### 主な機能
+## 主な機能
 
 - タブ型インターフェース： コメント，動画情報，関連動画などを個別のタブに分けて整理．
 - レイアウトのカスタマイズ： タブの順番や表示/非表示を自由に設定．
 - 視聴しながら操作可能： 動画を再生しながら，他のタブを簡単に操作．
 - ダークモード対応： ライトモードでもダークモードでも快適に使用可能．
 
-### 詳細仕様
+## 詳細仕様
 
-- **サイドバー表示**： ウィンドウ幅が 1017px 以上の場合，サイドバー（セカンダリエリア）にタブを表示．
-- **メインエリア表示**： ウィンドウ幅が 1017px 以下の場合，タブをメインエリア（プライマリエリア）に表示．
-- **タブ化する情報**： コメント欄，概要欄，関連動画などをタブ化．設定で表示する情報を変更可能．
+- サイドバー表示： ウィンドウ幅が 1017px 以上の場合，サイドバー（セカンダリエリア）にタブを表示．
+- メインエリア表示： ウィンドウ幅が 1017px 以下の場合，タブをメインエリア（プライマリエリア）に表示．
+- タブ化する情報： コメント欄，概要欄，関連動画などをタブ化．設定で表示する情報を変更可能．
 
-### 注意点
+## 注意点
 
 - 一部の実験的なYouTubeレイアウトや機能とは互換性がない場合があります．
 - YouTubeの仕様変更により，拡張機能の動作が一時的に不安定になることがあります．
