@@ -1,4 +1,6 @@
-function createCheckbox(option, className) {
+import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../settings';
+
+export function createCheckbox(option: SettingOption, className: string): string {
   return /*html*/`
     <ytd-settings-checkbox-renderer class="${className}">
       <tp-yt-paper-checkbox id="checkbox" role="checkbox" aria-checked="false"
@@ -14,7 +16,7 @@ function createCheckbox(option, className) {
   `;
 }
 
-function createRadio(option, className) {
+export function createRadio(option: SettingOption, className: string): string {
   return /*html*/`
     <ytd-settings-radio-option-renderer class="${className}">
       <tp-yt-paper-radio-button id="radio" class="style-scope ytd-settings-radio-option-renderer" role="radio"
@@ -30,7 +32,7 @@ function createRadio(option, className) {
   `;
 }
 
-function createDetail(detail, className) {
+export function createDetail(detail: SettingDetails, className: string): string {
   return /*html*/`
     <ytd-settings-options-renderer id="detail" class="style-scope ytd-item-section-renderer" data-id="${detail.id}" >
       <div id="section" class="${className}">
@@ -55,12 +57,12 @@ function createDetail(detail, className) {
   `;
 }
 
-function extensionSettings() {
+export function extensionSettings(): HTMLElement {
   const settings = document.createElement('div');
   const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
-  const extensionLink = chrome.runtime.getURL("docs/index.html");
+  const extensionLink = chrome.runtime.getURL("index.html");
   const issueLink = 'https://forms.gle/qkaaa2E49GQ5QKMT8';
-  const className = 'style-scope ytd-settings-options-renderer';
+  const className: string = 'style-scope ytd-settings-options-renderer';
   settings.id = 'extension-settings';
   settings.style.display = 'none';
   settings.setAttribute('aria-selected', 'false');

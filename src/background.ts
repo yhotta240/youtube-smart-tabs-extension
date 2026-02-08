@@ -1,9 +1,16 @@
-// 初期化
-let context = 'all';
-let title = chrome.runtime.getManifest().name;
-let isEnabled = false;
+const docsUrl = "index.html";
+const context = 'all' as const;
+const title: string = chrome.runtime.getManifest().name ?? '';
+let isEnabled: boolean = false;
 
-const menuItems = [
+interface MenuItem {
+  title: string;
+  contexts: chrome.contextMenus.ContextType[];
+  parentId: string;
+  id: string;
+}
+
+const menuItems: chrome.contextMenus.CreateProperties[] = [
   { title: "Youtubeを開く", contexts: [context], parentId: "Extension", id: "youtubePage" },
   { title: "拡張機能のページを開く", contexts: [context], parentId: "Extension", id: "extensionPage" },
   { title: `YouTube スマートタブを${isEnabled ? '無効にする' : '有効にする'}`, contexts: [context], parentId: "Extension", id: "keyEnabled" },
@@ -13,10 +20,13 @@ const menuItems = [
 ];
 
 // 拡張機能がインストールされたときに実行される処理
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime.onInstalled.addListener((details: chrome.runtime.InstalledDetails) => {
   console.log('拡張機能がインストールされました。', title, details.reason);
-  chrome.tabs.create({ url: 'docs/index.html' });
-  chrome.storage.local.get('isEnabled', (data) => {
+  //オプションページを開く
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: docsUrl });
+  }
+  chrome.storage.local.get('isEnabled', (data: { isEnabled?: boolean }) => {
     isEnabled = data.isEnabled !== undefined ? data.isEnabled : isEnabled;
     actionIcon(isEnabled);
   });
@@ -24,22 +34,21 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 
 // ストレージの値が変更されたときに実行される処理
-chrome.storage.onChanged.addListener((changes) => {
+chrome.storage.onChanged.addListener((changes: { [key: string]: chrome.storage.StorageChange }) => {
   if (changes.isEnabled) {
-    isEnabled = changes.isEnabled.newValue;
+    isEnabled = changes.isEnabled.newValue as boolean;
     actionIcon(isEnabled);
   }
   updateContextMenu();
 });
 
 // コンテキストメニューの項目がクリックされたときに実行される処理
-chrome.contextMenus.onClicked.addListener((info) => {
-  const actions = {
+chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData) => {
+  const actions: Record<string, () => void> = {
     youtubePage: () => chrome.tabs.create({ url: 'https://www.youtube.com' }),
     extensionPage: () => {
-      const docsUrl = "docs/index.html";
-      chrome.tabs.query({ url: `chrome-extension://${chrome.runtime.id}/${docsUrl}` }, (tabs) => {
-        if (tabs.length > 0) chrome.tabs.remove(tabs[0].id);
+      chrome.tabs.query({ url: `chrome-extension://${chrome.runtime.id}/${docsUrl}` }, (tabs: chrome.tabs.Tab[]) => {
+        if (tabs.length > 0 && tabs[0].id) chrome.tabs.remove(tabs[0].id);
         chrome.tabs.create({ url: docsUrl });
       });
     },
@@ -52,13 +61,14 @@ chrome.contextMenus.onClicked.addListener((info) => {
     storePage: () => chrome.tabs.create({ url: `https://chrome.google.com/webstore/detail/${chrome.runtime.id}` }),
     reportIssue: () => chrome.tabs.create({ url: 'https://forms.gle/qkaaa2E49GQ5QKMT8' })
   };
-  if (actions[info.menuItemId]) actions[info.menuItemId]();
+  const menuItemId = info.menuItemId as string;
+  if (actions[menuItemId]) actions[menuItemId]();
 });
 
 // タブが更新されたときに実行される処理
-chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: { status?: string }, tab: chrome.tabs.Tab) => {
   if (changeInfo.status === 'complete') {
-    chrome.storage.local.get('isEnabled', (data) => {
+    chrome.storage.local.get('isEnabled', (data: { isEnabled?: boolean }) => {
       isEnabled = data.isEnabled !== undefined ? data.isEnabled : isEnabled;
       updateContextMenu();
     });
@@ -66,13 +76,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 // コンテキストメニューを更新する関数
-function updateContextMenu() {
+function updateContextMenu(): void {
   chrome.contextMenus.update("keyEnabled", {
     title: `YouTube スマートタブを${isEnabled ? '無効にする' : '有効にする'}`
   });
 }
 
-function createContextMenu() {
+function createContextMenu(): void {
   chrome.contextMenus.create({
     title: title,
     contexts: [context],
@@ -81,26 +91,30 @@ function createContextMenu() {
   menuItems.forEach(item => chrome.contextMenus.create(item));
 }
 
-chrome.action.onClicked.addListener((tab) => {
+// ブラウザアクションがクリックされたときに実行される処理
+chrome.action.onClicked.addListener((tab: chrome.tabs.Tab) => {
   isEnabled = !isEnabled;
+  console.log(`Tab clicked: ${isEnabled}`);
   actionIcon(isEnabled);
   chrome.storage.local.set({ isEnabled: isEnabled });
 });
 
-function actionIcon(isEnabled) {
+function actionIcon(isEnabled: boolean): void {
   chrome.action.setIcon({
     path: isEnabled ? "icons/icon.png" : "icons/icon_gray.png"
   });
 }
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const cssFilePath = 'settings/css/comment-detail.css';
+chrome.runtime.onMessage.addListener((message: { action: string }, sender: chrome.runtime.MessageSender, sendResponse: () => void) => {
+  const cssFilePath = 'comment-detail.css';
   const tabId = sender.tab?.id;
   if (!tabId) return;
   if (message.action === "insertCSS") {
     chrome.scripting.insertCSS({
       target: { tabId },
       files: [cssFilePath]
+    }, () => {
+      console.log('Received message in background:', message);
     });
   } else if (message.action === "removeCSS") {
     chrome.scripting.removeCSS({

@@ -18,19 +18,14 @@
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": [
-        "settings/js/settingsData.js",
-        "settings/js/extensionSetting.js",
-        "lib/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js",
-        "content.js"
-      ],
-      "css": ["content.css"]
+      "js": ["content.js"]
     }
   ],
+  "options_page": "index.html",
   "web_accessible_resources": [
     {
-      "resources": ["docs/index.html"],
-      "matches": ["<all_urls>"]
+      "matches": ["https://www.youtube.com/*"],
+      "resources": ["index.html"]
     }
   ],
   "host_permissions": ["https://www.youtube.com/*"]
