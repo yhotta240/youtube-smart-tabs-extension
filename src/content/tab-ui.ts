@@ -1,4 +1,4 @@
-import { settingsOption, settingDetails, SettingOption, SettingDetails } from './settingsData';
+import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../settings';
 
 export function createCheckbox(option: SettingOption, className: string): string {
   return /*html*/`

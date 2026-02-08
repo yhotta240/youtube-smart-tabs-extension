@@ -1,6 +1,6 @@
 import './style.css';
 import { extensionSettings } from './tab-ui';
-import { tabs, defaultCheckedTabs, defaultSelectedTab, settingDetails, Tab } from './settingsData';
+import { tabs, defaultCheckedTabs, defaultSelectedTab, settingDetails, Tab } from '../settings';
 
 interface ExtensionDetail {
   id: string;
