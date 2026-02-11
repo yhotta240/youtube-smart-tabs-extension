@@ -1,6 +1,6 @@
 {
-  "name": "chrome-extension-starter-kit",
-  "version": "0.1.0",
+  "name": "youtube-smart-tabs-extension",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
