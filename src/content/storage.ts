@@ -43,16 +43,10 @@ export class StorageState {
 
 export const storageState = new StorageState();
 
-// ヘルパー関数：ストレージの初期化
 export function initializeStorage(callback?: () => void): void {
   storageState.initialize((isEnabled) => {
     if (isEnabled && callback) {
       callback();
     }
   });
-}
-
-// ヘルパー関数：ストレージ変更リスナーの設定（既に initialize 内で設定されているため、空関数）
-export function setupStorageListener(): void {
-  // ストレージリスナーは既に initialize 内で設定されているため、ここでは何もしない
 }

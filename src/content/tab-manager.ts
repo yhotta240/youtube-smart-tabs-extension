@@ -1,4 +1,4 @@
-import { Tab } from '../settings';
+import { Tab, TabId } from '../settings';
 import { YouTubeElements, HTMLElementWithReg } from './types';
 import { getElements } from './elements';
 import { storageState } from './storage';
@@ -61,6 +61,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
   return tab;
 }
 
+// 指定されたタブをアクティブに設定する関数
 export function setActiveTab(customTab: HTMLElement): void {
   const tabs = customTab.querySelectorAll<HTMLElement>('[data-bs-target]');
 
@@ -169,6 +170,13 @@ export function clickTab(innerContent: HTMLElement): void {
       }
     });
   });
+}
+
+export function displayTabElement(tabId: TabId): void {
+  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+  if (button && button.style.display === 'none') {
+    button.style.removeProperty('display');
+  }
 }
 
 export function removeCustomTabSelected(): void {

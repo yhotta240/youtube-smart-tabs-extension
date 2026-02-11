@@ -4,7 +4,7 @@ import { YouTubeElements, HTMLElementWithReg } from './types';
 import { getElements } from './elements';
 import { storageState } from './storage';
 import { handleSettings } from './settings-handler';
-import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone } from './tab-manager';
+import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement } from './tab-manager';
 import { renderUI } from './renderer';
 
 export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
@@ -205,6 +205,29 @@ function moveElement(): void {
       below.appendChild(element);
     }
   }
+}
+
+// プレイリストが変更されたときに検知するオブザーバー
+export function observePlaylistChange(): void {
+  const playlistObserver = new MutationObserver(() => {
+    const { playlist } = getElements();
+    if (!playlist) return;
+
+    const isVisible = !playlist.hasAttribute("hidden");
+    const isObserved = playlist.classList.contains("observed");
+
+    // 状態が変わっていなければ何もしない
+    if (isVisible === isObserved) return;
+
+    if (isVisible) {
+      displayTabElement("playlist");
+      playlist.classList.add("observed");
+    } else {
+      playlist.classList.remove("observed");
+    }
+  });
+
+  playlistObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 export function createObserver(): MutationObserver {
