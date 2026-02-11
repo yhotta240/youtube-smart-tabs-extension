@@ -26,6 +26,10 @@
   z-index: 1000;
 }
 
+#extension-settings-tab {
+  flex: 0 0 45px;
+  padding: 0;
+}
 
 html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-start {
   border-radius: 10px 0 0 0;
