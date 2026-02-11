@@ -1,13 +1,15 @@
+export type TabId = "description" | "chat-container" | "comments" | "related" | "playlist" | "donation-shelf" | "auto";
+
 export type Tab = {
   num: number; // 順番
-  id: string; // id属性
+  id: TabId; // id属性
   name: string; // 表示名
   elementName: string; // 対応する要素名
 }
 
 export type SettingOption = {
   num: number; // 順番
-  id: string; // id属性
+  id: TabId; // id属性
   name: string; // 表示名
   elementName: string; // 対応する要素名
 }
