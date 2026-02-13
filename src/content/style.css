@@ -249,7 +249,7 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   height: 100% !important;
 }
 
-#secondary #panels.ytd-watch-flexy ytd-engagement-panel-section-list-renderer.ytd-watch-flexy {
+#secondary #panels.ytd-watch-flexy.observed ytd-engagement-panel-section-list-renderer.ytd-watch-flexy {
   height: 100% !important;
   max-height: none !important;
   margin-bottom: 0 !important;

@@ -207,7 +207,11 @@ function moveElement(): void {
   }
 }
 
-export function observeYouTubeElements(): void {
+export async function observeYouTubeElements(): Promise<void> {
+  // 有効化されていない場合は何もしない
+  const data = await chrome.storage.local.get(['isEnabled']);
+  if (!data.isEnabled) return;
+
   const observer = new MutationObserver(() => {
     const { panels, playlist } = getElements();
 
