@@ -1,4 +1,5 @@
 import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../settings';
+import meta from '../../public/manifest.meta.json';
 
 export function createCheckbox(option: SettingOption, className: string): string {
   return /*html*/`
@@ -61,7 +62,7 @@ export function extensionSettings(): HTMLElement {
   const settings = document.createElement('div');
   const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
   const extensionLink = chrome.runtime.getURL("index.html");
-  const issueLink = 'https://forms.gle/qkaaa2E49GQ5QKMT8';
+  const issueLink = meta.issues_url;
   const className: string = 'style-scope ytd-settings-options-renderer';
   settings.id = 'extension-settings';
   settings.style.display = 'none';

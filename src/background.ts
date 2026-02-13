@@ -2,13 +2,7 @@ const docsUrl = "index.html";
 const context = 'all' as const;
 const title: string = chrome.runtime.getManifest().name ?? '';
 let isEnabled: boolean = false;
-
-interface MenuItem {
-  title: string;
-  contexts: chrome.contextMenus.ContextType[];
-  parentId: string;
-  id: string;
-}
+import meta from '../public/manifest.meta.json';
 
 const menuItems: chrome.contextMenus.CreateProperties[] = [
   { title: "Youtubeを開く", contexts: [context], parentId: "Extension", id: "youtubePage" },
@@ -59,7 +53,7 @@ chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData
     },
     manageExtension: () => chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` }),
     storePage: () => chrome.tabs.create({ url: `https://chrome.google.com/webstore/detail/${chrome.runtime.id}` }),
-    reportIssue: () => chrome.tabs.create({ url: 'https://forms.gle/qkaaa2E49GQ5QKMT8' })
+    reportIssue: () => chrome.tabs.create({ url: meta.issues_url })
   };
   const menuItemId = info.menuItemId as string;
   if (actions[menuItemId]) actions[menuItemId]();
