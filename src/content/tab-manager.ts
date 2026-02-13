@@ -154,10 +154,12 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
       if (!targetId) return;
 
       if (targetId === '#chat-container') {
-        const { chatContainer, showHideChatBtn } = getElements();
+        const { chatContainer, chat, showHideChatBtn } = getElements();
         if (chatContainer) {
-          showHideChatBtn?.click();
           chatContainer.classList.add('active', 'show');
+        }
+        if (chat && chat.hasAttribute('collapsed') && showHideChatBtn) {
+          showHideChatBtn.click();
         }
       }
 

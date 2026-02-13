@@ -223,7 +223,8 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   height: 100% !important;
 }
 
-#secondary-inner #chat-container.style-scope.ytd-watch-flexy.active.show #chat {
+#secondary-inner #chat-container.style-scope.ytd-watch-flexy.active.show #chat,
+#secondary-inner #chat-container.style-scope.ytd-watch-flexy.active.show #chat iframe.ytd-live-chat-frame {
   border: 0;
   border-radius: 0px;
 }
