@@ -9,7 +9,7 @@ export function renderUI(): void {
   }
 
   if (secondaryInner) {
-    console.log("Setting secondaryInner height");
+    // console.log("Setting secondaryInner height");
     secondaryInner.style.height = `${height()}px`;
 
     const descInner = document.querySelector<HTMLElement>('ytd-watch-metadata.watch-active-metadata #description-inner');
