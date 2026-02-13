@@ -3,6 +3,12 @@ import { YouTubeElements, HTMLElementWithReg } from './types';
 import { getElements } from './elements';
 import { storageState } from './storage';
 
+const SEGMENTED_CLASS = {
+  start: 'yt-spec-button-shape-next--segmented-start',
+  interval: 'yt-spec-button-shape-next--segmented-interval',
+  end: 'yt-spec-button-shape-next--segmented-end',
+};
+
 export function createTab(checkedTabs: Tab[]): HTMLElement {
   const filteredTabs: Tab[] = [...checkedTabs];
   filteredTabs.sort((a, b) => a.num - b.num);
@@ -14,9 +20,22 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
   tab.style.marginBottom = `${window.innerWidth >= 1017 ? '' : '10px;'}`;
   tab.role = 'tablist';
   tab.innerHTML = /*html*/`
+      <button
+        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${SEGMENTED_CLASS.start}"
+        id="panels-tab"
+        data-bs-toggle="pill"
+        data-bs-target="#panels"
+        type="button"
+        role="tab"
+        aria-controls="panels"
+        aria-selected="false"
+        style="display: none;"
+      >
+        <span class="style-scope yt-chip-cloud-chip-renderer">パネル</span>
+      </button>
     ${filteredTabs.map((tab, index) => /*html*/`
       <button
-        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading yt-spec-button-shape-next--segmented-${index === 0 ? 'start' : 'interval'}"
+        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${index === 0 ? SEGMENTED_CLASS.start : SEGMENTED_CLASS.interval}"
         id="${tab.id}-tab"
         data-bs-toggle="pill"
         data-bs-target="#${tab.id}"
@@ -29,7 +48,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
       </button>
     `).join('')}
       <button
-        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading yt-spec-button-shape-next--segmented-end"
+        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${SEGMENTED_CLASS.end}"
         id="extension-settings-tab"
         data-bs-toggle="pill"
         data-bs-target="#extension-settings"
@@ -45,8 +64,8 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
     `;
 
   setTimeout(() => {
-    const startButton = tab.querySelector<HTMLElement>(".yt-spec-button-shape-next--segmented-start");
-    const intervalButtons = tab.querySelectorAll<HTMLElement>(".yt-spec-button-shape-next--segmented-interval");
+    const startButton = tab.querySelector<HTMLElement>(`.${SEGMENTED_CLASS.start}`);
+    const intervalButtons = tab.querySelectorAll<HTMLElement>(`.${SEGMENTED_CLASS.start}, .${SEGMENTED_CLASS.interval}`);
     if (startButton) {
       const bgColor: string = window.getComputedStyle(startButton).backgroundColor;
       const rgbaColor: string = bgColor.replace(/rgb(a)?\((\d+), (\d+), (\d+)(, [\d.]+)?\)/, (_, a, r, g, b) => {
@@ -61,7 +80,6 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
   return tab;
 }
 
-// 指定されたタブをアクティブに設定する関数
 export function setActiveTab(customTab: HTMLElement): void {
   const tabs = customTab.querySelectorAll<HTMLElement>('[data-bs-target]');
 
@@ -120,9 +138,12 @@ export function displayElementNone(innerContent: HTMLElement): void {
     settings.style.display = 'none';
     settings.setAttribute('aria-selected', 'false');
   }
+  if (elements.panels) {
+    elements.panels.style.display = 'none';
+  }
 }
 
-export function clickTab(innerContent: HTMLElement): void {
+export function addTabClickListeners(innerContent: HTMLElement): void {
   const buttons = document.querySelectorAll<HTMLElement>('[data-bs-target]');
   if (storageState.isEventAdded) return;
   storageState.isEventAdded = true;
@@ -139,17 +160,17 @@ export function clickTab(innerContent: HTMLElement): void {
       button.classList.add('custom-tab-selected')
 
       const targetContent = document.querySelector<HTMLElement>(targetId);
-      if (targetContent) targetContent.style.display = 'block';
+      if (targetContent) targetContent.style.removeProperty('display');
 
       if (targetId === '#description') {
         const description = document.querySelector<HTMLElement>('ytd-watch-metadata')
-        if (description) description.style.display = 'block';
+        if (description) description.style.removeProperty('display');
       }
 
       if (targetId === '#playlist') {
         const playlist = getElements().playlist;
         if (playlist) {
-          playlist.style.display = 'block';
+          playlist.style.removeProperty('display');
           playlist.classList.add('active', 'show');
         }
       }
@@ -172,6 +193,39 @@ export function clickTab(innerContent: HTMLElement): void {
   });
 }
 
+/** タブ形式の見た目にするため，yt-spec-button-shape-next--segmented クラスのスタイルを調整する */
+export function updateSegmentedTabClasses(): void {
+  const { customTab } = getElements();
+  if (!customTab) return;
+
+  const buttons = Array.from(customTab.querySelectorAll<HTMLElement>('[data-bs-target]'));
+  const visibleButtons = buttons.filter((button) => button.style.display !== 'none');
+
+  if (visibleButtons.length === 0) return;
+
+  const first = visibleButtons[0];
+  const last = visibleButtons[visibleButtons.length - 1];
+
+  buttons.forEach((button) => {
+    button.classList.remove(SEGMENTED_CLASS.start, SEGMENTED_CLASS.interval, SEGMENTED_CLASS.end);
+    if (button.style.display === 'none') return;
+    if (button === first) {
+      button.classList.add(SEGMENTED_CLASS.start);
+    } else if (button === last) {
+      button.classList.add(SEGMENTED_CLASS.end);
+    } else {
+      button.classList.add(SEGMENTED_CLASS.interval);
+    }
+  });
+}
+
+export function clickTab(tabId: TabId): void {
+  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+  if (button) {
+    button.click();
+  }
+}
+
 export function displayTabElement(tabId: TabId): void {
   const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
   if (button && button.style.display === 'none') {
@@ -179,8 +233,15 @@ export function displayTabElement(tabId: TabId): void {
   }
 }
 
+export function hideTabElement(tabId: TabId): void {
+  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+  if (button) {
+    button.style.display = 'none';
+  }
+}
+
 export function removeCustomTabSelected(): void {
-  const buttons = document.querySelectorAll('[data-bs-target]');
+  const buttons = document.querySelectorAll<HTMLElement>('[data-bs-target]');
   buttons.forEach(button => {
     button.classList.remove('custom-tab-selected');
   });

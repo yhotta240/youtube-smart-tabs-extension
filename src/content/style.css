@@ -244,3 +244,15 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
 #secondary #custom-tab>button.yt-spec-button-shape-next--size-s {
   padding: 0 !important;
 }
+
+#secondary #panels {
+  height: 100% !important;
+}
+
+#secondary #panels.ytd-watch-flexy ytd-engagement-panel-section-list-renderer.ytd-watch-flexy {
+  height: 100% !important;
+  max-height: none !important;
+  margin-bottom: 0 !important;
+  border: none !important;
+  border-radius: 0px !important;
+}

@@ -1,4 +1,4 @@
-export type TabId = "description" | "chat-container" | "comments" | "related" | "playlist" | "donation-shelf" | "auto";
+export type TabId = "description" | "chat-container" | "comments" | "related" | "playlist" | "donation-shelf" | "panels" | "auto";
 
 export type Tab = {
   num: number; // 順番

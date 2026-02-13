@@ -9,6 +9,7 @@ export interface YouTubeElements {
   primaryInner: HTMLElement | null;
   secondary: HTMLElement | null;
   secondaryInner: HTMLElement | null;
+  panels: HTMLElement | null;
   description: HTMLElement | null;
   comments: HTMLElement | null;
   related: HTMLElement | null;

@@ -4,7 +4,7 @@ import { YouTubeElements, HTMLElementWithReg } from './types';
 import { getElements } from './elements';
 import { storageState } from './storage';
 import { handleSettings } from './settings-handler';
-import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement } from './tab-manager';
+import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement, hideTabElement, addTabClickListeners, updateSegmentedTabClasses } from './tab-manager';
 import { renderUI } from './renderer';
 
 export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
@@ -13,14 +13,14 @@ export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[],
     const tabs = createTab(checkedTabs);
     if (elements.secondary && elements.secondaryInner) {
       elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
-      clickTab(elements.secondaryInner);
+      addTabClickListeners(elements.secondaryInner);
     }
   } else {
     const tabs = createTab(checkedTabs);
     if (elements.below) {
       const targetElement = elements.below.querySelector('#related');
       elements.below.insertBefore(tabs, targetElement);
-      clickTab(elements.below);
+      addTabClickListeners(elements.below);
     }
   }
 }
@@ -50,7 +50,7 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
         }
       });
     }
-    if (elements.secondaryInner) clickTab(elements.secondaryInner);
+    if (elements.secondaryInner) addTabClickListeners(elements.secondaryInner);
   } else if (!isLargeScreen && storageState.preRespWidth === 'large') {
     Array.from(customTab.children).forEach(tab => {
       if (tab.classList.contains(`${sizeClass}s`)) {
@@ -78,7 +78,7 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
         }
       });
     }
-    if (elements.below) clickTab(elements.below);
+    if (elements.below) addTabClickListeners(elements.below);
   }
 }
 
@@ -207,7 +207,34 @@ function moveElement(): void {
   }
 }
 
-// プレイリストが変更されたときに検知するオブザーバー
+export function observePanelsChange(): void {
+  const panelsObserver = new MutationObserver(() => {
+    const { panels } = getElements();
+    if (!panels) return;
+
+    // visibility属性がどれか一つでも"ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"になっているか確認
+    let isAnyPanelExpanded = false;
+    Array.from(panels.children).forEach(child => {
+      const visibleAttr = child.getAttribute("visibility");
+      if (visibleAttr === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED") {
+        isAnyPanelExpanded = true;
+      }
+    });
+
+    if (isAnyPanelExpanded && !panels.classList.contains("observed")) {
+      displayTabElement("panels");
+      updateSegmentedTabClasses();
+      clickTab("panels");
+      panels.classList.add("observed");
+    } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
+      hideTabElement("panels");
+      updateSegmentedTabClasses();
+      panels.classList.remove("observed");
+    }
+  });
+  panelsObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 export function observePlaylistChange(): void {
   const playlistObserver = new MutationObserver(() => {
     const { playlist } = getElements();
@@ -221,12 +248,14 @@ export function observePlaylistChange(): void {
 
     if (isVisible) {
       displayTabElement("playlist");
+      updateSegmentedTabClasses();
       playlist.classList.add("observed");
     } else {
+      hideTabElement("playlist");
+      updateSegmentedTabClasses();
       playlist.classList.remove("observed");
     }
   });
-
   playlistObserver.observe(document.body, { childList: true, subtree: true });
 }
 
