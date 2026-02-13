@@ -154,10 +154,12 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
       if (!targetId) return;
 
       if (targetId === '#chat-container') {
-        const { chatContainer, showHideChatBtn } = getElements();
+        const { chatContainer, chat, showHideChatBtn } = getElements();
         if (chatContainer) {
-          showHideChatBtn?.click();
           chatContainer.classList.add('active', 'show');
+        }
+        if (chat && chat.hasAttribute('collapsed') && showHideChatBtn) {
+          showHideChatBtn.click();
         }
       }
 
@@ -171,6 +173,14 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
       if (targetId === '#description') {
         const description = document.querySelector<HTMLElement>('ytd-watch-metadata')
         if (description) description.style.removeProperty('display');
+      }
+
+      if (targetId === '#comments') {
+        const comments = getElements().comments;
+        if (comments) {
+          comments.style.removeProperty('display');
+          comments.classList.add('active', 'show');
+        }
       }
 
       if (targetId === '#related') {
