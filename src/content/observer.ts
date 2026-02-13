@@ -226,6 +226,10 @@ export function observePanelsChange(): void {
       updateSegmentedTabClasses();
       clickTab("panels");
       panels.classList.add("observed");
+      // クリップ作成の描画不具合対策としてリサイズイベントを発火
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('resize'));
+      });
     } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
       hideTabElement("panels");
       updateSegmentedTabClasses();
