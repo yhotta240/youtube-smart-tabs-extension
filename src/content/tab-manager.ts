@@ -173,6 +173,14 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
         if (description) description.style.removeProperty('display');
       }
 
+      if (targetId === '#comments') {
+        const comments = getElements().comments;
+        if (comments) {
+          comments.style.removeProperty('display');
+          comments.classList.add('active', 'show');
+        }
+      }
+
       if (targetId === '#related') {
         const related = getElements().related;
         if (related) {

@@ -136,15 +136,13 @@ html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.cust
 }
 
 #secondary-inner #comments.style-scope.ytd-watch-flexy.active.show #contents.style-scope.ytd-item-section-renderer {
-  position: relative;
-  z-index: 1;
-  padding-inline: var(--ytd-margin-4x);
+  padding-inline: var(--ytd-margin-2x);
 }
 
 #secondary-inner #comments #header ytd-comments-header-renderer {
   margin-top: 0 !important;
   padding-top: var(--comments-header-renderer-margin-top, 12px);
-  padding-inline: var(--ytd-margin-3x);
+  padding-inline: var(--ytd-margin-2x);
 }
 
 #secondary-inner ytd-watch-metadata.watch-active-metadata.style-scope.ytd-watch-flexy.style-scope.ytd-watch-flexy {
