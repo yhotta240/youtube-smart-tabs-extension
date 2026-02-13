@@ -21,6 +21,7 @@ export interface YouTubeElements {
   chatViewBtn: HTMLElement | null;
   chatContainerTab: HTMLElement | null;
   chat: HTMLElement | null;
+  showHideChatBtn: HTMLElement | null;
 }
 
 export interface HTMLElementWithReg extends HTMLElement {

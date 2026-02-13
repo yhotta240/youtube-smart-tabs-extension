@@ -19,6 +19,7 @@ export const getElements = (): YouTubeElements => {
     chatViewBtn: document.querySelector<HTMLElement>('button-view-model.yt-spec-button-view-model.ytTextCarouselItemViewModelButton'),
     chatContainerTab: document.querySelector<HTMLElement>('#chat-container-tab'),
     chat: document.querySelector<HTMLElement>('#chat'),
+    showHideChatBtn: document.querySelector<HTMLElement>('#chat-container.style-scope.ytd-watch-flexy #show-hide-button button'),
   };
 };
 
