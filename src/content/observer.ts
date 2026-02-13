@@ -207,60 +207,62 @@ function moveElement(): void {
   }
 }
 
-export function observePanelsChange(): void {
-  const panelsObserver = new MutationObserver(() => {
-    const { panels } = getElements();
-    if (!panels) return;
+export function observeYouTubeElements(): void {
+  const observer = new MutationObserver(() => {
+    const { panels, playlist } = getElements();
 
-    // visibility属性がどれか一つでも"ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"になっているか確認
-    let isAnyPanelExpanded = false;
-    Array.from(panels.children).forEach(child => {
-      const visibleAttr = child.getAttribute("visibility");
-      if (visibleAttr === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED") {
-        isAnyPanelExpanded = true;
-      }
-    });
-
-    if (isAnyPanelExpanded && !panels.classList.contains("observed")) {
-      displayTabElement("panels");
-      updateSegmentedTabClasses();
-      clickTab("panels");
-      panels.classList.add("observed");
-      // クリップ作成の描画不具合対策としてリサイズイベントを発火
-      requestAnimationFrame(() => {
-        window.dispatchEvent(new Event('resize'));
+    // panels の監視
+    if (panels) {
+      let isAnyPanelExpanded = false;
+      Array.from(panels.children).forEach(child => {
+        const visibleAttr = child.getAttribute("visibility");
+        if (visibleAttr === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED") {
+          isAnyPanelExpanded = true;
+        }
       });
-    } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
-      hideTabElement("panels");
-      updateSegmentedTabClasses();
-      panels.classList.remove("observed");
+
+      if (isAnyPanelExpanded && !panels.classList.contains("observed")) {
+        displayTabElement("panels");
+        updateSegmentedTabClasses();
+        clickTab("panels");
+        panels.classList.add("observed");
+        // クリップ作成の描画不具合対策としてリサイズイベントを発火
+        requestAnimationFrame(() => {
+          window.dispatchEvent(new Event('resize'));
+        });
+      } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
+        hideTabElement("panels");
+        updateSegmentedTabClasses();
+        panels.classList.remove("observed");
+      }
+    }
+
+    // playlist の監視
+    if (playlist) {
+      const isVisible = !playlist.hasAttribute("hidden");
+      const isObserved = playlist.classList.contains("observed");
+
+      // 状態が変わっていなければ何もしない
+      if (isVisible !== isObserved) {
+        if (isVisible) {
+          displayTabElement("playlist");
+          updateSegmentedTabClasses();
+          playlist.classList.add("observed");
+        } else {
+          hideTabElement("playlist");
+          updateSegmentedTabClasses();
+          playlist.classList.remove("observed");
+        }
+      }
     }
   });
-  panelsObserver.observe(document.body, { childList: true, subtree: true });
-}
 
-export function observePlaylistChange(): void {
-  const playlistObserver = new MutationObserver(() => {
-    const { playlist } = getElements();
-    if (!playlist) return;
-
-    const isVisible = !playlist.hasAttribute("hidden");
-    const isObserved = playlist.classList.contains("observed");
-
-    // 状態が変わっていなければ何もしない
-    if (isVisible === isObserved) return;
-
-    if (isVisible) {
-      displayTabElement("playlist");
-      updateSegmentedTabClasses();
-      playlist.classList.add("observed");
-    } else {
-      hideTabElement("playlist");
-      updateSegmentedTabClasses();
-      playlist.classList.remove("observed");
-    }
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['visibility', 'hidden']
   });
-  playlistObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 export function createObserver(): MutationObserver {
