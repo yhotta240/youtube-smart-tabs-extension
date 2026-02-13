@@ -1,7 +1,7 @@
 import './style.css';
 import { initializeStorage } from './storage';
 import { initializeResizeHandler } from './renderer';
-import { createObserver, observePlaylistChange } from './observer';
+import { createObserver, observePanelsChange, observePlaylistChange } from './observer';
 
 initializeStorage(() => {
   // Observerの作成と開始
@@ -10,4 +10,5 @@ initializeStorage(() => {
 });
 
 observePlaylistChange();
+observePanelsChange();
 initializeResizeHandler();

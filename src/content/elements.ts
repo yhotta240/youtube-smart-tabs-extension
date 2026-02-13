@@ -7,6 +7,7 @@ export const getElements = (): YouTubeElements => {
     primaryInner: document.querySelector<HTMLElement>('#primary-inner.style-scope.ytd-watch-flexy'),
     secondary: document.querySelector<HTMLElement>('#secondary.style-scope.ytd-watch-flexy'),
     secondaryInner: document.querySelector<HTMLElement>('#secondary-inner.style-scope.ytd-watch-flexy'),
+    panels: document.querySelector<HTMLElement>('#panels.style-scope.ytd-watch-flexy'),
     description: document.querySelector<HTMLElement>('#below > ytd-watch-metadata'),
     comments: document.querySelector<HTMLElement>('#comments.style-scope.ytd-watch-flexy'),
     related: document.querySelector<HTMLElement>('#related.style-scope.ytd-watch-flexy'),
