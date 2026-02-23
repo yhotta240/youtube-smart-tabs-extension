@@ -2,6 +2,8 @@ import { YouTubeElements } from './types';
 
 export const getElements = (): YouTubeElements => {
   return {
+    ytdWatchFlexy: document.querySelector<HTMLElement>("ytd-watch-flexy"),
+    columns: document.querySelector<HTMLElement>("#columns.style-scope.ytd-watch-flexy"),
     below: document.querySelector<HTMLElement>('#below.style-scope.ytd-watch-flexy'),
     primary: document.querySelector<HTMLElement>('#primary.style-scope.ytd-watch-flexy'),
     primaryInner: document.querySelector<HTMLElement>('#primary-inner.style-scope.ytd-watch-flexy'),
@@ -20,6 +22,8 @@ export const getElements = (): YouTubeElements => {
     chatContainerTab: document.querySelector<HTMLElement>('#chat-container-tab'),
     chat: document.querySelector<HTMLElement>('#chat'),
     showHideChatBtn: document.querySelector<HTMLElement>('#chat-container.style-scope.ytd-watch-flexy #show-hide-button button'),
+    video: document.querySelector<HTMLVideoElement>("video.html5-main-video"),
+    dragHandle: document.querySelector<HTMLElement>('.yst-drag-handle'),
   };
 };
 

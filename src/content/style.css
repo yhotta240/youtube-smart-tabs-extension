@@ -256,3 +256,35 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   border: none !important;
   border-radius: 0px !important;
 }
+
+.yst-drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: ew-resize !important;
+  width: 5px !important;
+  background-color: transparent !important;
+  z-index: 2000;
+}
+
+.yst-drag-handle.dragging {
+  background-color: var(--yt-spec-call-to-action-hover) !important;
+}
+
+#primary.yst-custom-sidebar-width {
+  min-width: calc(var(--yst-primary-width) - var(--ytd-watch-flexy-horizontal-page-margin) - var(--ytd-watch-flexy-horizontal-page-margin)) !important;
+}
+
+#secondary.yst-custom-sidebar-width {
+  min-width: calc(var(--yst-secondary-width) - var(--ytd-watch-flexy-horizontal-page-margin)) !important;
+}
+
+ytd-watch-flexy.yst-custom-sidebar-width {
+  --ytd-watch-flexy-min-player-height: auto !important;
+}
+
+video.yst-custom-sidebar-width {
+  height: auto !important;
+  width: 100% !important;
+}

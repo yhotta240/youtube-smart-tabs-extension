@@ -4,6 +4,8 @@ export interface ExtensionDetail {
 }
 
 export interface YouTubeElements {
+  ytdWatchFlexy: HTMLElement | null;
+  columns: HTMLElement | null;
   below: HTMLElement | null;
   primary: HTMLElement | null;
   primaryInner: HTMLElement | null;
@@ -22,6 +24,8 @@ export interface YouTubeElements {
   chatContainerTab: HTMLElement | null;
   chat: HTMLElement | null;
   showHideChatBtn: HTMLElement | null;
+  video: HTMLVideoElement | null;
+  dragHandle: HTMLElement | null;
 }
 
 export interface HTMLElementWithReg extends HTMLElement {
