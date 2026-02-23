@@ -1,4 +1,4 @@
-import { Tab, defaultCheckedTabs, defaultSelectedTab, settingDetails } from '../settings';
+import { Tab, defaultCheckedTabs, defaultSelectedTab, settingDetails } from '../../settings';
 import { ExtensionDetail, ResponsiveWidth } from './types';
 
 type StorageData = {

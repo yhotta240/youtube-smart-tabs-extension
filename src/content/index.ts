@@ -1,6 +1,6 @@
 import './style.css';
-import { initializeStorage } from './storage';
-import { initializeResizeHandler } from './renderer';
+import { initializeStorage } from './core/storage';
+import { initializeResizeHandler } from './ui/renderer';
 import { createObserver, observeYouTubeElements } from './observer';
 
 initializeStorage(() => {

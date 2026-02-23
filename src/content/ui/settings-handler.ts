@@ -1,6 +1,7 @@
-import { Tab, tabs, defaultCheckedTabs, defaultSelectedTab } from '../settings';
-import { getElements } from './elements';
-import { storageState } from './storage';
+import { tabs, defaultCheckedTabs, defaultSelectedTab } from '../../settings';
+import { getElements } from '../core/elements';
+import { removeSidebarWidths } from './renderer';
+import { storageState } from '../core/storage';
 
 export function handleSettings(isFirstLoad: boolean): void {
   const { settings } = getElements();
@@ -111,6 +112,20 @@ export function handleSettings(isFirstLoad: boolean): void {
       }
     });
   });
+
+  const sidebarResizeToggle = settings.querySelector<HTMLElement>("#sidebarResizeToggle");
+  if (sidebarResizeToggle) {
+    sidebarResizeToggle.addEventListener('click', () => {
+      const isEnabled = sidebarResizeToggle.getAttribute("aria-pressed") === "true";
+      console.log('[youtube-smart-tabs] sidebarResizeToggle clicked, new state:', isEnabled);
+      if (isEnabled) {
+        chrome.storage.local.set({ sidebarRatio: null });
+      } else {
+        chrome.storage.local.remove('sidebarRatio');
+        removeSidebarWidths();
+      }
+    });
+  }
 
   // 詳細設定の状態の復元とイベントリスナの追加
   const details = settings.querySelectorAll<HTMLElement>("#detail");

@@ -1,10 +1,9 @@
-import { getElements, height } from './elements';
-import { storageState } from './storage';
+import { getElements, height } from '../core/elements';
+import { storageState } from '../core/storage';
 
 export function renderUI(): void {
   insertDragHandle();
   setupSidebarRatio();
-  handleDrag();
   handleFullscreenResize();
 
   const { primaryInner, secondaryInner } = getElements();
@@ -100,7 +99,7 @@ export function initializeResizeHandler(): void {
   });
 }
 
-function handleFullscreenResize(): void {
+export function handleFullscreenResize(): void {
   if (fullscreenResizeInitialized) return;
   fullscreenResizeInitialized = true;
   window.addEventListener('resize', (ev: Event) => {
@@ -113,12 +112,13 @@ function handleFullscreenResize(): void {
   });
 }
 
-function insertDragHandle(): void {
+export async function insertDragHandle(): Promise<void> {
   const { secondaryInner, dragHandle: exist } = getElements();
   if (exist) return;
   const dragHandle = document.createElement('div');
   dragHandle.classList.add('style-scope', 'ytd-watch-flexy', 'yst-drag-handle');
   secondaryInner?.insertAdjacentElement('beforebegin', dragHandle);
+  handleDrag();
 }
 
 type SidebarElements = {
@@ -138,18 +138,34 @@ function applySidebarWidths(columnsWidth: number, primaryWidth: number, els: Sid
   els.video.classList.add('yst-custom-sidebar-width');
 }
 
-async function setupSidebarRatio(): Promise<void> {
+export function removeSidebarWidths(): void {
+  const { columns, primary, secondary, ytdWatchFlexy, video } = getElements();
+
+  if (!columns || !primary || !secondary || !ytdWatchFlexy || !video) return;
+  primary.style.removeProperty('--yst-primary-width');
+  primary.classList.remove('yst-custom-sidebar-width');
+  secondary.style.removeProperty('--yst-secondary-width');
+  secondary.classList.remove('yst-custom-sidebar-width');
+  ytdWatchFlexy.classList.remove('yst-custom-sidebar-width');
+  video.classList.remove('yst-custom-sidebar-width');
+  window.dispatchEvent(new Event('resize'));
+}
+
+export async function setupSidebarRatio(): Promise<void> {
   const { columns, primary, secondary, ytdWatchFlexy, video } = getElements();
   if (!columns || !primary || !secondary || !ytdWatchFlexy || !video) return;
   try {
     const data = await chrome.storage.local.get(['sidebarRatio']);
-    let ratio = (data?.sidebarRatio as number) ?? 0.5;
-    ratio = Math.min(Math.max(ratio, 0.05), 0.95);
-    const columnsWidth = columns.clientWidth;
-    const primaryWidth = Math.floor(columnsWidth * ratio);
-    applySidebarWidths(columnsWidth, primaryWidth, { primary, secondary, ytdWatchFlexy, video });
-    // 強制的にリサイズイベントを発生させてYouTubeのレイアウトを更新
-    window.dispatchEvent(new Event('resize'));
+    if (data.sidebarRatio) {
+      const ratio = data.sidebarRatio as number;
+      const columnsWidth = columns.clientWidth;
+      const primaryWidth = Math.floor(columnsWidth * ratio);
+      applySidebarWidths(columnsWidth, primaryWidth, { primary, secondary, ytdWatchFlexy, video });
+      // 強制的にリサイズイベントを発生させてYouTubeのレイアウトを更新
+      window.dispatchEvent(new Event('resize'));
+    } else {
+      removeSidebarWidths();
+    }
   } catch (err) {
     console.error('[youtube-smart-tabs] setupSidebarRatio error', err);
   }
