@@ -110,19 +110,17 @@ export function extensionSettings(): HTMLElement {
           </div>
         </div>
         <div id="section" class="${className}">
-          <div id="settings-title" class="${className}">サイドエリア幅を変更</div>
+          <div id="settings-title" class="${className}">サイドエリア幅を変更（実験的機能）</div>
           <div id="content" class="${className}">
             <div id="options" class="${className}">
               <ytd-settings-switch-renderer class="${className}">
-                <tp-yt-paper-toggle-button id="sidebarResizeToggle" noink="" class="style-scope ytd-settings-switch-renderer" role="button" aria-pressed="false" tabindex="0" toggles="" aria-disabled="false" aria-label="概要" style="touch-action: pan-y;">
-                  <div class="toggle-label style-scope tp-yt-paper-toggle-button" data-value="sidebarResize"></div>
+                <tp-yt-paper-toggle-button id="secondaryResizeToggle" noink="" class="style-scope ytd-settings-switch-renderer" role="button" aria-pressed="false" tabindex="0" toggles="" aria-disabled="false" aria-label="概要" style="touch-action: pan-y;">
+                  <div class="toggle-label style-scope tp-yt-paper-toggle-button" data-value="secondaryResize"></div>
                 </tp-yt-paper-toggle-button>
                 <div class="style-scope ytd-settings-switch-renderer">
                   <div id="title" class="style-scope ytd-settings-switch-renderer">有効にする</div>
                   <div id="subtitle" class="style-scope ytd-settings-switch-renderer">
-                    タブのサイドエリアの幅をドラッグで変更できるようにします．
-                    タブの幅が動画プレーヤーに被るのを防止するため，幅を広げすぎないように注意してください．
-                  </div>
+                    タブのサイドエリアの幅をドラッグで変更できるようにします．有効にするとタブの左側にドラッグハンドルが表示され，そのハンドルをドラッグすることでサイドエリアの幅を変更できます．                  </div>
                 </div>
               </ytd-settings-switch-renderer>
             </div>

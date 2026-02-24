@@ -1,6 +1,6 @@
 import { tabs, defaultCheckedTabs, defaultSelectedTab } from '../../settings';
 import { getElements } from '../core/elements';
-import { removeSidebarWidths } from './renderer';
+import { applySecondaryResizeSettings } from './secondary-resize';
 import { storageState } from '../core/storage';
 
 export function handleSettings(isFirstLoad: boolean): void {
@@ -113,17 +113,32 @@ export function handleSettings(isFirstLoad: boolean): void {
     });
   });
 
-  const sidebarResizeToggle = settings.querySelector<HTMLElement>("#sidebarResizeToggle");
-  if (sidebarResizeToggle) {
-    sidebarResizeToggle.addEventListener('click', () => {
-      const isEnabled = sidebarResizeToggle.getAttribute("aria-pressed") === "true";
-      console.log('[youtube-smart-tabs] sidebarResizeToggle clicked, new state:', isEnabled);
+  const secondaryResizeToggle = settings.querySelector<HTMLElement>("#secondaryResizeToggle");
+  if (secondaryResizeToggle) {
+    // 状態の復元（デフォルトはOFF）
+    if (storageState.secondaryResizeEnabled) {
+      secondaryResizeToggle.setAttribute("aria-pressed", "true");
+      secondaryResizeToggle.setAttribute("active", "");
+    } else {
+      secondaryResizeToggle.setAttribute("aria-pressed", "false");
+      secondaryResizeToggle.removeAttribute("active");
+    }
+
+    secondaryResizeToggle.addEventListener('click', () => {
+      const isEnabled = secondaryResizeToggle.getAttribute("aria-pressed") === "true";
+      storageState.secondaryResizeEnabled = isEnabled;
+
       if (isEnabled) {
-        chrome.storage.local.set({ sidebarRatio: null });
+        // 初回ON時はYouTubeデフォルト幅（secondaryRatio=null）
+        storageState.secondaryRatio = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: true, secondaryRatio: null });
       } else {
-        chrome.storage.local.remove('sidebarRatio');
-        removeSidebarWidths();
+        // OFF時は保存済み幅を無効化（デフォルト幅に戻す）
+        storageState.secondaryRatio = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: false, secondaryRatio: null });
       }
+
+      void applySecondaryResizeSettings();
     });
   }
 

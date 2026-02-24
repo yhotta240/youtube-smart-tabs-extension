@@ -266,6 +266,11 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   width: 5px !important;
   background-color: transparent !important;
   z-index: 2000;
+  display: none;
+}
+
+ytd-watch-flexy.yst-secondary-resize-enabled .yst-drag-handle {
+  display: block;
 }
 
 .yst-drag-handle.dragging {
