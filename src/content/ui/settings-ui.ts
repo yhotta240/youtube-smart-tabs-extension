@@ -110,7 +110,7 @@ export function extensionSettings(): HTMLElement {
           </div>
         </div>
         <div id="section" class="${className}">
-          <div id="settings-title" class="${className}">サイドエリア幅を変更（実験的機能）</div>
+          <div id="settings-title" class="${className}">サイドバー幅を変更</div>
           <div id="content" class="${className}">
             <div id="options" class="${className}">
               <ytd-settings-switch-renderer class="${className}">
@@ -118,9 +118,10 @@ export function extensionSettings(): HTMLElement {
                   <div class="toggle-label style-scope tp-yt-paper-toggle-button" data-value="secondaryResize"></div>
                 </tp-yt-paper-toggle-button>
                 <div class="style-scope ytd-settings-switch-renderer">
-                  <div id="title" class="style-scope ytd-settings-switch-renderer">有効にする</div>
+                  <div id="title" class="style-scope ytd-settings-switch-renderer">サイドバー幅をドラッグして変更する（実験的機能）</div>
                   <div id="subtitle" class="style-scope ytd-settings-switch-renderer">
-                    タブのサイドエリアの幅をドラッグで変更できるようにします．有効にするとタブの左側にドラッグハンドルが表示され，そのハンドルをドラッグすることでサイドエリアの幅を変更できます．                  </div>
+                    有効にすると，動画プレイヤーとサイドバーの境界をドラッグして幅を調整できます．ドラッグ中は境界が強調表示され，設定した幅は次回以降も保持されます．
+                  </div>
                 </div>
               </ytd-settings-switch-renderer>
             </div>
