@@ -1,7 +1,11 @@
-import { getElements, height } from './elements';
-import { storageState } from './storage';
+import { getElements, height } from '../core/elements';
+import { storageState } from '../core/storage';
+import { applySecondaryResizeSettings, handleFullscreenResize } from './secondary-resize';
 
 export function renderUI(): void {
+  applySecondaryResizeSettings();
+  handleFullscreenResize();
+
   const { primaryInner, secondaryInner } = getElements();
 
   if (primaryInner) {
@@ -9,7 +13,6 @@ export function renderUI(): void {
   }
 
   if (secondaryInner) {
-    // console.log("Setting secondaryInner height");
     secondaryInner.style.height = `${height()}px`;
 
     const descInner = document.querySelector<HTMLElement>('ytd-watch-metadata.watch-active-metadata #description-inner');
@@ -60,12 +63,13 @@ export function isFullscreen(): boolean {
   return !!document.fullscreenElement;
 }
 
-// リサイズイベントハンドラーの初期化
 let initialHeight: number = window.innerHeight;
 let rafId: number | null = null;
 
 export function initializeResizeHandler(): void {
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', (ev: Event) => {
+    // YouTubeのレイアウト更新のために拡張機能が強制的に発生させるresizeイベントを無視する
+    if (!ev.isTrusted) return;
     const windowHeight = window.innerHeight;
     const heightDiff = windowHeight - initialHeight;
     initialHeight = windowHeight;
@@ -88,3 +92,4 @@ export function initializeResizeHandler(): void {
     });
   });
 }
+

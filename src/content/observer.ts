@@ -1,11 +1,11 @@
 import { Tab } from '../settings';
-import { extensionSettings } from './tab-ui';
-import { YouTubeElements, HTMLElementWithReg } from './types';
-import { getElements } from './elements';
-import { storageState } from './storage';
-import { handleSettings } from './settings-handler';
-import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement, hideTabElement, addTabClickListeners, updateSegmentedTabClasses } from './tab-manager';
-import { renderUI } from './renderer';
+import { extensionSettings } from './ui/settings-ui';
+import { YouTubeElements, HTMLElementWithReg } from './core/types';
+import { getElements } from './core/elements';
+import { storageState } from './core/storage';
+import { handleSettings } from './ui/settings-handler';
+import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement, hideTabElement, addTabClickListeners, updateSegmentedTabClasses } from './ui/tab-manager';
+import { renderUI } from './ui/renderer';
 
 export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
   storageState.isEventAdded = false;

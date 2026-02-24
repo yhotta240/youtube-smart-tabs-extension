@@ -1,5 +1,5 @@
-import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../settings';
-import meta from '../../public/manifest.meta.json';
+import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../../settings';
+import meta from '../../../public/manifest.meta.json';
 
 export function createCheckbox(option: SettingOption, className: string): string {
   return /*html*/`
@@ -106,6 +106,24 @@ export function extensionSettings(): HTMLElement {
           <div id="content" class="${className}">
             <div id="options" class="${className}">
               ${settingsOption.map(option => createRadio(option, className)).join('')}
+            </div>
+          </div>
+        </div>
+        <div id="section" class="${className}">
+          <div id="settings-title" class="${className}">サイドバー幅を変更</div>
+          <div id="content" class="${className}">
+            <div id="options" class="${className}">
+              <ytd-settings-switch-renderer class="${className}">
+                <tp-yt-paper-toggle-button id="secondaryResizeToggle" noink="" class="style-scope ytd-settings-switch-renderer" role="button" aria-pressed="false" tabindex="0" toggles="" aria-disabled="false" aria-label="概要" style="touch-action: pan-y;">
+                  <div class="toggle-label style-scope tp-yt-paper-toggle-button" data-value="secondaryResize"></div>
+                </tp-yt-paper-toggle-button>
+                <div class="style-scope ytd-settings-switch-renderer">
+                  <div id="title" class="style-scope ytd-settings-switch-renderer">サイドバー幅をドラッグして変更する（実験的機能）</div>
+                  <div id="subtitle" class="style-scope ytd-settings-switch-renderer">
+                    有効にすると，動画プレイヤーとサイドバーの境界をドラッグして幅を調整できます．ドラッグ中は境界が強調表示され，設定した幅は次回以降も保持されます．
+                  </div>
+                </div>
+              </ytd-settings-switch-renderer>
             </div>
           </div>
         </div>

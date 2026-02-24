@@ -1,7 +1,7 @@
-import { Tab, TabId } from '../settings';
-import { YouTubeElements, HTMLElementWithReg } from './types';
-import { getElements } from './elements';
-import { storageState } from './storage';
+import { Tab, TabId } from '../../settings';
+import { YouTubeElements, HTMLElementWithReg } from '../core/types';
+import { getElements } from '../core/elements';
+import { storageState } from '../core/storage';
 
 const SEGMENTED_CLASS = {
   start: 'yt-spec-button-shape-next--segmented-start',
