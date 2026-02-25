@@ -27,7 +27,7 @@ export const getElements = (): YouTubeElements => {
   };
 };
 
-export const height = (): number => {
+export const calculateTabsHeight = (): number => {
   const header = document.querySelector('#container.style-scope.ytd-masthead') as HTMLElement | null;
   const headerHeight = header ? header.offsetHeight : 0;
   const windowHeight = window.innerHeight;
