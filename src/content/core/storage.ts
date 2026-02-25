@@ -7,7 +7,7 @@ type StorageData = {
   selectedTab?: Tab;
   details?: ExtensionDetail[];
   secondaryResizeEnabled?: boolean;
-  secondaryRatio?: number | null;
+  secondaryWidth?: number | null;
 };
 
 export class StorageState {
@@ -16,14 +16,14 @@ export class StorageState {
   selectedTab: Tab | null = null;
   extensionDetails: ExtensionDetail[] | null = null;
   secondaryResizeEnabled: boolean = false;
-  secondaryRatio: number | null = null;
+  secondaryWidth: number | null = null;
   preRespWidth: ResponsiveWidth = null;
   isFirstSelected: boolean = false;
   isEventAdded: boolean = false;
   preUrl: string | null = null;
 
   async initialize(onEnableChange: (isEnabled: boolean) => void): Promise<void> {
-    const data = await chrome.storage.local.get<StorageData>(['isEnabled', 'checkedTabs', 'selectedTab', 'details', 'secondaryResizeEnabled', 'secondaryRatio']);
+    const data = await chrome.storage.local.get<StorageData>(['isEnabled', 'checkedTabs', 'selectedTab', 'details', 'secondaryResizeEnabled', 'secondaryWidth']);
 
     this.isEnabled = data.isEnabled ?? false;
     this.checkedTabs = data.checkedTabs ?? defaultCheckedTabs;
@@ -33,7 +33,7 @@ export class StorageState {
     this.selectedTab = data.selectedTab ?? defaultSelectedTab;
     this.extensionDetails = data.details ?? settingDetails;
     this.secondaryResizeEnabled = data.secondaryResizeEnabled ?? false;
-    this.secondaryRatio = data.secondaryRatio ?? null;
+    this.secondaryWidth = data.secondaryWidth ?? null;
 
     onEnableChange(this.isEnabled);
 
@@ -46,8 +46,8 @@ export class StorageState {
       if (changes.secondaryResizeEnabled) {
         this.secondaryResizeEnabled = (changes.secondaryResizeEnabled.newValue as boolean) ?? false;
       }
-      if (changes.secondaryRatio) {
-        this.secondaryRatio = (changes.secondaryRatio.newValue as number | null) ?? null;
+      if (changes.secondaryWidth) {
+        this.secondaryWidth = (changes.secondaryWidth.newValue as number | null) ?? null;
       }
     });
   }
