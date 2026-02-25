@@ -1,4 +1,4 @@
-import { getElements, height } from '../core/elements';
+import { getElements, calculateTabsHeight } from '../core/elements';
 import { storageState } from '../core/storage';
 import { applySecondaryResizeSettings, handleFullscreenResize } from './secondary-resize';
 
@@ -13,7 +13,7 @@ export function renderUI(): void {
   }
 
   if (secondaryInner) {
-    secondaryInner.style.height = `${height()}px`;
+    secondaryInner.style.height = `${calculateTabsHeight()}px`;
 
     const descInner = document.querySelector<HTMLElement>('ytd-watch-metadata.watch-active-metadata #description-inner');
     const isDetailedDesc: boolean | undefined = storageState.extensionDetails?.find(detail => detail.id === 'description-detail')?.isEnabled;
@@ -81,10 +81,8 @@ export function initializeResizeHandler(): void {
     if (rafId !== null) cancelAnimationFrame(rafId);
 
     rafId = requestAnimationFrame(() => {
-      if (isFullscreen()) {
-        secondaryInner.style.height = `${secondaryInnerHeight + heightDiff}px`;
-      } else {
-        secondaryInner.style.height = `${secondaryInner.clientHeight + heightDiff}px`;
+      if (!isFullscreen()) {
+        secondaryInner.style.height = `${calculateTabsHeight()}px`;
       }
       if (chat) {
         chat.style.height = `${chat.offsetHeight + heightDiff}px`;
