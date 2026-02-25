@@ -129,13 +129,13 @@ export function handleSettings(isFirstLoad: boolean): void {
       storageState.secondaryResizeEnabled = isEnabled;
 
       if (isEnabled) {
-        // 初回ON時はYouTubeデフォルト幅（secondaryRatio=null）
-        storageState.secondaryRatio = null;
-        chrome.storage.local.set({ secondaryResizeEnabled: true, secondaryRatio: null });
+        // 初回ON時はYouTubeデフォルト幅（secondaryWidth=null）
+        storageState.secondaryWidth = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: true, secondaryWidth: null });
       } else {
         // OFF時は保存済み幅を無効化（デフォルト幅に戻す）
-        storageState.secondaryRatio = null;
-        chrome.storage.local.set({ secondaryResizeEnabled: false, secondaryRatio: null });
+        storageState.secondaryWidth = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: false, secondaryWidth: null });
       }
 
       void applySecondaryResizeSettings();

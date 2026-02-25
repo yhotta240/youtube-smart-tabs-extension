@@ -86,13 +86,17 @@ export async function setupSecondaryRatio(): Promise<void> {
     return;
   }
   try {
-    const data = await chrome.storage.local.get(['secondaryRatio']);
-    const ratio = (data.secondaryRatio ?? storageState.secondaryRatio) as number | null;
-    storageState.secondaryRatio = ratio ?? null;
+    const data = await chrome.storage.local.get(['secondaryWidth']);
+    const savedWidth = (data.secondaryWidth ?? storageState.secondaryWidth) as number | null;
+    storageState.secondaryWidth = savedWidth ?? null;
 
-    if (ratio !== null && ratio !== undefined) {
+    if (savedWidth !== null && savedWidth !== undefined) {
       const columnsWidth = columns.clientWidth;
-      const secondaryWidth = Math.floor(columnsWidth * ratio);
+      const minSecondaryWidth = 300;
+      const minPrimaryWidth = 300;
+      const maxSecondaryWidth = Math.max(columnsWidth - minPrimaryWidth, minSecondaryWidth);
+      let secondaryWidth = Math.floor(savedWidth);
+      secondaryWidth = Math.min(Math.max(secondaryWidth, minSecondaryWidth), maxSecondaryWidth);
       const primaryWidth = Math.max(columnsWidth - secondaryWidth, 0);
       applySecondaryWidths(columnsWidth, primaryWidth, { primary, secondary, ytdWatchFlexy, video });
       window.dispatchEvent(new Event('resize'));
@@ -131,9 +135,12 @@ function handleDrag(): void {
     (async () => {
       const columnsWidth = columns.clientWidth;
       const secondaryWidth = Math.round(secondary.getBoundingClientRect().width);
-      const ratio = Math.min(Math.max(secondaryWidth / columnsWidth, 0.05), 0.95);
-      await chrome.storage.local.set({ secondaryRatio: ratio });
-      storageState.secondaryRatio = ratio;
+      const minSecondaryWidth = 300;
+      const minPrimaryWidth = 300;
+      const maxSecondaryWidth = Math.max(columnsWidth - minPrimaryWidth, minSecondaryWidth);
+      const clamped = Math.min(Math.max(Math.round(secondaryWidth), minSecondaryWidth), maxSecondaryWidth);
+      await chrome.storage.local.set({ secondaryWidth: clamped });
+      storageState.secondaryWidth = clamped;
       window.dispatchEvent(new Event('resize'));
     })();
   };
