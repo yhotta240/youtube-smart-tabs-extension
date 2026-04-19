@@ -6,6 +6,7 @@ import { storageState } from './core/storage';
 import { handleSettings } from './ui/settings-handler';
 import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement, hideTabElement, addTabClickListeners, updateSegmentedTabClasses } from './ui/tab-manager';
 import { renderUI } from './ui/renderer';
+import { applySecondaryResizeSettings } from './ui/secondary-resize';
 
 export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
   storageState.isEventAdded = false;
@@ -52,6 +53,7 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
     }
     if (elements.secondaryInner) addTabClickListeners(elements.secondaryInner);
   } else if (!isLargeScreen && storageState.preRespWidth === 'large') {
+    applySecondaryResizeSettings();
     Array.from(customTab.children).forEach(tab => {
       if (tab.classList.contains(`${sizeClass}s`)) {
         tab.classList.replace(`${sizeClass}s`, `${sizeClass}m`);
@@ -287,7 +289,7 @@ export function createObserver(): MutationObserver {
     if (!customTab) {
       if (storageState.checkedTabs) handleFirstRender(elements, storageState.checkedTabs, isLargeScreen);
       if (preVideoId !== currentVideoId) {
-        // console.log("URLが変更", storageState.preUrl, "から", url.href);
+        console.log("URLが変更", storageState.preUrl, "から", url.href);
         handleUrlChange();
         storageState.preUrl = url.href;
       }
