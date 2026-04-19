@@ -76,8 +76,6 @@ export function initializeResizeHandler(): void {
     const { secondaryInner, chat } = getElements();
     if (!secondaryInner) return;
 
-    const secondaryInnerHeight = secondaryInner.clientHeight;
-
     if (rafId !== null) cancelAnimationFrame(rafId);
 
     rafId = requestAnimationFrame(() => {

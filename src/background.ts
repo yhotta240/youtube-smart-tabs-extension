@@ -107,8 +107,6 @@ chrome.runtime.onMessage.addListener((message: { action: string }, sender: chrom
     chrome.scripting.insertCSS({
       target: { tabId },
       files: [cssFilePath]
-    }, () => {
-      console.log('Received message in background:', message);
     });
   } else if (message.action === "removeCSS") {
     chrome.scripting.removeCSS({

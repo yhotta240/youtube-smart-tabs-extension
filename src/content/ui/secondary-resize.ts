@@ -15,7 +15,7 @@ export function handleFullscreenResize(): void {
     if (!ev.isTrusted) return;
     if (resizeTimeout) clearTimeout(resizeTimeout);
     resizeTimeout = window.setTimeout(() => {
-      if (isLargeScreenLayout()) setupSecondaryRatio();
+      if (isLargeScreenLayout()) setupSecondaryWidths();
     }, 200);
   });
 }
@@ -45,7 +45,7 @@ export async function applySecondaryResizeSettings(): Promise<void> {
   }
 
   await insertDragHandle();
-  await setupSecondaryRatio();
+  await setupSecondaryWidths();
 }
 
 type SidebarElements = {
@@ -78,7 +78,7 @@ export function clearSecondaryWidths(): void {
   window.dispatchEvent(new Event('resize'));
 }
 
-export async function setupSecondaryRatio(): Promise<void> {
+export async function setupSecondaryWidths(): Promise<void> {
   const { columns, primary, secondary, ytdWatchFlexy, video } = getElements();
   if (!columns || !primary || !secondary || !ytdWatchFlexy || !video) return;
   if (!storageState.secondaryResizeEnabled) {
@@ -104,7 +104,7 @@ export async function setupSecondaryRatio(): Promise<void> {
       clearSecondaryWidths();
     }
   } catch (err) {
-    console.error('[youtube-smart-tabs] setupSecondaryRatio error', err);
+    console.error('[youtube-smart-tabs] setupSecondaryWidths error', err);
   }
 }
 
