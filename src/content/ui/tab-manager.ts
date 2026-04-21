@@ -4,9 +4,9 @@ import { getElements } from '../core/elements';
 import { storageState } from '../core/storage';
 
 const SEGMENTED_CLASS = {
-  start: 'yt-spec-button-shape-next--segmented-start',
-  interval: 'yt-spec-button-shape-next--segmented-interval',
-  end: 'yt-spec-button-shape-next--segmented-end',
+  start: 'ytSpecButtonShapeNextSegmentedStart',
+  interval: 'ytSpecButtonShapeNextSegmentedInterval',
+  end: 'ytSpecButtonShapeNextSegmentedEnd',
 };
 
 export function createTab(checkedTabs: Tab[]): HTMLElement {
@@ -14,14 +14,14 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
   filteredTabs.sort((a, b) => a.num - b.num);
 
   const tab: HTMLDivElement = document.createElement('div');
-  const btnSize: string = `yt-spec-button-shape-next--size-${window.innerWidth >= 1017 ? 's' : 'm'}`;
+  const btnSize: string = `ytSpecButtonShapeNextSize${window.innerWidth >= 1017 ? 'S' : 'M'}`;
   tab.id = 'custom-tab';
   tab.classList.add('style-scope', 'yt-button-group');
   tab.style.marginBottom = `${window.innerWidth >= 1017 ? '' : '10px;'}`;
   tab.role = 'tablist';
   tab.innerHTML = /*html*/`
       <button
-        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${SEGMENTED_CLASS.start}"
+        class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${SEGMENTED_CLASS.start}"
         id="panels-tab"
         data-bs-toggle="pill"
         data-bs-target="#panels"
@@ -35,7 +35,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
       </button>
     ${filteredTabs.map((tab, index) => /*html*/`
       <button
-        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${index === 0 ? SEGMENTED_CLASS.start : SEGMENTED_CLASS.interval}"
+        class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${index === 0 ? SEGMENTED_CLASS.start : SEGMENTED_CLASS.interval}"
         id="${tab.id}-tab"
         data-bs-toggle="pill"
         data-bs-target="#${tab.id}"
@@ -48,7 +48,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
       </button>
     `).join('')}
       <button
-        class="style-scope yt-chip-cloud-chip-renderer yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono ${btnSize} yt-spec-button-shape-next--icon-leading ${SEGMENTED_CLASS.end}"
+        class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${SEGMENTED_CLASS.end}"
         id="extension-settings-tab"
         data-bs-toggle="pill"
         data-bs-target="#extension-settings"
@@ -217,7 +217,7 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
   });
 }
 
-/** タブ形式の見た目にするため，yt-spec-button-shape-next--segmented クラスのスタイルを調整する */
+/** タブ形式の見た目にするため，ytSpecButtonShapeNextSegmented クラスのスタイルを調整する */
 export function updateSegmentedTabClasses(): void {
   const { customTab } = getElements();
   if (!customTab) return;

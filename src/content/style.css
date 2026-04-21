@@ -31,17 +31,17 @@
   padding: 0;
 }
 
-html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-start {
+html body .ytSpecButtonShapeNextSizeS.ytSpecButtonShapeNextSegmentedStart {
   border-radius: 10px 0 0 0;
   position: relative;
 }
 
-.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--segmented-interval {
+.ytSpecButtonShapeNextSizeM.ytSpecButtonShapeNextSegmentedInterval {
   border-radius: 0 0 0 0;
   position: relative;
 }
 
-.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--segmented-interval::after {
+.ytSpecButtonShapeNextSizeM.ytSpecButtonShapeNextSegmentedInterval::after {
   content: "";
   background: var(--segmented-bg-color, rgba(255, 255, 255, 0.2));
   position: absolute;
@@ -51,12 +51,12 @@ html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmente
   width: 1px;
 }
 
-.yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-interval {
+.ytSpecButtonShapeNextSizeS.ytSpecButtonShapeNextSegmentedInterval {
   border-radius: 0 0 0 0;
   position: relative;
 }
 
-.yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-interval::after {
+.ytSpecButtonShapeNextSizeS.ytSpecButtonShapeNextSegmentedInterval::after {
   content: "";
   background: var(--segmented-bg-color, rgba(255, 255, 255, 0.2));
   /* 取得できない場合のデフォルト値 */
@@ -68,7 +68,7 @@ html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmente
 }
 
 
-html body .yt-spec-button-shape-next--size-s.yt-spec-button-shape-next--segmented-end {
+html body .ytSpecButtonShapeNextSizeS.ytSpecButtonShapeNextSegmentedEnd {
   border-radius: 0 10px 0 0;
   position: relative;
 }
@@ -96,7 +96,7 @@ ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #
   display: block;
 }
 
-html body .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal.custom-tab-selected {
+html body .ytSpecButtonShapeNextMono.ytSpecButtonShapeNextTonal.custom-tab-selected {
   background-color: var(--yt-spec-text-primary);
   color: var(--yt-spec-text-primary-inverse);
 }
@@ -241,7 +241,7 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   max-height: none;
 }
 
-#secondary #custom-tab button.yt-spec-button-shape-next--size-s {
+#secondary #custom-tab button.ytSpecButtonShapeNextSizeS {
   padding: 0 !important;
 }
 
