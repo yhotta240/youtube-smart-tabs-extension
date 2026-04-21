@@ -27,12 +27,12 @@ export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[],
 }
 
 export function handleResize(elements: YouTubeElements, customTab: HTMLElement, isLargeScreen: boolean): void {
-  const sizeClass = 'yt-spec-button-shape-next--size-';
+  const sizeClass = 'ytSpecButtonShapeNextSize';
   if (isLargeScreen && storageState.preRespWidth === 'medium') {
     renderUI();
     Array.from(customTab.children).forEach(tab => {
-      if (tab.classList.contains(`${sizeClass}m`)) {
-        tab.classList.replace(`${sizeClass}m`, `${sizeClass}s`);
+      if (tab.classList.contains(`${sizeClass}M`)) {
+        tab.classList.replace(`${sizeClass}M`, `${sizeClass}S`);
       }
     });
     // 大画面レイアウトに合わせて要素を移動
@@ -55,8 +55,8 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
   } else if (!isLargeScreen && storageState.preRespWidth === 'large') {
     applySecondaryResizeSettings();
     Array.from(customTab.children).forEach(tab => {
-      if (tab.classList.contains(`${sizeClass}s`)) {
-        tab.classList.replace(`${sizeClass}s`, `${sizeClass}m`);
+      if (tab.classList.contains(`${sizeClass}S`)) {
+        tab.classList.replace(`${sizeClass}S`, `${sizeClass}M`);
       }
     });
     // 中画面レイアウトに合わせて要素を移動
@@ -148,11 +148,11 @@ export function handleUrlChange(): void {
       // クラスの適用
       tablist.forEach((tab, index) => {
         if (index === 0) {
-          tab.classList.remove('yt-spec-button-shape-next--segmented-interval');
-          tab.classList.add('yt-spec-button-shape-next--segmented-start');
+          tab.classList.remove('ytSpecButtonShapeNextSegmentedInterval');
+          tab.classList.add('ytSpecButtonShapeNextSegmentedStart');
         } else {
-          tab.classList.remove('yt-spec-button-shape-next--segmented-start');
-          tab.classList.add('yt-spec-button-shape-next--segmented-interval');
+          tab.classList.remove('ytSpecButtonShapeNextSegmentedStart');
+          tab.classList.add('ytSpecButtonShapeNextSegmentedInterval');
         }
       });
     }
