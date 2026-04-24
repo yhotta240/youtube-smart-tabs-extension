@@ -97,15 +97,15 @@ ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #
 }
 
 html body .ytSpecButtonShapeNextMono.ytSpecButtonShapeNextTonal.custom-tab-selected {
-  background-color: var(--yt-spec-text-primary);
-  color: var(--yt-spec-text-primary-inverse);
+  background-color: var(--tffc2fd3a644f6275);
+  color: var(--t6216186c28b3834b);
 }
 
 #extension-settings .ytd-settings-extensions-renderer {
   width: 160px;
   min-width: 160px;
   margin-right: 56px;
-  color: var(--yt-spec-text-primary);
+  color: var(--tffc2fd3a644f6275);
   font-family: "Roboto", "Arial", sans-serif;
   font-size: 1.4rem;
   line-height: 2rem;
@@ -116,7 +116,7 @@ html body .ytSpecButtonShapeNextMono.ytSpecButtonShapeNextTonal.custom-tab-selec
   margin-right: 0 !important;
   width: 160px;
   min-width: 160px;
-  color: var(--yt-spec-text-primary);
+  color: var(--tffc2fd3a644f6275);
   font-family: "Roboto", "Arial", sans-serif;
   font-size: 1.4rem;
   line-height: 2rem;
@@ -215,7 +215,7 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
 }
 
 .resize-secondary:hover {
-  background-color: var(--yt-spec-text-primary);
+  background-color: var(--tffc2fd3a644f6275);
 }
 
 #secondary-inner #chat-container.style-scope.ytd-watch-flexy.active.show,
