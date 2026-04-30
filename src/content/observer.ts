@@ -289,7 +289,6 @@ export function createObserver(): MutationObserver {
     if (!customTab) {
       if (storageState.checkedTabs) handleFirstRender(elements, storageState.checkedTabs, isLargeScreen);
       if (preVideoId !== currentVideoId) {
-        console.log("URLが変更", storageState.preUrl, "から", url.href);
         handleUrlChange();
         storageState.preUrl = url.href;
       }
