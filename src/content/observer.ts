@@ -1,217 +1,12 @@
-import { Tab } from '../settings';
-import { extensionSettings } from './ui/settings-ui';
-import { YouTubeElements, HTMLElementWithReg } from './core/types';
-import { getElements } from './core/elements';
-import { storageState } from './core/storage';
-import { handleSettings } from './ui/settings-handler';
-import { createTab, setActiveTab, clickTab, removeCustomTabSelected, displayElementNone, displayTabElement, hideTabElement, addTabClickListeners, updateSegmentedTabClasses } from './ui/tab-manager';
-import { renderUI } from './ui/renderer';
-import { applySecondaryResizeSettings } from './ui/secondary-resize';
+import { getElements } from "./elements";
+import { storageState } from "./storage";
+import { clickTab, displayTabElement, hideTabElement, updateSegmentedTabClasses } from "./ui/tab-manager";
+import { handleFirstRender, handleResize, handleUrlChange } from "./ui/layout";
 
-export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
-  storageState.isEventAdded = false;
-  if (isLargeScreen) {
-    const tabs = createTab(checkedTabs);
-    if (elements.secondary && elements.secondaryInner) {
-      elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
-      addTabClickListeners(elements.secondaryInner);
-    }
-  } else {
-    const tabs = createTab(checkedTabs);
-    if (elements.below) {
-      const targetElement = elements.below.querySelector('#related');
-      elements.below.insertBefore(tabs, targetElement);
-      addTabClickListeners(elements.below);
-    }
-  }
-}
-
-export function handleResize(elements: YouTubeElements, customTab: HTMLElement, isLargeScreen: boolean): void {
-  const sizeClass = 'ytSpecButtonShapeNextSize';
-  if (isLargeScreen && storageState.preRespWidth === 'medium') {
-    renderUI();
-    Array.from(customTab.children).forEach(tab => {
-      if (tab.classList.contains(`${sizeClass}M`)) {
-        tab.classList.replace(`${sizeClass}M`, `${sizeClass}S`);
-      }
-    });
-    // 大画面レイアウトに合わせて要素を移動
-    if (elements.secondary) {
-      elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
-    }
-    if (elements.settings && elements.secondaryInner) {
-      elements.secondaryInner.appendChild(elements.settings);
-    }
-    handleSettings(false);
-    if (storageState.checkedTabs) {
-      storageState.checkedTabs.forEach(tab => {
-        const element = getElements()[tab.elementName as keyof YouTubeElements];
-        if (element && elements.secondaryInner) {
-          elements.secondaryInner.appendChild(element);
-        }
-      });
-    }
-    if (elements.secondaryInner) addTabClickListeners(elements.secondaryInner);
-  } else if (!isLargeScreen && storageState.preRespWidth === 'large') {
-    applySecondaryResizeSettings();
-    Array.from(customTab.children).forEach(tab => {
-      if (tab.classList.contains(`${sizeClass}S`)) {
-        tab.classList.replace(`${sizeClass}S`, `${sizeClass}M`);
-      }
-    });
-    // 中画面レイアウトに合わせて要素を移動
-    if (elements.settings && elements.below) {
-      elements.below.appendChild(elements.settings);
-    }
-    if (elements.below) {
-      elements.below.insertBefore(customTab, elements.settings);
-    }
-    handleSettings(false);
-    if (storageState.checkedTabs) {
-      storageState.checkedTabs.forEach(tab => {
-        let element: HTMLElement | null;
-        if (tab.id === 'description') {
-          element = document.querySelector<HTMLElement>('ytd-watch-metadata');
-        } else {
-          element = getElements()[tab.elementName as keyof YouTubeElements];
-        }
-        if (element && elements.below) {
-          elements.below.appendChild(element);
-        }
-      });
-    }
-    if (elements.below) addTabClickListeners(elements.below);
-  }
-}
-
-export function handleUrlChange(): void {
-  let tryCount: number = 0;
-  const maxTries: number = 10;
-  moveElement();
-
-  const interval = setInterval(() => {
-    const { below, chatContainer, chatViewBtn, chatContainerTab, comments, playlist } = getElements();
-    if (!below || !comments) return;
-
-    // 一回だけUIをレンダリングする
-    if (tryCount === 0) {
-      renderUI();
-    }
-
-    // チャットリプレイパネルのイベントリスナ登録
-    if (chatViewBtn && !(chatViewBtn as HTMLElementWithReg)._reg) {
-      chatViewBtn.addEventListener('click', () => {
-        removeCustomTabSelected();
-        if (below && chatContainer && chatContainerTab) {
-          displayElementNone(below);
-          chatContainer.style.display = 'block';
-          chatContainerTab.click();
-        }
-      }, { once: true });
-      (chatViewBtn as HTMLElementWithReg)._reg = true;
-    }
-
-    const commentsHidden: boolean = comments.hasAttribute("hidden");
-    const teaserCarousel = document.querySelector<HTMLElement>("#teaser-carousel");
-    const customTab = document.querySelector<HTMLElement>('#custom-tab');
-    if (!customTab || !storageState.checkedTabs) return;
-
-    const filteredTabs: Tab[] = storageState.checkedTabs.filter(filteredTab => {
-      const element = getElements()[filteredTab.elementName as keyof YouTubeElements];
-      const tabElement = customTab.querySelector<HTMLElement>(`#${filteredTab.id}-tab`);
-      let shouldHideTab: boolean = false;
-
-      if (filteredTab.id === 'chat-container') {
-        shouldHideTab = !(filteredTab.id === 'chat-container' && teaserCarousel && !teaserCarousel.hasAttribute("hidden") || element?.children.length === 2);
-      }
-      if (filteredTab.id === 'comments') {
-        shouldHideTab = (commentsHidden);
-      }
-      if (filteredTab.id === 'related') {
-        shouldHideTab = !(element && element.children.length > 1);
-      }
-      if (filteredTab.id === 'playlist') {
-        shouldHideTab = playlist ? playlist.hasAttribute("hidden") : true;
-      }
-
-      if (tabElement) tabElement.style.display = shouldHideTab ? 'none' : 'block';
-      return !shouldHideTab;
-    });
-
-    filteredTabs.sort((a, b) => a.num - b.num);
-
-    if (filteredTabs.length > 0) {
-      const tablist: HTMLElement[] = filteredTabs
-        .map(filtered => customTab.querySelector<HTMLElement>(`#${filtered.id}-tab`))
-        .filter((tab): tab is HTMLElement => tab !== null);
-
-      // クラスの適用
-      tablist.forEach((tab, index) => {
-        if (index === 0) {
-          tab.classList.remove('ytSpecButtonShapeNextSegmentedInterval');
-          tab.classList.add('ytSpecButtonShapeNextSegmentedStart');
-        } else {
-          tab.classList.remove('ytSpecButtonShapeNextSegmentedStart');
-          tab.classList.add('ytSpecButtonShapeNextSegmentedInterval');
-        }
-      });
-    }
-
-    if (tryCount === 0) {
-      storageState.isFirstSelected = true;
-      setActiveTab(customTab);
-    }
-
-    // 最大試行回数に達したら終了
-    if (!commentsHidden || tryCount >= maxTries) {
-      setActiveTab(customTab);
-      clearInterval(interval);
-      return;
-    }
-    tryCount++;
-  }, 500);
-}
-
-function moveElement(): void {
-  const { below, secondaryInner, settings } = getElements();
-  if (!below && !secondaryInner) return;
-
-  const isLargeScreen = window.innerWidth >= 1017;
-  const parent = isLargeScreen ? secondaryInner : below;
-  if (!parent) return;
-
-  if (!settings) {
-    parent.appendChild(extensionSettings());
-    handleSettings(true);
-  } else {
-    parent.appendChild(settings);
-  }
-
-  if (!storageState.checkedTabs) return;
-  storageState.checkedTabs.forEach(tab => {
-    const element = getElements()[tab.elementName as keyof YouTubeElements];
-    if (element) {
-      if (tab.elementName === "chatContainer") {
-        return;
-      }
-      appendElement(tab);
-    }
-  });
-
-  function appendElement(tab: Tab): void {
-    const element = getElements()[tab.elementName as keyof YouTubeElements];
-    if (!element) return;
-    if (isLargeScreen && secondaryInner) {
-      secondaryInner.appendChild(element);
-    } else if (!isLargeScreen && below) {
-      below.appendChild(element);
-    }
-  }
-}
 
 export async function observeYouTubeElements(): Promise<void> {
   // 有効化されていない場合は何もしない
-  const data = await chrome.storage.local.get(['isEnabled']);
+  const data = await chrome.storage.local.get(["isEnabled"]);
   if (!data.isEnabled) return;
 
   const observer = new MutationObserver(() => {
@@ -220,7 +15,7 @@ export async function observeYouTubeElements(): Promise<void> {
     // panels の監視
     if (panels) {
       let isAnyPanelExpanded = false;
-      Array.from(panels.children).forEach(child => {
+      Array.from(panels.children).forEach((child) => {
         const visibleAttr = child.getAttribute("visibility");
         if (visibleAttr === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED") {
           isAnyPanelExpanded = true;
@@ -234,7 +29,7 @@ export async function observeYouTubeElements(): Promise<void> {
         panels.classList.add("observed");
         // クリップ作成の描画不具合対策としてリサイズイベントを発火
         requestAnimationFrame(() => {
-          window.dispatchEvent(new Event('resize'));
+          window.dispatchEvent(new Event("resize"));
         });
       } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
         hideTabElement("panels");
@@ -267,7 +62,7 @@ export async function observeYouTubeElements(): Promise<void> {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['visibility', 'hidden']
+    attributeFilter: ["visibility", "hidden"],
   });
 }
 
@@ -276,12 +71,12 @@ export function createObserver(): MutationObserver {
     const elements = getElements();
     if (!elements.below && !elements.secondary && !elements.secondaryInner) return;
 
-    if (elements.secondaryInner && !elements.secondaryInner.classList.contains('tab-container')) {
-      elements.secondaryInner.classList.add('tab-container');
+    if (elements.secondaryInner && !elements.secondaryInner.classList.contains("tab-container")) {
+      elements.secondaryInner.classList.add("tab-container");
     }
 
     const isLargeScreen = window.innerWidth >= 1017;
-    const customTab = document.querySelector<HTMLElement>('#custom-tab');
+    const customTab = document.querySelector<HTMLElement>("#custom-tab");
     const url: URL = new URL(window.location.href);
     const preVideoId: string | null = storageState.preUrl ? new URL(storageState.preUrl).searchParams.get("v") : null;
     const currentVideoId: string | null = url.searchParams.get("v");
@@ -300,6 +95,6 @@ export function createObserver(): MutationObserver {
         storageState.preUrl = "https://www.youtube.com/";
       }
     }
-    storageState.preRespWidth = isLargeScreen ? 'large' : 'medium';
+    storageState.preRespWidth = isLargeScreen ? "large" : "medium";
   });
 }

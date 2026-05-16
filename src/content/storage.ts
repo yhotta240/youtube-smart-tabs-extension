@@ -1,4 +1,4 @@
-import { Tab, defaultCheckedTabs, defaultSelectedTab, settingDetails } from '../../settings';
+import { Tab, defaultCheckedTabs, defaultSelectedTab, settingDetails } from '../settings';
 import { ExtensionDetail, ResponsiveWidth } from './types';
 
 type StorageData = {
@@ -37,7 +37,6 @@ export class StorageState {
 
     onEnableChange(this.isEnabled);
 
-    // Listen for storage changes
     chrome.storage.onChanged.addListener((changes) => {
       if (changes.isEnabled) {
         this.isEnabled = changes.isEnabled.newValue as boolean;

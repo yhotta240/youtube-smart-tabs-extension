@@ -1,5 +1,8 @@
-import { settingsOption, settingDetails, SettingOption, SettingDetails } from '../../settings';
+import { tabs, defaultCheckedTabs, defaultSelectedTab, settingsOption, settingDetails, SettingOption, SettingDetails } from '../../settings';
 import meta from '../../../public/manifest.meta.json';
+import { getElements } from '../elements';
+import { applySecondaryResizeSettings } from './secondary-resize';
+import { storageState } from '../storage';
 
 export function createCheckbox(option: SettingOption, className: string): string {
   return /*html*/`
@@ -144,4 +147,155 @@ export function extensionSettings(): HTMLElement {
     </div>
   `;
   return settings;
+}
+
+export function handleSettings(isFirstLoad: boolean): void {
+  const { settings } = getElements();
+  if (!settings) return;
+
+  const checkbox = settings.querySelectorAll<HTMLElement>("#checkbox");
+  const radioButtons = settings.querySelectorAll<HTMLElement>("#radio");
+
+  if (!storageState.checkedTabs) {
+    storageState.checkedTabs = defaultCheckedTabs;
+    chrome.storage.local.set({ checkedTabs: storageState.checkedTabs });
+  }
+  if (!storageState.selectedTab) {
+    storageState.selectedTab = defaultSelectedTab;
+    chrome.storage.local.set({ selectedTab: storageState.selectedTab });
+  }
+
+  if (storageState.checkedTabs) {
+    checkbox.forEach((cb) => {
+      const labelElement = cb.querySelector<HTMLElement>("#label.style-scope.ytd-settings-checkbox-renderer");
+      if (labelElement && storageState.checkedTabs) {
+        const labelVal = labelElement.dataset.value ?? '';
+        if (storageState.checkedTabs.some((tab) => tab.id === labelVal)) {
+          cb.setAttribute("aria-checked", "true");
+          cb.setAttribute("checked", "");
+          cb.setAttribute("active", "");
+        } else {
+          cb.setAttribute("aria-checked", "false");
+          cb.removeAttribute("checked");
+          cb.removeAttribute("active");
+        }
+      }
+    });
+  }
+
+  checkbox.forEach((cb) => {
+    cb.addEventListener('click', () => {
+      const labelElement = cb.querySelector<HTMLElement>("#label.style-scope.ytd-settings-checkbox-renderer");
+      if (!labelElement) return;
+
+      const labelVal = labelElement.dataset.value ?? '';
+      const label = labelElement.textContent ?? '';
+      const isChecked = cb.getAttribute("aria-checked") === "true";
+
+      if (isChecked) {
+        const tabId = tabs.find(tab => tab.id === labelVal)?.id;
+        const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
+        const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
+        if (tabId && tabNum !== undefined && tabElementName && storageState.checkedTabs) {
+          storageState.checkedTabs = storageState.checkedTabs.filter(tab => tab.id !== labelVal);
+          storageState.checkedTabs.push({ id: tabId, name: label, num: tabNum, elementName: tabElementName });
+        }
+      } else if (storageState.checkedTabs) {
+        storageState.checkedTabs = storageState.checkedTabs.filter(tab => tab.id !== labelVal);
+      }
+      chrome.storage.local.set({ checkedTabs: storageState.checkedTabs });
+    });
+  });
+
+  if (storageState.selectedTab) {
+    radioButtons.forEach((radio) => {
+      const labelElement = radio.querySelector<HTMLElement>("#label.style-scope.ytd-settings-radio-option-renderer");
+      if (!labelElement || !storageState.selectedTab) return;
+
+      const labelVal = labelElement.dataset.value ?? '';
+      if (labelVal === storageState.selectedTab.id) {
+        radio.setAttribute("aria-checked", "true");
+        radio.setAttribute("checked", "");
+        radio.setAttribute("active", "");
+      } else {
+        radio.setAttribute("aria-checked", "false");
+        radio.removeAttribute("checked");
+        radio.removeAttribute("active");
+      }
+    });
+  }
+
+  radioButtons.forEach((radio) => {
+    radio.addEventListener('click', () => {
+      radioButtons.forEach((r) => {
+        r.setAttribute("aria-checked", "false");
+        r.removeAttribute("checked");
+        r.removeAttribute("active");
+      });
+
+      const labelElement = radio.querySelector<HTMLElement>("#label.style-scope.ytd-settings-radio-option-renderer");
+      if (!labelElement) return;
+
+      const labelVal = labelElement.dataset.value ?? '';
+      const label = labelElement.textContent ?? '';
+      radio.setAttribute("aria-checked", "true");
+      radio.setAttribute("checked", "");
+      radio.setAttribute("active", "");
+
+      const tabId = tabs.find(tab => tab.id === labelVal)?.id;
+      const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
+      const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
+      storageState.selectedTab = { id: tabId ?? "auto", name: label, num: tabNum ?? 0, elementName: tabElementName ?? "auto" };
+      chrome.storage.local.set({ selectedTab: storageState.selectedTab });
+
+      if (!tabId) {
+        chrome.storage.local.set({ currentTab: null });
+      }
+    });
+  });
+
+  const secondaryResizeToggle = settings.querySelector<HTMLElement>("#secondaryResizeToggle");
+  if (secondaryResizeToggle) {
+    if (storageState.secondaryResizeEnabled) {
+      secondaryResizeToggle.setAttribute("aria-pressed", "true");
+      secondaryResizeToggle.setAttribute("active", "");
+    } else {
+      secondaryResizeToggle.setAttribute("aria-pressed", "false");
+      secondaryResizeToggle.removeAttribute("active");
+    }
+
+    secondaryResizeToggle.addEventListener('click', () => {
+      const isEnabled = secondaryResizeToggle.getAttribute("aria-pressed") === "true";
+      storageState.secondaryResizeEnabled = isEnabled;
+
+      if (isEnabled) {
+        storageState.secondaryWidth = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: true, secondaryWidth: null });
+      } else {
+        storageState.secondaryWidth = null;
+        chrome.storage.local.set({ secondaryResizeEnabled: false, secondaryWidth: null });
+      }
+
+      void applySecondaryResizeSettings();
+    });
+  }
+
+  const details = settings.querySelectorAll<HTMLElement>("#detail");
+  if (!details.length) return;
+  if (!isFirstLoad) return;
+
+  details.forEach(detail => {
+    const toggle = detail.querySelector<HTMLElement>("#toggle");
+    if (!toggle || !storageState.extensionDetails) return;
+
+    const detailData = storageState.extensionDetails.find(d => d.id === detail.dataset.id);
+    if (detailData?.isEnabled) toggle.click();
+
+    toggle.addEventListener('click', () => {
+      if (detailData) {
+        detailData.isEnabled = toggle.getAttribute("aria-pressed") === "true";
+        chrome.storage.local.set({ details: storageState.extensionDetails });
+      }
+    });
+  });
 }
