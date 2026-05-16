@@ -126,7 +126,6 @@ export function displayElementNone(innerContent: HTMLElement): void {
       }
       if (tab.elementName === "description") {
         const description = elements.description;
-        console.log(description);
         if (description) description.style.display = 'none';
       }
     });
