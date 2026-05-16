@@ -1,5 +1,5 @@
-import { getElements } from '../core/elements';
-import { storageState } from '../core/storage';
+import { getElements } from '../elements';
+import { storageState } from '../storage';
 
 export function isLargeScreenLayout(): boolean {
   return window.innerWidth >= 1017;

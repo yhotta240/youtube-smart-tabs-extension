@@ -1,5 +1,5 @@
-import { getElements, calculateTabsHeight } from '../core/elements';
-import { storageState } from '../core/storage';
+import { getElements, calculateTabsHeight } from '../elements';
+import { storageState } from '../storage';
 import { applySecondaryResizeSettings, handleFullscreenResize } from './secondary-resize';
 
 export function renderUI(): void {
