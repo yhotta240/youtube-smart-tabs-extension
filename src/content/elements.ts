@@ -1,4 +1,4 @@
-import { YouTubeElements } from "./types";
+import type { YouTubeElements } from "./types";
 
 export const getElements = (): YouTubeElements => ({
   ytdWatchFlexy: document.querySelector<HTMLElement>("ytd-watch-flexy"),
@@ -9,7 +9,7 @@ export const getElements = (): YouTubeElements => ({
   secondary: document.querySelector<HTMLElement>("#secondary.style-scope.ytd-watch-flexy"),
   secondaryInner: document.querySelector<HTMLElement>("#secondary-inner.style-scope.ytd-watch-flexy"),
   panels: document.querySelector<HTMLElement>("#panels.style-scope.ytd-watch-flexy"),
-  description: document.querySelector<HTMLElement>("#below > ytd-watch-metadata"),
+  description: document.querySelector<HTMLElement>("#columns ytd-watch-metadata")?.parentElement as HTMLElement | null,
   comments: document.querySelector<HTMLElement>("#comments.style-scope.ytd-watch-flexy"),
   related: document.querySelector<HTMLElement>("#related.style-scope.ytd-watch-flexy"),
   chatContainer: document.querySelector<HTMLElement>("#chat-container.style-scope.ytd-watch-flexy"),
