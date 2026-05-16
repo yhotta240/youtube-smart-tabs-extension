@@ -125,7 +125,8 @@ export function displayElementNone(innerContent: HTMLElement): void {
         element.setAttribute('aria-selected', 'false');
       }
       if (tab.elementName === "description") {
-        const description = document.querySelector<HTMLElement>('ytd-watch-metadata')
+        const description = elements.description;
+        console.log(description);
         if (description) description.style.display = 'none';
       }
     });
@@ -171,7 +172,7 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
       if (targetContent) targetContent.style.removeProperty('display');
 
       if (targetId === '#description') {
-        const description = document.querySelector<HTMLElement>('ytd-watch-metadata')
+        const description = getElements().description;
         if (description) description.style.removeProperty('display');
       }
 
