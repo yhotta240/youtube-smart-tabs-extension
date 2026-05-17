@@ -262,11 +262,11 @@ export function removeSelectedExtensionTabs(): void {
 export function toggleExtensionTabsSize(isLarge: boolean): void {
   const { extensionTabs } = getElements();
   if (!extensionTabs) return;
-  const sizeSuffix = isLarge ? "S" : "M";
+  const sizeSuffix = isLarge ? "M" : "S";
 
   Array.from(extensionTabs.children).forEach((tab) => {
     if (tab.classList.contains(`${SIZE_CLASS}${sizeSuffix}`)) {
-      tab.classList.replace(`${SIZE_CLASS}${sizeSuffix}`, `${SIZE_CLASS}${isLarge ? "M" : "S"}`);
+      tab.classList.replace(`${SIZE_CLASS}${sizeSuffix}`, `${SIZE_CLASS}${isLarge ? "S" : "M"}`);
     }
   });
 }
