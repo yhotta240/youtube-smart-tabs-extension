@@ -18,8 +18,8 @@ export interface YouTubeElements {
   chatContainer: HTMLElement | null;
   playlist: HTMLElement | null;
   donationShelf: HTMLElement | null;
-  extensionSettings : HTMLElement | null;
-  customTab: HTMLElement | null;
+  extensionSettings: HTMLElement | null;
+  extensionTabs: HTMLElement | null;
   chatViewBtn: HTMLElement | null;
   chatContainerTab: HTMLElement | null;
   chat: HTMLElement | null;
@@ -32,4 +32,4 @@ export interface HTMLElementWithReg extends HTMLElement {
   _reg?: boolean;
 }
 
-export type ResponsiveWidth = 'large' | 'medium' | null;
+export type ResponsiveWidth = "large" | "medium" | null;

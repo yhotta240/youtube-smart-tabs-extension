@@ -96,7 +96,7 @@ ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #
   display: block;
 }
 
-html body .ytSpecButtonShapeNextMono.ytSpecButtonShapeNextTonal.custom-tab-selected {
+html body .ytSpecButtonShapeNextMono.ytSpecButtonShapeNextTonal.extension-tabs-selected {
   background-color: var(--tffc2fd3a644f6275);
   color: var(--t6216186c28b3834b);
 }
@@ -241,7 +241,7 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   max-height: none;
 }
 
-#secondary #custom-tab button.ytSpecButtonShapeNextSizeS {
+#secondary #extension-tabs button.ytSpecButtonShapeNextSizeS {
   padding: 0 !important;
 }
 
