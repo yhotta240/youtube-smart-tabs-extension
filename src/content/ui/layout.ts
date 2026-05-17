@@ -17,11 +17,11 @@ export function handleFirstRender(checkedTabs: Tab[]): void {
       addTabClickListeners();
     }
   } else {
-    const below = elements.below;
-    if (below) {
-      // below の最初の子要素の前にタブを挿入
-      if (below.firstChild) {
-        below.insertBefore(tabs, below.firstChild);
+    const primaryInner = elements.primaryInner;
+    if (primaryInner) {
+      // primaryInner の player と below の間にタブを挿入
+      if (primaryInner.firstChild) {
+        primaryInner.insertBefore(tabs, elements.below);
       }
       addTabClickListeners();
     }
@@ -64,8 +64,8 @@ export function handleResize(customTab: HTMLElement): void {
     if (elements.extensionSettings && elements.below) {
       elements.below.appendChild(elements.extensionSettings);
     }
-    if (elements.below) {
-      elements.below.insertBefore(customTab, elements.extensionSettings);
+    if (elements.primaryInner) {
+      elements.primaryInner.insertBefore(customTab, elements.below);
     }
     handleSettings(false);
     if (storageState.checkedTabs) {
