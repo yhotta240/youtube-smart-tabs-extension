@@ -125,14 +125,19 @@ export function displayElementNone(): void {
       const element = elements[tab.elementName as keyof YouTubeElements];
       if (element) {
         element.classList.add("hidden");
+        element.classList.remove("active", "show");
       }
     });
   }
-  if (elements.extensionSettings) {
-    elements.extensionSettings.classList.add("hidden");
+  const settings = elements.extensionSettings;
+  const panels = elements.panels;
+  if (settings) {
+    settings.classList.add("hidden");
+    settings.classList.remove("active", "show");
   }
-  if (elements.panels) {
-    elements.panels.classList.add("hidden");
+  if (panels) {
+    panels.classList.add("hidden");
+    panels.classList.remove("active", "show");
   }
 }
 
@@ -156,6 +161,7 @@ export function addTabClickListeners(): void {
         const { chatContainer, chat, showHideChatBtn } = getElements();
         if (chatContainer && chat && chat.hasAttribute("collapsed") && showHideChatBtn) {
           chatContainer.classList.remove("hidden");
+          chatContainer.classList.add("active", "show");
           showHideChatBtn.click();
         }
       }
@@ -163,6 +169,7 @@ export function addTabClickListeners(): void {
       const targetContent = getElements()[elementName];
       if (targetContent) {
         targetContent.classList.remove("hidden");
+        targetContent.classList.add("active", "show");
       }
 
       if (storageState.selectedTab && storageState.selectedTab.id === "auto") {
