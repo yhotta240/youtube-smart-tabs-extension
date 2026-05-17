@@ -1,11 +1,11 @@
-import { tabs, defaultCheckedTabs, defaultSelectedTab, settingsOption, settingDetails, SettingOption, SettingDetails } from '../../settings';
-import meta from '../../../public/manifest.meta.json';
-import { getElements } from '../elements';
-import { applySecondaryResizeSettings } from './secondary-resize';
-import { storageState } from '../storage';
+import { tabs, defaultCheckedTabs, defaultSelectedTab, settingsOption, settingDetails, SettingOption, SettingDetails } from "../../settings";
+import meta from "../../../public/manifest.meta.json";
+import { getElements } from "../elements";
+import { applySecondaryResizeSettings } from "./secondary-resize";
+import { storageState } from "../storage";
 
 export function createCheckbox(option: SettingOption, className: string): string {
-  return /*html*/`
+  return /*html*/ `
     <ytd-settings-checkbox-renderer class="${className}">
       <tp-yt-paper-checkbox id="checkbox" role="checkbox" aria-checked="false"
       class="${className}" tabindex="0" aria-label="${option.name}">
@@ -21,7 +21,7 @@ export function createCheckbox(option: SettingOption, className: string): string
 }
 
 export function createRadio(option: SettingOption, className: string): string {
-  return /*html*/`
+  return /*html*/ `
     <ytd-settings-radio-option-renderer class="${className}">
       <tp-yt-paper-radio-button id="radio" class="style-scope ytd-settings-radio-option-renderer" role="radio"
         tabindex="0" toggles="" aria-checked="false" aria-disabled="false" aria-label="${option.name}"
@@ -37,7 +37,7 @@ export function createRadio(option: SettingOption, className: string): string {
 }
 
 export function createDetail(detail: SettingDetails, className: string): string {
-  return /*html*/`
+  return /*html*/ `
     <ytd-settings-options-renderer id="detail" class="style-scope ytd-item-section-renderer" data-id="${detail.id}" >
       <div id="section" class="${className}">
         <div id="title" class="${className}" style="margin-right: 0;">${detail.sectionTitle}</div>
@@ -61,16 +61,15 @@ export function createDetail(detail: SettingDetails, className: string): string 
   `;
 }
 
-export function extensionSettings(): HTMLElement {
-  const settings = document.createElement('div');
+export function createExtensionSettings(): HTMLElement {
+  const settings = document.createElement("div");
   const storeLink = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
   const extensionLink = chrome.runtime.getURL("index.html");
   const issueLink = meta.issues_url;
-  const className: string = 'style-scope ytd-settings-options-renderer';
-  settings.id = 'extension-settings';
-  settings.style.display = 'none';
-  settings.setAttribute('aria-selected', 'false');
-  settings.classList.add('style-scope', 'ytd-watch-flexy');
+  const className: string = "style-scope ytd-settings-options-renderer";
+  settings.id = "extension-settings";
+  settings.setAttribute("aria-selected", "false");
+  settings.classList.add("style-scope", "ytd-watch-flexy", "hidden");
   settings.innerHTML = /*html*/ `
     <div class="style-scope ytd-watch-flexy" id="settings-container" style="padding: 10px;">
       <div id="options" class="${className}">
@@ -101,14 +100,17 @@ export function extensionSettings(): HTMLElement {
         <div id="section" class="${className}">
           <div id="settings-title" class="${className}">タブ化するコンテンツ</div>
           <div id="content" class="${className}">
-            ${settingsOption.filter(option => option.id !== 'auto').map(option => createCheckbox(option, className)).join('')}
+            ${settingsOption
+              .filter((option) => option.id !== "auto")
+              .map((option) => createCheckbox(option, className))
+              .join("")}
           </div>
         </div>
         <div id="section" class="${className}">
           <div id="settings-title" class="${className}">最初に表示するタブ</div>
           <div id="content" class="${className}">
             <div id="options" class="${className}">
-              ${settingsOption.map(option => createRadio(option, className)).join('')}
+              ${settingsOption.map((option) => createRadio(option, className)).join("")}
             </div>
           </div>
         </div>
@@ -141,7 +143,7 @@ export function extensionSettings(): HTMLElement {
           </ytd-item-section-header-renderer>
         </div>
         <div id="contents" class=" style-scope ytd-item-section-renderer style-scope ytd-item-section-renderer">
-          ${settingDetails.map(detail => createDetail(detail, className)).join('')}
+          ${settingDetails.map((detail) => createDetail(detail, className)).join("")}
         </div>
       </div>
     </div>
@@ -150,11 +152,11 @@ export function extensionSettings(): HTMLElement {
 }
 
 export function handleSettings(isFirstLoad: boolean): void {
-  const { settings } = getElements();
-  if (!settings) return;
+  const { extensionSettings } = getElements();
+  if (!extensionSettings) return;
 
-  const checkbox = settings.querySelectorAll<HTMLElement>("#checkbox");
-  const radioButtons = settings.querySelectorAll<HTMLElement>("#radio");
+  const checkbox = extensionSettings.querySelectorAll<HTMLElement>("#checkbox");
+  const radioButtons = extensionSettings.querySelectorAll<HTMLElement>("#radio");
 
   if (!storageState.checkedTabs) {
     storageState.checkedTabs = defaultCheckedTabs;
@@ -169,7 +171,7 @@ export function handleSettings(isFirstLoad: boolean): void {
     checkbox.forEach((cb) => {
       const labelElement = cb.querySelector<HTMLElement>("#label.style-scope.ytd-settings-checkbox-renderer");
       if (labelElement && storageState.checkedTabs) {
-        const labelVal = labelElement.dataset.value ?? '';
+        const labelVal = labelElement.dataset.value ?? "";
         if (storageState.checkedTabs.some((tab) => tab.id === labelVal)) {
           cb.setAttribute("aria-checked", "true");
           cb.setAttribute("checked", "");
@@ -184,24 +186,24 @@ export function handleSettings(isFirstLoad: boolean): void {
   }
 
   checkbox.forEach((cb) => {
-    cb.addEventListener('click', () => {
+    cb.addEventListener("click", () => {
       const labelElement = cb.querySelector<HTMLElement>("#label.style-scope.ytd-settings-checkbox-renderer");
       if (!labelElement) return;
 
-      const labelVal = labelElement.dataset.value ?? '';
-      const label = labelElement.textContent ?? '';
+      const labelVal = labelElement.dataset.value ?? "";
+      const label = labelElement.textContent ?? "";
       const isChecked = cb.getAttribute("aria-checked") === "true";
 
       if (isChecked) {
-        const tabId = tabs.find(tab => tab.id === labelVal)?.id;
-        const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
-        const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
+        const tabId = tabs.find((tab) => tab.id === labelVal)?.id;
+        const tabNum = tabs.find((tab) => tab.id === labelVal)?.num;
+        const tabElementName = tabs.find((tab) => tab.id === labelVal)?.elementName;
         if (tabId && tabNum !== undefined && tabElementName && storageState.checkedTabs) {
-          storageState.checkedTabs = storageState.checkedTabs.filter(tab => tab.id !== labelVal);
+          storageState.checkedTabs = storageState.checkedTabs.filter((tab) => tab.id !== labelVal);
           storageState.checkedTabs.push({ id: tabId, name: label, num: tabNum, elementName: tabElementName });
         }
       } else if (storageState.checkedTabs) {
-        storageState.checkedTabs = storageState.checkedTabs.filter(tab => tab.id !== labelVal);
+        storageState.checkedTabs = storageState.checkedTabs.filter((tab) => tab.id !== labelVal);
       }
       chrome.storage.local.set({ checkedTabs: storageState.checkedTabs });
     });
@@ -212,7 +214,7 @@ export function handleSettings(isFirstLoad: boolean): void {
       const labelElement = radio.querySelector<HTMLElement>("#label.style-scope.ytd-settings-radio-option-renderer");
       if (!labelElement || !storageState.selectedTab) return;
 
-      const labelVal = labelElement.dataset.value ?? '';
+      const labelVal = labelElement.dataset.value ?? "";
       if (labelVal === storageState.selectedTab.id) {
         radio.setAttribute("aria-checked", "true");
         radio.setAttribute("checked", "");
@@ -226,7 +228,7 @@ export function handleSettings(isFirstLoad: boolean): void {
   }
 
   radioButtons.forEach((radio) => {
-    radio.addEventListener('click', () => {
+    radio.addEventListener("click", () => {
       radioButtons.forEach((r) => {
         r.setAttribute("aria-checked", "false");
         r.removeAttribute("checked");
@@ -236,15 +238,15 @@ export function handleSettings(isFirstLoad: boolean): void {
       const labelElement = radio.querySelector<HTMLElement>("#label.style-scope.ytd-settings-radio-option-renderer");
       if (!labelElement) return;
 
-      const labelVal = labelElement.dataset.value ?? '';
-      const label = labelElement.textContent ?? '';
+      const labelVal = labelElement.dataset.value ?? "";
+      const label = labelElement.textContent ?? "";
       radio.setAttribute("aria-checked", "true");
       radio.setAttribute("checked", "");
       radio.setAttribute("active", "");
 
-      const tabId = tabs.find(tab => tab.id === labelVal)?.id;
-      const tabNum = tabs.find(tab => tab.id === labelVal)?.num;
-      const tabElementName = tabs.find(tab => tab.id === labelVal)?.elementName;
+      const tabId = tabs.find((tab) => tab.id === labelVal)?.id;
+      const tabNum = tabs.find((tab) => tab.id === labelVal)?.num;
+      const tabElementName = tabs.find((tab) => tab.id === labelVal)?.elementName;
       storageState.selectedTab = { id: tabId ?? "auto", name: label, num: tabNum ?? 0, elementName: tabElementName ?? "auto" };
       chrome.storage.local.set({ selectedTab: storageState.selectedTab });
 
@@ -254,7 +256,7 @@ export function handleSettings(isFirstLoad: boolean): void {
     });
   });
 
-  const secondaryResizeToggle = settings.querySelector<HTMLElement>("#secondaryResizeToggle");
+  const secondaryResizeToggle = extensionSettings.querySelector<HTMLElement>("#secondaryResizeToggle");
   if (secondaryResizeToggle) {
     if (storageState.secondaryResizeEnabled) {
       secondaryResizeToggle.setAttribute("aria-pressed", "true");
@@ -264,7 +266,7 @@ export function handleSettings(isFirstLoad: boolean): void {
       secondaryResizeToggle.removeAttribute("active");
     }
 
-    secondaryResizeToggle.addEventListener('click', () => {
+    secondaryResizeToggle.addEventListener("click", () => {
       const isEnabled = secondaryResizeToggle.getAttribute("aria-pressed") === "true";
       storageState.secondaryResizeEnabled = isEnabled;
 
@@ -280,18 +282,18 @@ export function handleSettings(isFirstLoad: boolean): void {
     });
   }
 
-  const details = settings.querySelectorAll<HTMLElement>("#detail");
+  const details = extensionSettings.querySelectorAll<HTMLElement>("#detail");
   if (!details.length) return;
   if (!isFirstLoad) return;
 
-  details.forEach(detail => {
+  details.forEach((detail) => {
     const toggle = detail.querySelector<HTMLElement>("#toggle");
     if (!toggle || !storageState.extensionDetails) return;
 
-    const detailData = storageState.extensionDetails.find(d => d.id === detail.dataset.id);
+    const detailData = storageState.extensionDetails.find((d) => d.id === detail.dataset.id);
     if (detailData?.isEnabled) toggle.click();
 
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener("click", () => {
       if (detailData) {
         detailData.isEnabled = toggle.getAttribute("aria-pressed") === "true";
         chrome.storage.local.set({ details: storageState.extensionDetails });

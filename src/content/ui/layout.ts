@@ -1,5 +1,5 @@
 import { Tab } from "../../settings";
-import { extensionSettings, handleSettings } from "./settings";
+import { createExtensionSettings, handleSettings } from "./settings";
 import { YouTubeElements, HTMLElementWithReg } from "../types";
 import { getElements } from "../elements";
 import { storageState } from "../storage";
@@ -7,30 +7,31 @@ import { createTab, setActiveTab, removeCustomTabSelected, displayElementNone, a
 import { renderUI } from "./renderer";
 import { applySecondaryResizeSettings } from "./secondary-resize";
 
-export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[], isLargeScreen: boolean): void {
+export function handleFirstRender(checkedTabs: Tab[]): void {
+  const elements = getElements();
   storageState.isEventAdded = false;
-  if (isLargeScreen) {
-    const tabs = createTab(checkedTabs);
+  const tabs = createTab(checkedTabs);
+  if (isLargeScreen()) {
     if (elements.secondary && elements.secondaryInner) {
       elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
-      addTabClickListeners(elements.secondaryInner);
+      addTabClickListeners();
     }
   } else {
-    const tabs = createTab(checkedTabs);
     const below = elements.below;
     if (below) {
       // below の最初の子要素の前にタブを挿入
       if (below.firstChild) {
         below.insertBefore(tabs, below.firstChild);
       }
-      addTabClickListeners(below);
+      addTabClickListeners();
     }
   }
 }
 
-export function handleResize(elements: YouTubeElements, customTab: HTMLElement, isLargeScreen: boolean): void {
+export function handleResize(customTab: HTMLElement): void {
+  const elements = getElements();
   const sizeClass = "ytSpecButtonShapeNextSize";
-  if (isLargeScreen && storageState.preRespWidth === "medium") {
+  if (isLargeScreen() && storageState.preRespWidth === "medium") {
     renderUI();
     Array.from(customTab.children).forEach((tab) => {
       if (tab.classList.contains(`${sizeClass}M`)) {
@@ -40,42 +41,42 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
     if (elements.secondary) {
       elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
     }
-    if (elements.settings && elements.secondaryInner) {
-      elements.secondaryInner.appendChild(elements.settings);
+    if (elements.extensionSettings && elements.secondaryInner) {
+      elements.secondaryInner.appendChild(elements.extensionSettings);
     }
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
-        const element = getElements()[tab.elementName as keyof YouTubeElements];
+        const element = elements[tab.elementName as keyof YouTubeElements];
         if (element && elements.secondaryInner) {
           elements.secondaryInner.appendChild(element as HTMLElement);
         }
       });
     }
-    if (elements.secondaryInner) addTabClickListeners(elements.secondaryInner);
-  } else if (!isLargeScreen && storageState.preRespWidth === "large") {
+    if (elements.secondaryInner) addTabClickListeners();
+  } else if (!isLargeScreen() && storageState.preRespWidth === "large") {
     applySecondaryResizeSettings();
     Array.from(customTab.children).forEach((tab) => {
       if (tab.classList.contains(`${sizeClass}S`)) {
         tab.classList.replace(`${sizeClass}S`, `${sizeClass}M`);
       }
     });
-    if (elements.settings && elements.below) {
-      elements.below.appendChild(elements.settings);
+    if (elements.extensionSettings && elements.below) {
+      elements.below.appendChild(elements.extensionSettings);
     }
     if (elements.below) {
-      elements.below.insertBefore(customTab, elements.settings);
+      elements.below.insertBefore(customTab, elements.extensionSettings);
     }
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
-        const element = getElements()[tab.elementName as keyof YouTubeElements];
+        const element = elements[tab.elementName as keyof YouTubeElements];
         if (element && elements.below) {
           elements.below.appendChild(element);
         }
       });
     }
-    if (elements.below) addTabClickListeners(elements.below);
+    if (elements.below) addTabClickListeners();
   }
 }
 
@@ -166,18 +167,17 @@ export function handleUrlChange(): void {
 }
 
 function moveElement(): void {
-  const { below, secondaryInner, settings } = getElements();
+  const { below, secondaryInner, extensionSettings } = getElements();
   if (!below && !secondaryInner) return;
 
-  const isLargeScreen = window.innerWidth >= 1017;
-  const parent = isLargeScreen ? secondaryInner : below;
+  const parent = isLargeScreen() ? secondaryInner : below;
   if (!parent) return;
 
-  if (!settings) {
-    parent.appendChild(extensionSettings());
+  if (!extensionSettings) {
+    parent.appendChild(createExtensionSettings());
     handleSettings(true);
   } else {
-    parent.appendChild(settings);
+    parent.appendChild(extensionSettings);
   }
 
   if (!storageState.checkedTabs) return;
@@ -194,10 +194,14 @@ function moveElement(): void {
   function appendElement(tab: Tab): void {
     const element = getElements()[tab.elementName as keyof YouTubeElements];
     if (!element) return;
-    if (isLargeScreen && secondaryInner) {
+    if (isLargeScreen() && secondaryInner) {
       secondaryInner.appendChild(element);
-    } else if (!isLargeScreen && below) {
+    } else if (!isLargeScreen() && below) {
       below.appendChild(element);
     }
   }
+}
+
+export function isLargeScreen(): boolean {
+  return window.innerWidth >= 1017;
 }

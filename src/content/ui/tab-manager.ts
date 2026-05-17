@@ -1,27 +1,27 @@
-import { Tab, TabId } from '../../settings';
-import { YouTubeElements, HTMLElementWithReg } from '../types';
-import { getElements } from '../elements';
-import { storageState } from '../storage';
+import type { Tab, TabId } from "../../settings";
+import type { YouTubeElements } from "../types";
+import { getElements } from "../elements";
+import { storageState } from "../storage";
 
 const SEGMENTED_CLASS = {
-  start: 'ytSpecButtonShapeNextSegmentedStart',
-  interval: 'ytSpecButtonShapeNextSegmentedInterval',
-  end: 'ytSpecButtonShapeNextSegmentedEnd',
+  start: "ytSpecButtonShapeNextSegmentedStart",
+  interval: "ytSpecButtonShapeNextSegmentedInterval",
+  end: "ytSpecButtonShapeNextSegmentedEnd",
 };
 
 export function createTab(checkedTabs: Tab[]): HTMLElement {
   const filteredTabs: Tab[] = [...checkedTabs];
   filteredTabs.sort((a, b) => a.num - b.num);
 
-  const tab: HTMLDivElement = document.createElement('div');
-  const btnSize: string = `ytSpecButtonShapeNextSize${window.innerWidth >= 1017 ? 'S' : 'M'}`;
-  tab.id = 'custom-tab';
-  tab.classList.add('style-scope', 'yt-button-group');
-  tab.style.marginBottom = `${window.innerWidth >= 1017 ? '' : '10px;'}`;
-  tab.role = 'tablist';
-  tab.innerHTML = /*html*/`
+  const tab: HTMLDivElement = document.createElement("div");
+  const btnSize: string = `ytSpecButtonShapeNextSize${window.innerWidth >= 1017 ? "S" : "M"}`;
+  tab.id = "custom-tab";
+  tab.classList.add("style-scope", "yt-button-group");
+  tab.style.marginBottom = `${window.innerWidth >= 1017 ? "" : "10px;"}`;
+  tab.role = "tablist";
+  tab.innerHTML = /*html*/ `
       <button
-        class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${SEGMENTED_CLASS.start}"
+        class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${SEGMENTED_CLASS.start} hidden"
         id="panels-tab"
         data-bs-toggle="pill"
         data-bs-target="#panels"
@@ -29,11 +29,12 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
         role="tab"
         aria-controls="panels"
         aria-selected="false"
-        style="display: none;"
       >
         <span class="style-scope yt-chip-cloud-chip-renderer">パネル</span>
       </button>
-    ${filteredTabs.map((tab, index) => /*html*/`
+    ${filteredTabs
+      .map(
+        (tab, index) => /*html*/ `
       <button
         class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${index === 0 ? SEGMENTED_CLASS.start : SEGMENTED_CLASS.interval}"
         id="${tab.id}-tab"
@@ -41,12 +42,14 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
         data-bs-target="#${tab.id}"
         type="button"
         role="tab"
-        aria-controls="${tab.id}"
+        aria-controls="${tab.elementName}"
         aria-selected="false"
       >
         <span class="style-scope yt-chip-cloud-chip-renderer">${tab.name}</span>
       </button>
-    `).join('')}
+    `,
+      )
+      .join("")}
       <button
         class="ytSpecButtonShapeNextHost ytSpecButtonShapeNextTonal ytSpecButtonShapeNextMono ${btnSize} ytSpecButtonShapeNextIconLeading ${SEGMENTED_CLASS.end}"
         id="extension-settings-tab"
@@ -54,7 +57,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
         data-bs-target="#extension-settings"
         type="button"
         role="tab"
-        aria-controls="extension-settings"
+        aria-controls="extensionSettings"
         aria-selected="false"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">
@@ -71,7 +74,7 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
       const rgbaColor: string = bgColor.replace(/rgb(a)?\((\d+), (\d+), (\d+)(, [\d.]+)?\)/, (_, a, r, g, b) => {
         return `rgba(${r}, ${g}, ${b}, 0.2)`;
       });
-      intervalButtons.forEach(btn => {
+      intervalButtons.forEach((btn) => {
         btn.style.setProperty("--segmented-bg-color", rgbaColor);
       });
     }
@@ -81,22 +84,22 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
 }
 
 export function setActiveTab(customTab: HTMLElement): void {
-  const tabs = customTab.querySelectorAll<HTMLElement>('[data-bs-target]');
+  const tabs = customTab.querySelectorAll<HTMLElement>("[data-bs-target]");
 
   const autoSelectTab = (): void => {
     for (const tab of Array.from(tabs)) {
-      if (tab.style.display === 'block') {
+      if (tab.style.display === "block") {
         tab.click();
         return;
       }
     }
   };
 
-  if (storageState.selectedTab && storageState.selectedTab.id === 'auto') {
-    chrome.storage.local.get('currentTab', ({ currentTab }: { currentTab?: Tab }) => {
+  if (storageState.selectedTab && storageState.selectedTab.id === "auto") {
+    chrome.storage.local.get("currentTab", ({ currentTab }: { currentTab?: Tab }) => {
       if (currentTab) {
         const targetButton = document.querySelector<HTMLElement>(`[data-bs-target="#${currentTab.id}"]`);
-        if (targetButton && targetButton.style.display === 'block') {
+        if (targetButton && targetButton.style.display === "block") {
           targetButton.click();
         } else {
           autoSelectTab();
@@ -107,7 +110,7 @@ export function setActiveTab(customTab: HTMLElement): void {
     });
   } else if (storageState.selectedTab) {
     const targetTab = customTab.querySelector<HTMLElement>(`#${storageState.selectedTab.id}-tab`);
-    if (targetTab && targetTab.style.display === 'block') {
+    if (targetTab && targetTab.style.display === "block") {
       targetTab.click();
     } else {
       autoSelectTab();
@@ -118,86 +121,53 @@ export function setActiveTab(customTab: HTMLElement): void {
 export function displayElementNone(): void {
   const elements = getElements();
   if (storageState.checkedTabs) {
-    storageState.checkedTabs.forEach(tab => {
+    storageState.checkedTabs.forEach((tab) => {
       const element = elements[tab.elementName as keyof YouTubeElements];
       if (element) {
-        element.style.display = 'none';
-        element.setAttribute('aria-selected', 'false');
-      }
-      if (tab.elementName === "description") {
-        const description = elements.description;
-        if (description) description.style.display = 'none';
+        element.classList.add("hidden");
       }
     });
   }
-  if (elements.settings) {
-    elements.settings.style.display = 'none';
+  if (elements.extensionSettings) {
+    elements.extensionSettings.classList.add("hidden");
   }
   if (elements.panels) {
-    elements.panels.style.display = 'none';
+    elements.panels.classList.add("hidden");
   }
 }
 
-export function addTabClickListeners(innerContent: HTMLElement): void {
+export function addTabClickListeners(): void {
   const customTab = getElements().customTab;
-  const buttons = customTab?.querySelectorAll<HTMLElement>('[data-bs-target]');
+  const buttons = customTab?.querySelectorAll<HTMLElement>("[data-bs-target]");
   if (storageState.isEventAdded) return;
   storageState.isEventAdded = true;
 
-  buttons?.forEach(button => {
-    button.addEventListener('click', () => {
-      const targetId = button.getAttribute('data-bs-target');
-      if (!targetId) return;
+  buttons?.forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetId = button.getAttribute("data-bs-target");
+      const elementName = button.getAttribute("aria-controls") as keyof YouTubeElements | null;
+      if (!targetId || !elementName) return;
 
-      if (targetId === '#chat-container') {
+      removeCustomTabSelected();
+      displayElementNone();
+      button.classList.add("custom-tab-selected");
+
+      if (targetId === "#chat-container") {
         const { chatContainer, chat, showHideChatBtn } = getElements();
-        if (chatContainer) {
-          chatContainer.classList.add('active', 'show');
-        }
-        if (chat && chat.hasAttribute('collapsed') && showHideChatBtn) {
+        if (chatContainer && chat && chat.hasAttribute("collapsed") && showHideChatBtn) {
+          chatContainer.classList.remove("hidden");
           showHideChatBtn.click();
         }
       }
 
-      removeCustomTabSelected();
-      displayElementNone();
-      button.classList.add('custom-tab-selected')
-
-      const targetContent = document.querySelector<HTMLElement>(targetId);
-      if (targetContent) targetContent.style.removeProperty('display');
-
-      if (targetId === '#description') {
-        const description = getElements().description;
-        if (description) description.style.removeProperty('display');
+      const targetContent = getElements()[elementName];
+      if (targetContent) {
+        targetContent.classList.remove("hidden");
       }
 
-      if (targetId === '#comments') {
-        const comments = getElements().comments;
-        if (comments) {
-          comments.style.removeProperty('display');
-          comments.classList.add('active', 'show');
-        }
-      }
-
-      if (targetId === '#related') {
-        const related = getElements().related;
-        if (related) {
-          related.style.removeProperty('display');
-          related.classList.add('active', 'show');
-        }
-      }
-
-      if (targetId === '#playlist') {
-        const playlist = getElements().playlist;
-        if (playlist) {
-          playlist.style.removeProperty('display');
-          playlist.classList.add('active', 'show');
-        }
-      }
-
-      if (storageState.selectedTab && storageState.selectedTab.id === 'auto') {
+      if (storageState.selectedTab && storageState.selectedTab.id === "auto") {
         if (storageState.checkedTabs) {
-          storageState.checkedTabs.forEach(tab => {
+          storageState.checkedTabs.forEach((tab) => {
             if (tab.id === targetId.slice(1, targetId.length)) {
               const tabObject: Tab = { num: tab.num, id: tab.id, name: tab.name, elementName: tab.elementName };
               if (!storageState.isFirstSelected) {
@@ -218,8 +188,8 @@ export function updateSegmentedTabClasses(): void {
   const { customTab } = getElements();
   if (!customTab) return;
 
-  const buttons = Array.from(customTab.querySelectorAll<HTMLElement>('[data-bs-target]'));
-  const visibleButtons = buttons.filter((button) => button.style.display !== 'none');
+  const buttons = Array.from(customTab.querySelectorAll<HTMLElement>("[data-bs-target]"));
+  const visibleButtons = buttons.filter((button) => button.classList.contains("hidden") === false);
 
   if (visibleButtons.length === 0) return;
 
@@ -228,7 +198,6 @@ export function updateSegmentedTabClasses(): void {
 
   buttons.forEach((button) => {
     button.classList.remove(SEGMENTED_CLASS.start, SEGMENTED_CLASS.interval, SEGMENTED_CLASS.end);
-    if (button.style.display === 'none') return;
     if (button === first) {
       button.classList.add(SEGMENTED_CLASS.start);
     } else if (button === last) {
@@ -248,21 +217,21 @@ export function clickTab(tabId: TabId): void {
 
 export function displayTabElement(tabId: TabId): void {
   const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
-  if (button && button.style.display === 'none') {
-    button.style.removeProperty('display');
+  if (button && button.classList.contains("hidden")) {
+    button.classList.remove("hidden");
   }
 }
 
 export function hideTabElement(tabId: TabId): void {
   const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
   if (button) {
-    button.style.display = 'none';
+    button.classList.add("hidden");
   }
 }
 
 export function removeCustomTabSelected(): void {
-  const buttons = document.querySelectorAll<HTMLElement>('[data-bs-target]');
-  buttons.forEach(button => {
-    button.classList.remove('custom-tab-selected');
+  const buttons = document.querySelectorAll<HTMLElement>("[data-bs-target]");
+  buttons.forEach((button) => {
+    button.classList.remove("custom-tab-selected");
   });
 }

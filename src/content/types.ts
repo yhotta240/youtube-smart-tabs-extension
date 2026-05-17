@@ -18,7 +18,7 @@ export interface YouTubeElements {
   chatContainer: HTMLElement | null;
   playlist: HTMLElement | null;
   donationShelf: HTMLElement | null;
-  settings: HTMLElement | null;
+  extensionSettings : HTMLElement | null;
   customTab: HTMLElement | null;
   chatViewBtn: HTMLElement | null;
   chatContainerTab: HTMLElement | null;

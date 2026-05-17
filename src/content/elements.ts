@@ -15,7 +15,7 @@ export const getElements = (): YouTubeElements => ({
   chatContainer: document.querySelector<HTMLElement>("#chat-container.style-scope.ytd-watch-flexy"),
   playlist: document.querySelector<HTMLElement>("#playlist.style-scope.ytd-watch-flexy"),
   donationShelf: document.querySelector<HTMLElement>("#donation-shelf.style-scope.ytd-watch-flexy"),
-  settings: document.querySelector<HTMLElement>("#extension-settings.style-scope.ytd-watch-flexy"),
+  extensionSettings : document.querySelector<HTMLElement>("#extension-settings.style-scope.ytd-watch-flexy"),
   customTab: document.querySelector<HTMLElement>("#custom-tab"),
   chatViewBtn: document.querySelector<HTMLElement>("button-view-model.yt-spec-button-view-model.ytTextCarouselItemViewModelButton"),
   chatContainerTab: document.querySelector<HTMLElement>("#chat-container-tab"),

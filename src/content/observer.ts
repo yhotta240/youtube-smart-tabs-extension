@@ -1,8 +1,7 @@
 import { getElements } from "./elements";
 import { storageState } from "./storage";
 import { clickTab, displayTabElement, hideTabElement, updateSegmentedTabClasses } from "./ui/tab-manager";
-import { handleFirstRender, handleResize, handleUrlChange } from "./ui/layout";
-
+import { handleFirstRender, handleResize, handleUrlChange, isLargeScreen } from "./ui/layout";
 
 export async function observeYouTubeElements(): Promise<void> {
   // 有効化されていない場合は何もしない
@@ -24,7 +23,6 @@ export async function observeYouTubeElements(): Promise<void> {
 
       if (isAnyPanelExpanded && !panels.classList.contains("observed")) {
         displayTabElement("panels");
-        updateSegmentedTabClasses();
         clickTab("panels");
         panels.classList.add("observed");
         // クリップ作成の描画不具合対策としてリサイズイベントを発火
@@ -33,9 +31,9 @@ export async function observeYouTubeElements(): Promise<void> {
         });
       } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
         hideTabElement("panels");
-        updateSegmentedTabClasses();
         panels.classList.remove("observed");
       }
+      updateSegmentedTabClasses();
     }
 
     // playlist の監視
@@ -47,13 +45,12 @@ export async function observeYouTubeElements(): Promise<void> {
       if (isVisible !== isObserved) {
         if (isVisible) {
           displayTabElement("playlist");
-          updateSegmentedTabClasses();
           playlist.classList.add("observed");
         } else {
           hideTabElement("playlist");
-          updateSegmentedTabClasses();
           playlist.classList.remove("observed");
         }
+        updateSegmentedTabClasses();
       }
     }
   });
@@ -75,26 +72,25 @@ export function createObserver(): MutationObserver {
       elements.secondaryInner.classList.add("tab-container");
     }
 
-    const isLargeScreen = window.innerWidth >= 1017;
     const customTab = document.querySelector<HTMLElement>("#custom-tab");
     const url: URL = new URL(window.location.href);
     const preVideoId: string | null = storageState.preUrl ? new URL(storageState.preUrl).searchParams.get("v") : null;
     const currentVideoId: string | null = url.searchParams.get("v");
 
     if (!customTab) {
-      if (storageState.checkedTabs) handleFirstRender(elements, storageState.checkedTabs, isLargeScreen);
+      if (storageState.checkedTabs) handleFirstRender(storageState.checkedTabs);
       if (preVideoId !== currentVideoId) {
         handleUrlChange();
         storageState.preUrl = url.href;
       }
     } else {
-      handleResize(elements, customTab, isLargeScreen);
+      handleResize(customTab);
       if (preVideoId !== currentVideoId && storageState.preUrl) {
         customTab.remove();
       } else if (preVideoId !== currentVideoId) {
         storageState.preUrl = "https://www.youtube.com/";
       }
     }
-    storageState.preRespWidth = isLargeScreen ? "large" : "medium";
+    storageState.preRespWidth = isLargeScreen() ? "large" : "medium";
   });
 }

@@ -88,7 +88,7 @@ ytd-watch-flexy[default-layout]:not([no-top-margin]):not([reduced-top-margin]) #
   /* padding-bottom: var(--ytd-margin-6x); */
 }
 
-.hidden {
+#columns .ytd-watch-flexy .hidden {
   display: none;
 }
 
@@ -245,9 +245,9 @@ ytd-watch-metadata #description-inner.ytd-watch-metadata #cloneCollapse.cloneBtn
   padding: 0 !important;
 }
 
-#secondary #panels {
+/* #secondary #panels {
   height: 100% !important;
-}
+} */
 
 #secondary #panels.ytd-watch-flexy.observed ytd-engagement-panel-section-list-renderer.ytd-watch-flexy {
   height: 100% !important;

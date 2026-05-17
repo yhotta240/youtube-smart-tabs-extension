@@ -1,18 +1,18 @@
-export type TabId = "description" | "chat-container" | "comments" | "related" | "playlist" | "donation-shelf" | "panels" | "auto";
+export type TabId = "description" | "chat-container" | "comments" | "related" | "playlist" | "donation-shelf" | "panels" | "auto" | "extension-settings";
 
 export type Tab = {
   num: number; // 順番
   id: TabId; // id属性
   name: string; // 表示名
   elementName: string; // 対応する要素名
-}
+};
 
 export type SettingOption = {
   num: number; // 順番
   id: TabId; // id属性
   name: string; // 表示名
   elementName: string; // 対応する要素名
-}
+};
 
 export type SettingDetails = {
   id: string; // id属性
@@ -21,7 +21,7 @@ export type SettingDetails = {
   sectionTitle: string; // セクションタイトル
   title: string; // 設定タイトル
   subtitle: string; // 設定サブタイトル
-}
+};
 
 export const tabs: Tab[] = [
   { num: 1, id: "description", name: "概要", elementName: "description" },
@@ -51,8 +51,22 @@ export const settingsOption: SettingOption[] = [
 ];
 
 export const settingDetails: SettingDetails[] = [
-  { id: "description-detail", elementName: "description", isEnabled: true, sectionTitle: "概要", title: "概要欄の「一部を表示」ボタンを上部にも表示", subtitle: "概要欄の「もっと見る」ボタンをクリックしたときに，概要欄の下部に表示される「一部を表示」ボタンを上部にも表示します．" },
-  { id: "comment-detail", elementName: "comments", isEnabled: false, sectionTitle: "コメント", title: "コメントヘッダを固定", subtitle: "コメント欄のヘッダ（入力欄）をコンテンツ内の上部に固定します．" },
+  {
+    id: "description-detail",
+    elementName: "description",
+    isEnabled: true,
+    sectionTitle: "概要",
+    title: "概要欄の「一部を表示」ボタンを上部にも表示",
+    subtitle: "概要欄の「もっと見る」ボタンをクリックしたときに，概要欄の下部に表示される「一部を表示」ボタンを上部にも表示します．",
+  },
+  {
+    id: "comment-detail",
+    elementName: "comments",
+    isEnabled: false,
+    sectionTitle: "コメント",
+    title: "コメントヘッダを固定",
+    subtitle: "コメント欄のヘッダ（入力欄）をコンテンツ内の上部に固定します．",
+  },
 ];
 
 export type Settings = {
@@ -60,7 +74,7 @@ export type Settings = {
 };
 
 export async function isEnabled(): Promise<boolean> {
-  const data = await getStorage<{ isEnabled?: boolean }>('isEnabled');
+  const data = await getStorage<{ isEnabled?: boolean }>("isEnabled");
   return data.isEnabled === true;
 }
 
