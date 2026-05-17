@@ -1,4 +1,5 @@
 import type { YouTubeElements } from "./types";
+import { EXTENSION_TABS_ID } from "./ui/tab-manager";
 
 export const getElements = (): YouTubeElements => ({
   ytdWatchFlexy: document.querySelector<HTMLElement>("ytd-watch-flexy"),
@@ -16,7 +17,7 @@ export const getElements = (): YouTubeElements => ({
   playlist: document.querySelector<HTMLElement>("#playlist.style-scope.ytd-watch-flexy"),
   donationShelf: document.querySelector<HTMLElement>("#donation-shelf.style-scope.ytd-watch-flexy"),
   extensionSettings : document.querySelector<HTMLElement>("#extension-settings.style-scope.ytd-watch-flexy"),
-  customTab: document.querySelector<HTMLElement>("#custom-tab"),
+  extensionTabs: document.querySelector<HTMLElement>(`#${EXTENSION_TABS_ID}`),
   chatViewBtn: document.querySelector<HTMLElement>("button-view-model.yt-spec-button-view-model.ytTextCarouselItemViewModelButton"),
   chatContainerTab: document.querySelector<HTMLElement>("#chat-container-tab"),
   chat: document.querySelector<HTMLElement>("#chat"),

@@ -3,19 +3,23 @@ import type { YouTubeElements } from "../types";
 import { getElements } from "../elements";
 import { storageState } from "../storage";
 
+export const EXTENSION_TABS_ID = "extension-tabs";
+
+const SIZE_CLASS = "ytSpecButtonShapeNextSize";
+
 const SEGMENTED_CLASS = {
   start: "ytSpecButtonShapeNextSegmentedStart",
   interval: "ytSpecButtonShapeNextSegmentedInterval",
   end: "ytSpecButtonShapeNextSegmentedEnd",
 };
 
-export function createTab(checkedTabs: Tab[]): HTMLElement {
+export function createExtensionTabs(checkedTabs: Tab[]): HTMLElement {
   const filteredTabs: Tab[] = [...checkedTabs];
   filteredTabs.sort((a, b) => a.num - b.num);
 
   const tab: HTMLDivElement = document.createElement("div");
-  const btnSize: string = `ytSpecButtonShapeNextSize${window.innerWidth >= 1017 ? "S" : "M"}`;
-  tab.id = "custom-tab";
+  const btnSize: string = `${SIZE_CLASS}${window.innerWidth >= 1017 ? "S" : "M"}`;
+  tab.id = EXTENSION_TABS_ID;
   tab.classList.add("style-scope", "yt-button-group");
   tab.style.marginBottom = `${window.innerWidth >= 1017 ? "" : "10px;"}`;
   tab.role = "tablist";
@@ -83,8 +87,8 @@ export function createTab(checkedTabs: Tab[]): HTMLElement {
   return tab;
 }
 
-export function setActiveTab(customTab: HTMLElement): void {
-  const tabs = customTab.querySelectorAll<HTMLElement>("[data-bs-target]");
+export function setActiveExtensionTab(extensionTabs: HTMLElement): void {
+  const tabs = extensionTabs.querySelectorAll<HTMLElement>("[data-bs-target]");
 
   const autoSelectTab = (): void => {
     for (const tab of Array.from(tabs)) {
@@ -109,7 +113,7 @@ export function setActiveTab(customTab: HTMLElement): void {
       }
     });
   } else if (storageState.selectedTab) {
-    const targetTab = customTab.querySelector<HTMLElement>(`#${storageState.selectedTab.id}-tab`);
+    const targetTab = extensionTabs.querySelector<HTMLElement>(`#${storageState.selectedTab.id}-tab`);
     if (targetTab && targetTab.style.display === "block") {
       targetTab.click();
     } else {
@@ -118,7 +122,7 @@ export function setActiveTab(customTab: HTMLElement): void {
   }
 }
 
-export function displayElementNone(): void {
+export function hideExtensionTabContent(): void {
   const elements = getElements();
   if (storageState.checkedTabs) {
     storageState.checkedTabs.forEach((tab) => {
@@ -141,9 +145,9 @@ export function displayElementNone(): void {
   }
 }
 
-export function addTabClickListeners(): void {
-  const customTab = getElements().customTab;
-  const buttons = customTab?.querySelectorAll<HTMLElement>("[data-bs-target]");
+export function registerExtensionTabClickListeners(): void {
+  const { extensionTabs } = getElements();
+  const buttons = extensionTabs?.querySelectorAll<HTMLElement>("[data-bs-target]");
   if (storageState.isEventAdded) return;
   storageState.isEventAdded = true;
 
@@ -153,9 +157,9 @@ export function addTabClickListeners(): void {
       const elementName = button.getAttribute("aria-controls") as keyof YouTubeElements | null;
       if (!targetId || !elementName) return;
 
-      removeCustomTabSelected();
-      displayElementNone();
-      button.classList.add("custom-tab-selected");
+      removeSelectedExtensionTabs();
+      hideExtensionTabContent();
+      button.classList.add("extension-tabs-selected");
 
       if (targetId === "#chat-container") {
         const { chatContainer, chat, showHideChatBtn } = getElements();
@@ -191,11 +195,11 @@ export function addTabClickListeners(): void {
 }
 
 /** タブ形式の見た目にするため，ytSpecButtonShapeNextSegmented クラスのスタイルを調整する */
-export function updateSegmentedTabClasses(): void {
-  const { customTab } = getElements();
-  if (!customTab) return;
+export function updateExtensionTabClasses(): void {
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
 
-  const buttons = Array.from(customTab.querySelectorAll<HTMLElement>("[data-bs-target]"));
+  const buttons = Array.from(extensionTabs.querySelectorAll<HTMLElement>("[data-bs-target]"));
   const visibleButtons = buttons.filter((button) => button.classList.contains("hidden") === false);
 
   if (visibleButtons.length === 0) return;
@@ -216,29 +220,53 @@ export function updateSegmentedTabClasses(): void {
 }
 
 export function clickTab(tabId: TabId): void {
-  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
+
+  const button = extensionTabs.querySelector<HTMLElement>(`#${tabId}-tab`);
   if (button) {
     button.click();
   }
 }
 
-export function displayTabElement(tabId: TabId): void {
-  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+export function displayExtensionTab(tabId: TabId): void {
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
+
+  const button = extensionTabs.querySelector<HTMLElement>(`#${tabId}-tab`);
   if (button && button.classList.contains("hidden")) {
     button.classList.remove("hidden");
   }
 }
 
-export function hideTabElement(tabId: TabId): void {
-  const button = document.querySelector<HTMLElement>(`#custom-tab #${tabId}-tab`);
+export function hideExtensionTab(tabId: TabId): void {
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
+
+  const button = extensionTabs.querySelector<HTMLElement>(`#${tabId}-tab`);
   if (button) {
     button.classList.add("hidden");
   }
 }
 
-export function removeCustomTabSelected(): void {
-  const buttons = document.querySelectorAll<HTMLElement>("[data-bs-target]");
+export function removeSelectedExtensionTabs(): void {
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
+
+  const buttons = extensionTabs.querySelectorAll<HTMLElement>("[data-bs-target]");
   buttons.forEach((button) => {
-    button.classList.remove("custom-tab-selected");
+    button.classList.remove("extension-tabs-selected");
+  });
+}
+
+export function toggleExtensionTabsSize(isLarge: boolean): void {
+  const { extensionTabs } = getElements();
+  if (!extensionTabs) return;
+  const sizeSuffix = isLarge ? "S" : "M";
+
+  Array.from(extensionTabs.children).forEach((tab) => {
+    if (tab.classList.contains(`${SIZE_CLASS}${sizeSuffix}`)) {
+      tab.classList.replace(`${SIZE_CLASS}${sizeSuffix}`, `${SIZE_CLASS}${isLarge ? "M" : "S"}`);
+    }
   });
 }

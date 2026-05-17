@@ -3,18 +3,18 @@ import { createExtensionSettings, handleSettings } from "./settings";
 import { YouTubeElements, HTMLElementWithReg } from "../types";
 import { getElements } from "../elements";
 import { storageState } from "../storage";
-import { createTab, setActiveTab, removeCustomTabSelected, displayElementNone, addTabClickListeners } from "./tab-manager";
+import { createExtensionTabs, setActiveExtensionTab, removeSelectedExtensionTabs, hideExtensionTabContent, registerExtensionTabClickListeners, toggleExtensionTabsSize } from "./tab-manager";
 import { renderUI } from "./renderer";
 import { applySecondaryResizeSettings } from "./secondary-resize";
 
 export function handleFirstRender(checkedTabs: Tab[]): void {
   const elements = getElements();
   storageState.isEventAdded = false;
-  const tabs = createTab(checkedTabs);
+  const tabs = createExtensionTabs(checkedTabs);
   if (isLargeScreen()) {
     if (elements.secondary && elements.secondaryInner) {
       elements.secondary.insertBefore(tabs, elements.secondary.firstChild);
-      addTabClickListeners();
+      registerExtensionTabClickListeners();
     }
   } else {
     const primaryInner = elements.primaryInner;
@@ -23,60 +23,52 @@ export function handleFirstRender(checkedTabs: Tab[]): void {
       if (primaryInner.firstChild) {
         primaryInner.insertBefore(tabs, elements.below);
       }
-      addTabClickListeners();
+      registerExtensionTabClickListeners();
     }
   }
 }
 
-export function handleResize(customTab: HTMLElement): void {
+export function handleWindowResize(extensionTabs: HTMLElement): void {
   const elements = getElements();
-  const sizeClass = "ytSpecButtonShapeNextSize";
+  const { secondary, secondaryInner, extensionSettings, primaryInner, below } = elements;
   if (isLargeScreen() && storageState.preRespWidth === "medium") {
     renderUI();
-    Array.from(customTab.children).forEach((tab) => {
-      if (tab.classList.contains(`${sizeClass}M`)) {
-        tab.classList.replace(`${sizeClass}M`, `${sizeClass}S`);
-      }
-    });
-    if (elements.secondary) {
-      elements.secondary.insertBefore(customTab, elements.secondary.firstChild);
+    toggleExtensionTabsSize(true);
+    if (secondary) {
+      secondary.insertBefore(extensionTabs, secondary.firstChild);
     }
-    if (elements.extensionSettings && elements.secondaryInner) {
-      elements.secondaryInner.appendChild(elements.extensionSettings);
+    if (extensionSettings && secondaryInner) {
+      secondaryInner.appendChild(extensionSettings);
     }
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
         const element = elements[tab.elementName as keyof YouTubeElements];
-        if (element && elements.secondaryInner) {
-          elements.secondaryInner.appendChild(element as HTMLElement);
+        if (element && secondaryInner) {
+          secondaryInner.appendChild(element as HTMLElement);
         }
       });
     }
-    if (elements.secondaryInner) addTabClickListeners();
+    registerExtensionTabClickListeners();
   } else if (!isLargeScreen() && storageState.preRespWidth === "large") {
     applySecondaryResizeSettings();
-    Array.from(customTab.children).forEach((tab) => {
-      if (tab.classList.contains(`${sizeClass}S`)) {
-        tab.classList.replace(`${sizeClass}S`, `${sizeClass}M`);
-      }
-    });
-    if (elements.extensionSettings && elements.below) {
-      elements.below.appendChild(elements.extensionSettings);
+    toggleExtensionTabsSize(false);
+    if (extensionSettings && below) {
+      below.appendChild(extensionSettings);
     }
-    if (elements.primaryInner) {
-      elements.primaryInner.insertBefore(customTab, elements.below);
+    if (primaryInner) {
+      primaryInner.insertBefore(extensionTabs, below);
     }
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
         const element = elements[tab.elementName as keyof YouTubeElements];
-        if (element && elements.below) {
-          elements.below.appendChild(element);
+        if (element && below) {
+          below.appendChild(element);
         }
       });
     }
-    if (elements.below) addTabClickListeners();
+    registerExtensionTabClickListeners();
   }
 }
 
@@ -97,9 +89,9 @@ export function handleUrlChange(): void {
       chatViewBtn.addEventListener(
         "click",
         () => {
-          removeCustomTabSelected();
+          removeSelectedExtensionTabs();
           if (chatContainer && chatContainerTab) {
-            displayElementNone();
+            hideExtensionTabContent();
             chatContainer.style.display = "block";
             chatContainerTab.click();
           }
@@ -111,12 +103,12 @@ export function handleUrlChange(): void {
 
     const commentsHidden: boolean = comments.hasAttribute("hidden");
     const teaserCarousel = document.querySelector<HTMLElement>("#teaser-carousel");
-    const customTab = document.querySelector<HTMLElement>("#custom-tab");
-    if (!customTab || !storageState.checkedTabs) return;
+    const { extensionTabs } = getElements();
+    if (!extensionTabs || !storageState.checkedTabs) return;
 
     const filteredTabs: Tab[] = storageState.checkedTabs.filter((filteredTab) => {
       const element = getElements()[filteredTab.elementName as keyof YouTubeElements];
-      const tabElement = customTab.querySelector<HTMLElement>(`#${filteredTab.id}-tab`);
+      const tabElement = extensionTabs.querySelector<HTMLElement>(`#${filteredTab.id}-tab`);
       let shouldHideTab: boolean = false;
 
       if (filteredTab.id === "chat-container") {
@@ -139,7 +131,7 @@ export function handleUrlChange(): void {
     filteredTabs.sort((a, b) => a.num - b.num);
 
     if (filteredTabs.length > 0) {
-      const tablist: HTMLElement[] = filteredTabs.map((filtered) => customTab.querySelector<HTMLElement>(`#${filtered.id}-tab`)).filter((tab): tab is HTMLElement => tab !== null);
+      const tablist: HTMLElement[] = filteredTabs.map((filtered) => extensionTabs.querySelector<HTMLElement>(`#${filtered.id}-tab`)).filter((tab): tab is HTMLElement => tab !== null);
 
       tablist.forEach((tab, index) => {
         if (index === 0) {
@@ -154,11 +146,11 @@ export function handleUrlChange(): void {
 
     if (tryCount === 0) {
       storageState.isFirstSelected = true;
-      setActiveTab(customTab);
+      setActiveExtensionTab(extensionTabs);
     }
 
     if (!commentsHidden || tryCount >= maxTries) {
-      setActiveTab(customTab);
+      setActiveExtensionTab(extensionTabs);
       clearInterval(interval);
       return;
     }

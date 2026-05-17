@@ -1,7 +1,7 @@
 import { getElements } from "./elements";
 import { storageState } from "./storage";
-import { clickTab, displayTabElement, hideTabElement, updateSegmentedTabClasses } from "./ui/tab-manager";
-import { handleFirstRender, handleResize, handleUrlChange, isLargeScreen } from "./ui/layout";
+import { clickTab, displayExtensionTab, EXTENSION_TABS_ID, hideExtensionTab, updateExtensionTabClasses } from "./ui/tab-manager";
+import { handleFirstRender, handleWindowResize, handleUrlChange, isLargeScreen } from "./ui/layout";
 
 export async function observeYouTubeElements(): Promise<void> {
   // 有効化されていない場合は何もしない
@@ -22,7 +22,7 @@ export async function observeYouTubeElements(): Promise<void> {
       });
 
       if (isAnyPanelExpanded && !panels.classList.contains("observed")) {
-        displayTabElement("panels");
+        displayExtensionTab("panels");
         clickTab("panels");
         panels.classList.add("observed");
         // クリップ作成の描画不具合対策としてリサイズイベントを発火
@@ -30,10 +30,10 @@ export async function observeYouTubeElements(): Promise<void> {
           window.dispatchEvent(new Event("resize"));
         });
       } else if (!isAnyPanelExpanded && panels.classList.contains("observed")) {
-        hideTabElement("panels");
+        hideExtensionTab("panels");
         panels.classList.remove("observed");
       }
-      updateSegmentedTabClasses();
+      updateExtensionTabClasses();
     }
 
     // playlist の監視
@@ -44,13 +44,13 @@ export async function observeYouTubeElements(): Promise<void> {
       // 状態が変わっていなければ何もしない
       if (isVisible !== isObserved) {
         if (isVisible) {
-          displayTabElement("playlist");
+          displayExtensionTab("playlist");
           playlist.classList.add("observed");
         } else {
-          hideTabElement("playlist");
+          hideExtensionTab("playlist");
           playlist.classList.remove("observed");
         }
-        updateSegmentedTabClasses();
+        updateExtensionTabClasses();
       }
     }
   });
@@ -72,21 +72,21 @@ export function createObserver(): MutationObserver {
       elements.secondaryInner.classList.add("tab-container");
     }
 
-    const customTab = document.querySelector<HTMLElement>("#custom-tab");
+    const extensionTabs = document.querySelector<HTMLElement>(`#${EXTENSION_TABS_ID}`);
     const url: URL = new URL(window.location.href);
     const preVideoId: string | null = storageState.preUrl ? new URL(storageState.preUrl).searchParams.get("v") : null;
     const currentVideoId: string | null = url.searchParams.get("v");
 
-    if (!customTab) {
+    if (!extensionTabs) {
       if (storageState.checkedTabs) handleFirstRender(storageState.checkedTabs);
       if (preVideoId !== currentVideoId) {
         handleUrlChange();
         storageState.preUrl = url.href;
       }
     } else {
-      handleResize(customTab);
+      handleWindowResize(extensionTabs);
       if (preVideoId !== currentVideoId && storageState.preUrl) {
-        customTab.remove();
+        extensionTabs.remove();
       } else if (preVideoId !== currentVideoId) {
         storageState.preUrl = "https://www.youtube.com/";
       }
