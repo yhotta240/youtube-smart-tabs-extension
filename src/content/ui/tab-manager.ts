@@ -115,7 +115,7 @@ export function setActiveTab(customTab: HTMLElement): void {
   }
 }
 
-export function displayElementNone(innerContent: HTMLElement): void {
+export function displayElementNone(): void {
   const elements = getElements();
   if (storageState.checkedTabs) {
     storageState.checkedTabs.forEach(tab => {
@@ -133,22 +133,18 @@ export function displayElementNone(innerContent: HTMLElement): void {
   if (elements.settings) {
     elements.settings.style.display = 'none';
   }
-  const settings = innerContent.querySelector<HTMLElement>('#extension-settings');
-  if (settings) {
-    settings.style.display = 'none';
-    settings.setAttribute('aria-selected', 'false');
-  }
   if (elements.panels) {
     elements.panels.style.display = 'none';
   }
 }
 
 export function addTabClickListeners(innerContent: HTMLElement): void {
-  const buttons = document.querySelectorAll<HTMLElement>('[data-bs-target]');
+  const customTab = getElements().customTab;
+  const buttons = customTab?.querySelectorAll<HTMLElement>('[data-bs-target]');
   if (storageState.isEventAdded) return;
   storageState.isEventAdded = true;
 
-  buttons.forEach(button => {
+  buttons?.forEach(button => {
     button.addEventListener('click', () => {
       const targetId = button.getAttribute('data-bs-target');
       if (!targetId) return;
@@ -164,7 +160,7 @@ export function addTabClickListeners(innerContent: HTMLElement): void {
       }
 
       removeCustomTabSelected();
-      displayElementNone(innerContent);
+      displayElementNone();
       button.classList.add('custom-tab-selected')
 
       const targetContent = document.querySelector<HTMLElement>(targetId);

@@ -17,10 +17,13 @@ export function handleFirstRender(elements: YouTubeElements, checkedTabs: Tab[],
     }
   } else {
     const tabs = createTab(checkedTabs);
-    if (elements.below) {
-      const targetElement = elements.below.querySelector("#related");
-      elements.below.insertBefore(tabs, targetElement);
-      addTabClickListeners(elements.below);
+    const below = elements.below;
+    if (below) {
+      // below の最初の子要素の前にタブを挿入
+      if (below.firstChild) {
+        below.insertBefore(tabs, below.firstChild);
+      }
+      addTabClickListeners(below);
     }
   }
 }
@@ -43,7 +46,6 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
-        console.log(tab.elementName);
         const element = getElements()[tab.elementName as keyof YouTubeElements];
         if (element && elements.secondaryInner) {
           elements.secondaryInner.appendChild(element as HTMLElement);
@@ -67,12 +69,7 @@ export function handleResize(elements: YouTubeElements, customTab: HTMLElement, 
     handleSettings(false);
     if (storageState.checkedTabs) {
       storageState.checkedTabs.forEach((tab) => {
-        let element: HTMLElement | null;
-        if (tab.id === "description") {
-          element = document.querySelector<HTMLElement>("ytd-watch-metadata");
-        } else {
-          element = getElements()[tab.elementName as keyof YouTubeElements];
-        }
+        const element = getElements()[tab.elementName as keyof YouTubeElements];
         if (element && elements.below) {
           elements.below.appendChild(element);
         }
@@ -88,8 +85,8 @@ export function handleUrlChange(): void {
   moveElement();
 
   const interval = setInterval(() => {
-    const { below, chatContainer, chatViewBtn, chatContainerTab, comments, playlist } = getElements();
-    if (!below || !comments) return;
+    const { chatContainer, chatViewBtn, chatContainerTab, comments, playlist } = getElements();
+    if (!comments) return;
 
     if (tryCount === 0) {
       renderUI();
@@ -100,8 +97,8 @@ export function handleUrlChange(): void {
         "click",
         () => {
           removeCustomTabSelected();
-          if (below && chatContainer && chatContainerTab) {
-            displayElementNone(below);
+          if (chatContainer && chatContainerTab) {
+            displayElementNone();
             chatContainer.style.display = "block";
             chatContainerTab.click();
           }
@@ -141,9 +138,7 @@ export function handleUrlChange(): void {
     filteredTabs.sort((a, b) => a.num - b.num);
 
     if (filteredTabs.length > 0) {
-      const tablist: HTMLElement[] = filteredTabs
-        .map((filtered) => customTab.querySelector<HTMLElement>(`#${filtered.id}-tab`))
-        .filter((tab): tab is HTMLElement => tab !== null);
+      const tablist: HTMLElement[] = filteredTabs.map((filtered) => customTab.querySelector<HTMLElement>(`#${filtered.id}-tab`)).filter((tab): tab is HTMLElement => tab !== null);
 
       tablist.forEach((tab, index) => {
         if (index === 0) {
